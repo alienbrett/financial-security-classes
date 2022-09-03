@@ -1,4 +1,5 @@
 import typing
+from typing import List, Optional
 import dataclasses
 import enum
 
@@ -14,10 +15,10 @@ from .exceptions import *
 def Stock (
         ticker      : Ticker,
         gsid        : GSID                              = None,
-        description : typing.Optional[str]              = None,
-        website     : typing.Optional[str]              = None,
-        primary_exc : typing.Optional[Exchange]         = None,
-        identifiers : typing.List[SecurityIdentifier]   = [],
+        description : Optional[str]              = None,
+        website     : Optional[str]              = None,
+        primary_exc : Optional[Exchange]         = None,
+        identifiers : List[SecurityIdentifier]   = [],
     ) -> Security:
 
     return Security(
@@ -30,17 +31,18 @@ def Stock (
         website         = website,
         identifiers     = identifiers,
         issuer          = None,
+        denominated_ccy = None,
     )
 
 
 def ETP (
         ticker      : Ticker,
         gsid        : GSID                              = None,
-        issuer      : typing.Optional[str]              = None,
-        description : typing.Optional[str]              = None,
-        website     : typing.Optional[str]              = None,
-        primary_exc : typing.Optional[Exchange]         = None,
-        identifiers : typing.List[SecurityIdentifier]   = [],
+        issuer      : Optional[str]              = None,
+        description : Optional[str]              = None,
+        website     : Optional[str]              = None,
+        primary_exc : Optional[Exchange]         = None,
+        identifiers : List[SecurityIdentifier]   = [],
     ) -> Security:
 
     return Security(
@@ -53,6 +55,7 @@ def ETP (
         website         = website,
         identifiers     = identifiers,
         issuer          = (issuer if issuer is None else issuer.strip()),
+        denominated_ccy = None,
     )
 
 
@@ -61,8 +64,8 @@ def FiatCurrency(
         ticker      : Ticker,
         gsid        : GSID                  = None,
         nation      : str                   = None,
-        identifiers : typing.List[SecurityIdentifier]   = [],
-        description : typing.Optional[str]              = None,
+        identifiers : List[SecurityIdentifier]   = [],
+        description : Optional[str]              = None,
     ) -> Security:
     return Security(
         ticker          = ticker,
@@ -74,6 +77,7 @@ def FiatCurrency(
         primary_exchange= None,
         website         = None,
         description     = description,
+        denominated_ccy = None,
     )
 
 
@@ -81,9 +85,9 @@ def FiatCurrency(
 
 def CryptoCurrency(
         ticker      : Ticker,
-        gsid        : GSID                              = None,
-        identifiers : typing.List[SecurityIdentifier]   = [],
-        description : typing.Optional[str]              = None,
+        gsid        : GSID                      = None,
+        identifiers : List[SecurityIdentifier]  = [],
+        description : Optional[str]             = None,
     ) -> CurrencyQty:
     return Security(
         ticker          = ticker,
@@ -95,18 +99,26 @@ def CryptoCurrency(
         primary_exchange= None,
         website         = None,
         description     = description,
+        denominated_ccy = None,
     )
 
 
 
 def DerivedIndex(
         ticker      : Ticker,
-        gsid        : GSID                              = None,
-        website     : typing.Optional[str]              = None,
-        issuer      : typing.Optional[str]              = None,
-        identifiers : typing.List[SecurityIdentifier]   = [],
-        description : typing.Optional[str]              = None,
+        gsid        : GSID                          = None,
+        website     : Optional[str]                 = None,
+        issuer      : Optional[str]                 = None,
+        identifiers : List[SecurityIdentifier]      = [],
+        description : Optional[str]                 = None,
+        currency    : Optional[Security]            = None,
     ) -> Security:
+
+    if currency is not None:
+        currency_ref = create_reference_from_security( currency )
+    else:
+        currency_ref = None
+
     return Security(
         ticker          = ticker,
         gsid            = gsid,
@@ -117,6 +129,7 @@ def DerivedIndex(
         identifiers     = identifiers,
         primary_exchange= None,
         description     = description,
+        denominated_ccy = currency_ref,
     )
 
 
@@ -132,3 +145,12 @@ def ISIN(value : str) -> SecurityIdentifier:
 
 def CUSIP(value : str) -> SecurityIdentifier:
     return SecurityIdentifier(kind=SecurityIdentifierType.CUSIP, value=value)
+
+
+
+def create_reference_from_security( security: Security ) -> SecurityReference:
+    assert(security.gsid is not None)
+    return SecurityReference(
+        gsid    = security.gsid,
+        ticker  = security.ticker,
+    )
