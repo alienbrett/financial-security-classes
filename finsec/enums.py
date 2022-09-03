@@ -1,8 +1,11 @@
-# import typing
-# import dataclasses
+import typing
 import enum
 
-# import datetime
+
+
+Ticker          = typing.NewType('Ticker', str)
+GSID            = typing.NewType('GSID', typing.Any)
+CurrencyQty     = float
 
 
 

@@ -1,7 +1,7 @@
 
 from .exceptions import *
 
-from .classes import *
+from .enums import *
 
 from .exchanges import *
 

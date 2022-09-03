@@ -6,7 +6,7 @@ import datetime
 
 # import finsec as fs
 from .base import *
-from .classes import *
+from .enums import *
 from .exchanges import *
 from .exceptions import *
 
@@ -18,9 +18,9 @@ def Stock (
         website     : typing.Optional[str]              = None,
         primary_exc : typing.Optional[Exchange]         = None,
         identifiers : typing.List[SecurityIdentifier]   = [],
-    ) -> Equity:
+    ) -> Security:
 
-    return Equity(
+    return Security(
         ticker          = ticker,
         gsid            = gsid,
         security_type   = SecurityType.EQUITY,
@@ -41,9 +41,9 @@ def ETP (
         website     : typing.Optional[str]              = None,
         primary_exc : typing.Optional[Exchange]         = None,
         identifiers : typing.List[SecurityIdentifier]   = [],
-    ) -> Equity:
+    ) -> Security:
 
-    return Equity(
+    return Security(
         ticker          = ticker,
         gsid            = gsid,
         security_type   = SecurityType.EQUITY,
@@ -62,14 +62,18 @@ def FiatCurrency(
         gsid        : GSID                  = None,
         nation      : str                   = None,
         identifiers : typing.List[SecurityIdentifier]   = [],
-    ) -> Currency:
-    return Currency(
+        description : typing.Optional[str]              = None,
+    ) -> Security:
+    return Security(
         ticker          = ticker,
         issuer          = nation,
         gsid            = gsid,
         security_type   = SecurityType.CURRENCY,
         security_subtype= SecuritySubtype.NATIONAL_FIAT,
         identifiers     = identifiers,
+        primary_exchange= None,
+        website         = None,
+        description     = description,
     )
 
 
@@ -77,18 +81,43 @@ def FiatCurrency(
 
 def CryptoCurrency(
         ticker      : Ticker,
-        gsid        : GSID                  = None,
+        gsid        : GSID                              = None,
         identifiers : typing.List[SecurityIdentifier]   = [],
-    ) -> Currency:
-    return Currency(
+        description : typing.Optional[str]              = None,
+    ) -> CurrencyQty:
+    return Security(
         ticker          = ticker,
         issuer          = None,
         gsid            = gsid,
         security_type   = SecurityType.CURRENCY,
         security_subtype= SecuritySubtype.CRYPTOCURRENCY,
         identifiers     = identifiers,
+        primary_exchange= None,
+        website         = None,
+        description     = description,
     )
 
+
+
+def DerivedIndex(
+        ticker      : Ticker,
+        gsid        : GSID                              = None,
+        website     : typing.Optional[str]              = None,
+        issuer      : typing.Optional[str]              = None,
+        identifiers : typing.List[SecurityIdentifier]   = [],
+        description : typing.Optional[str]              = None,
+    ) -> Security:
+    return Security(
+        ticker          = ticker,
+        gsid            = gsid,
+        security_type   = SecurityType.INDEX,
+        security_subtype= SecuritySubtype.DERIVED_INDEX,
+        issuer          = issuer,
+        website         = website,
+        identifiers     = identifiers,
+        primary_exchange= None,
+        description     = description,
+    )
 
 
 

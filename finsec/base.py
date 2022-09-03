@@ -1,19 +1,10 @@
 import typing
 import dataclasses
-import enum
 
-import datetime
 
-# import finsec as fs
-from .classes import *
+from .enums import *
 from .exceptions import *
 from .exchanges import *
-
-
-Ticker      = typing.NewType('Ticker', str)
-GSID        = typing.NewType('GSID', typing.Any)
-
-Currency    = float
 
 
 
@@ -25,7 +16,7 @@ class SecurityIdentifier:
 
 
 @dataclasses.dataclass
-class BaseSecurity:
+class Security:
     ### Application-level globally unique security id
     # Burden is on user to assign these in unique way,
     # if user chooses to use this
@@ -40,40 +31,23 @@ class BaseSecurity:
     security_subtype    : SecuritySubtype
     identifiers         : typing.List[SecurityIdentifier]
 
+    primary_exchange    : typing.Optional[Exchange]
+
+    issuer              : typing.Optional[str]
+    description         : typing.Optional[str]
+    website             : typing.Optional[str]
+
     def __post_init__(self,):
         self.ticker = self.ticker.strip().upper()
 
 
 
-@dataclasses.dataclass
-class ListedSecurity(BaseSecurity):
-    '''Security, but trades on an exchange
-    '''
-    primary_exchange    : typing.Optional[Exchange]
-
 
 
 @dataclasses.dataclass
-class IssuedInstrument:
-    issuer              : typing.Optional[str]
+class Derivative(Security):
 
-
-@dataclasses.dataclass
-class Currency(BaseSecurity, IssuedInstrument):
-    pass
-
-
-
-@dataclasses.dataclass
-class Equity(ListedSecurity, IssuedInstrument):
-    website             : typing.Optional[str]              = dataclasses.field(default='')
-    description         : typing.Optional[str]              = dataclasses.field(default='')
-
-
-
-
-@dataclasses.dataclass
-class Derivative(ListedSecurity):
+    underlying          : Ticker
 
     settlement_type     : SettlementType
     expiry_series_type  : ExpirySeriesType
@@ -90,7 +64,7 @@ class Option(Derivative):
     option_flavor   : OptionFlavor
     option_exercise : OptionExerciseStyle
 
-    strike          : Currency
+    strike          : CurrencyQty
 
 
 @dataclasses.dataclass
