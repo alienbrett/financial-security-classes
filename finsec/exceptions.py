@@ -1,0 +1,3 @@
+
+class InvalidSettlementTypeException(Exception):
+    pass

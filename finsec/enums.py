@@ -5,7 +5,9 @@ import enum
 
 Ticker          = typing.NewType('Ticker', str)
 GSID            = typing.NewType('GSID', typing.Any)
+
 CurrencyQty     = float
+Multiplier      = float
 
 
 
@@ -32,6 +34,13 @@ class SecuritySubtype(enum.Enum):
     ##### Reserved 0-999
     UNKNOWN             = 0
     DERIVED_INDEX       = 10
+
+    
+    SOFT_COMMODITY      = 110
+    ENERGY              = 115
+    METAL               = 120
+    GRAIN               = 125
+    LIVESTOCK           = 130
 
     ##### Currencies
     NATIONAL_FIAT       = 505
