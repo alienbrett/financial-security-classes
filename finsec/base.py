@@ -1,5 +1,6 @@
 import typing
 import dataclasses
+import datetime
 
 
 from .enums import *
@@ -13,6 +14,11 @@ class SecurityIdentifier:
     kind    : SecurityIdentifierType
     value   : str
 
+
+@dataclasses.dataclass
+class SecurityReference:
+    gsid                : GSID
+    ticker              : Ticker
 
 
 @dataclasses.dataclass
@@ -33,9 +39,12 @@ class Security:
 
     primary_exchange    : typing.Optional[Exchange]
 
+    denominated_ccy     : typing.Optional[SecurityReference]
+
     issuer              : typing.Optional[str]
     description         : typing.Optional[str]
     website             : typing.Optional[str]
+
 
     def __post_init__(self,):
         self.ticker = self.ticker.strip().upper()
@@ -43,19 +52,31 @@ class Security:
 
 
 
-
 @dataclasses.dataclass
 class Derivative(Security):
 
-    underlying          : Ticker
+    ### Underlying that determines settlement of the contract
+    underlying          : SecurityReference
 
     settlement_type     : SettlementType
     expiry_series_type  : ExpirySeriesType
     expiry_time_of_day  : ExpiryTimeOfDay
 
-    def __post_init__(self,):
-        pass
+    expiry_date         : datetime.date
+    expiry_datetime     : typing.Optional[datetime.datetime]
 
+
+    ####### The minimum tick sizerement
+    tick_size           : CurrencyQty
+
+    ####### The multiplier vs underlier
+    multiplier          : Multiplier
+
+
+
+@dataclasses.dataclass
+class Future(Derivative):
+    pass
 
 
 @dataclasses.dataclass
@@ -67,6 +88,3 @@ class Option(Derivative):
     strike          : CurrencyQty
 
 
-@dataclasses.dataclass
-class Future(Derivative):
-    pass
