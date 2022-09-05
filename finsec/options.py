@@ -1,3 +1,4 @@
+from asyncio import create_subprocess_exec
 import typing
 from typing import Optional, List, Union
 
@@ -6,12 +7,12 @@ import enum
 
 import datetime
 
-# import finsec as fs
 from .base import *
 from .enums import *
 from .exchanges import *
 from .exceptions import *
 from .constructors import *
+from .occ_symbology import *
 from .utils import *
 
 
@@ -22,16 +23,18 @@ from .utils import *
 
 
 
-def NewFuture (
-        ticker              : Ticker,
-
+def European (
         # Will link against this underlier
         underlying_security : Security,
 
-        tick_size           : CurrencyQty,
         multiplier          : Multiplier,
 
         expiry_time_of_day  : ExpiryTimeOfDay,
+
+        strike              : CurrencyQty,
+        
+        ## Callput should be in ('call','put')
+        callput             : str,
 
         expiry_date         : datetime.date,
         expiry_datetime     : Optional[datetime.datetime]   = None,
@@ -50,12 +53,16 @@ def NewFuture (
 
         ### Currency will be used, if it cannot be inferred from underlying
         currency            : Union[Security,SecurityReference,None] = None,
-    ) -> Future:
-
-
+    ) -> Option:
     description = None
 
-    
+    good_callput = callput.strip().lower()
+    if good_callput == 'call':
+        flavor = OptionFlavor.CALL
+    elif good_callput == 'put':
+        flavor = OptionFlavor.PUT
+    else:
+        raise ValueError('Unknown callput type: {0}'.format(callput))
 
     if is_physical_settlement_available( underlying_security ):
         if settlement_type is None:
@@ -72,6 +79,17 @@ def NewFuture (
 
     underlying_ref = create_reference_from_security( underlying_security )
 
+    if isinstance(expiry_date, str):
+        expiry_date = datetime.datetime.strptime(expiry_date, '%Y-%m-%d').date()
+    if expiry_datetime is not None and expiry_date is None:
+        expiry_date = expiry_datetime.date()
+
+    occ_ticker = option_format(
+        symbol      = underlying_ref.ticker,
+        exp_date    = expiry_date,
+        flavor      = callput,
+        strike      = strike,
+    )
 
     if currency is None:
         if underlying_security.denominated_ccy is None:
@@ -81,25 +99,25 @@ def NewFuture (
     elif isinstance(currency, Security):
             currency = create_reference_from_security( currency )
 
-
-    return Future(
-        ticker              = ticker,
+    return Option(
         gsid                = gsid,
-
-        underlying          = underlying_ref,
-
-        tick_size           = tick_size,
-        multiplier          = multiplier,
+        ticker              = occ_ticker,
+        strike              = strike,
+        option_flavor       = flavor,
 
         security_type       = SecurityType.DERIVATIVE,
-        security_subtype    = SecuritySubtype.FUTURE,
+        security_subtype    = SecuritySubtype.EQUITY_OPTION,
 
+        option_exercise     = OptionExerciseStyle.EUROPEAN,
         settlement_type     = settlement_type,
-        expiry_series_type  = expiry_series_type,
-        expiry_time_of_day  = expiry_time_of_day,
-
         expiry_date         = expiry_date,
         expiry_datetime     = expiry_datetime,
+        expiry_time_of_day  = expiry_time_of_day,
+        underlying          = underlying_ref,
+
+        multiplier          = multiplier,
+        denominated_ccy     = currency,
+        expiry_series_type  = expiry_series_type,
 
         primary_exchange    = primary_exc,
 
@@ -107,7 +125,4 @@ def NewFuture (
         identifiers         = identifiers,
         website             = website,
         issuer              = None,
-        
-        denominated_ccy     = currency,
     )
-

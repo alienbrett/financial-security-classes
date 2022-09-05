@@ -65,10 +65,6 @@ class Derivative(Security):
     expiry_date         : datetime.date
     expiry_datetime     : typing.Optional[datetime.datetime]
 
-
-    ####### The minimum tick sizerement
-    tick_size           : CurrencyQty
-
     ####### The multiplier vs underlier
     multiplier          : Multiplier
 
@@ -76,7 +72,8 @@ class Derivative(Security):
 
 @dataclasses.dataclass
 class Future(Derivative):
-    pass
+    ####### The minimum tick sizerement
+    tick_size           : CurrencyQty
 
 
 @dataclasses.dataclass
