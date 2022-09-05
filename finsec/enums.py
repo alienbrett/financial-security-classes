@@ -12,7 +12,7 @@ Multiplier      = float
 
 
 
-class SecurityType(enum.Enum):
+class SecurityType(int, enum.Enum):
     UNKNOWN             = 0
 
     COMMODITY           = 1
@@ -22,13 +22,13 @@ class SecurityType(enum.Enum):
     DERIVATIVE          = 5
     ALTERNATIVE         = 6
     INDEX               = 7
-    STRUCTURE           = 10
+    intUCTURE           = 10
     BASKET              = 12
 
 
 
 
-class SecuritySubtype(enum.Enum):
+class SecuritySubtype(int, enum.Enum):
     '''Generics must value divisible by 100, and visa-versa
     '''
     ##### Reserved 0-999
@@ -65,7 +65,7 @@ class SecuritySubtype(enum.Enum):
     # SWAPTION            = 20
 
 
-    ##### Structures (fits, and whatnot)
+    ##### intuctures (fits, and whatnot)
     # like LIBOR cash, or US treasury cash
     # rates curve quotes will reference an underlyer like this
 
@@ -74,7 +74,7 @@ class SecuritySubtype(enum.Enum):
 
 
 
-class SettlementType(enum.Enum):
+class SettlementType(int, enum.Enum):
     UNKNOWN     = 0
 
     CASH        = 1
@@ -82,7 +82,7 @@ class SettlementType(enum.Enum):
 
 
 
-class SecurityIdentifierType(enum.Enum):
+class SecurityIdentifierType(int, enum.Enum):
     UNKNOWN     = 0
 
     FIGI        = 2
@@ -92,7 +92,7 @@ class SecurityIdentifierType(enum.Enum):
 
 
 
-class OptionFlavor(enum.Enum):
+class OptionFlavor(int, enum.Enum):
     UNKNOWN     = 0
 
     PUT         = 1
@@ -100,7 +100,7 @@ class OptionFlavor(enum.Enum):
 
 
 
-class OptionExerciseStyle(enum.Enum):
+class OptionExerciseStyle(int, enum.Enum):
     UNKNOWN     = 0
     #### Exercise only possible at expiration
     EUROPEAN    = 1
@@ -114,7 +114,7 @@ class OptionExerciseStyle(enum.Enum):
 
 
 
-class ExpirySeriesType(enum.Enum):
+class ExpirySeriesType(int, enum.Enum):
     UNKNOWN     = 0
 
     QUARTERLY   = 10
@@ -124,7 +124,7 @@ class ExpirySeriesType(enum.Enum):
 
 
 
-class ExpiryTimeOfDay(enum.Enum):
+class ExpiryTimeOfDay(int, enum.Enum):
     UNKOWN      = 0
 
     OPEN        = 1

@@ -18,11 +18,11 @@ URL = 'https://github.com/alienbrett/financial-security-classes'
 EMAIL = 'alienbrett648@gmail.com'
 AUTHOR = 'Brett Graves'
 REQUIRES_PYTHON = '>=3.9.0'
-VERSION = '0.1.0'
+VERSION = '0.1.1'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    # 'requests', 'maya', 'records',
+    'dataclasses_json',
 ]
 
 # What packages are optional?
