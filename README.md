@@ -121,6 +121,20 @@ euro_put = fs.European(
 )
 ```
 
+## Serialization support
+Objects can be safely converted to json or dict format:
+```python3
+obj_json = fs.json_encode(euro_put)
+obj_new = fs.json_decode(obj_json)
+assert( obj_new == euro_put )
+
+obj_dict = fs.dict_encode(euro_put)
+obj_new = fs.dict_decode(obj_dict)
+assert( obj_new == euro_put )
+```
+
+
+
 
 ## Run tests
 To run tests:
