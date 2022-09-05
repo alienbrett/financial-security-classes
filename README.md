@@ -1,4 +1,4 @@
-# FinSec
+# <img src="https://raw.githubusercontent.com/alienbrett/financial-security-classes/main/contract-icon.png" alt="FinSec icon" width="60"/> FinSec 
 Pure python financial securities dataclasses, as foundation for other projects
 
 ## Install
