@@ -13,3 +13,5 @@ from .constructors import *
 
 from .futures import *
 from .options import *
+
+from .serializer import *
