@@ -137,13 +137,13 @@ def DerivedIndex(
 
 
 def FIGI(value : str) -> SecurityIdentifier:
-    return SecurityIdentifier(kind=SecurityIdentifierType.FIGI, value=value)
+    return SecurityIdentifier(id_type=SecurityIdentifierType.FIGI, value=value)
 
 def ISIN(value : str) -> SecurityIdentifier:
-    return SecurityIdentifier(kind=SecurityIdentifierType.ISIN, value=value)
+    return SecurityIdentifier(id_type=SecurityIdentifierType.ISIN, value=value)
 
 def CUSIP(value : str) -> SecurityIdentifier:
-    return SecurityIdentifier(kind=SecurityIdentifierType.CUSIP, value=value)
+    return SecurityIdentifier(id_type=SecurityIdentifierType.CUSIP, value=value)
 
 
 
