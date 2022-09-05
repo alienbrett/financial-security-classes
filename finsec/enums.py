@@ -22,7 +22,7 @@ class SecurityType(int, enum.Enum):
     DERIVATIVE          = 5
     ALTERNATIVE         = 6
     INDEX               = 7
-    intUCTURE           = 10
+    STRUCTURE           = 10
     BASKET              = 12
 
 
@@ -65,7 +65,7 @@ class SecuritySubtype(int, enum.Enum):
     # SWAPTION            = 20
 
 
-    ##### intuctures (fits, and whatnot)
+    ##### structures (fits, and whatnot)
     # like LIBOR cash, or US treasury cash
     # rates curve quotes will reference an underlyer like this
 
