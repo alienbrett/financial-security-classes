@@ -15,7 +15,7 @@ from .config        import *
 @dataclass_json
 @dataclasses.dataclass
 class SecurityIdentifier:
-    kind    : SecurityIdentifierType
+    id_type : SecurityIdentifierType
     value   : str
 
 
