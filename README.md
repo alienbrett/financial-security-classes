@@ -53,7 +53,7 @@ tsla = fs.Stock(
 
 ```
 
-## Create a future, with SPX as underlier
+### Create a SPX future
 
 ```python3
 esu22 = fs.NewFuture(
@@ -81,8 +81,48 @@ esu22 = fs.NewFuture(
 )
 ```
 
+### Options
+The package supports americans and europeans:
+```python3
+amer_call = fs.European(
+    gsid                = fs.GSID(1_234_567),
+    underlying_security = tsla,
+    callput             = 'call',
+    strike              = 300.,
+    expiry_date         = datetime.date(2022,12,16),
+    expiry_time_of_day  = fs.ExpiryTimeOfDay.CLOSE,
+    primary_exc         = fs.Exchange.CBOE,
+    multiplier          = 100.0,
+    identifiers         = [
+        fs.FIGI('blahblahblah123'),
+    ],
+    settlement_type     = fs.SettlementType.PHYSICAL,
+    
+    # Without this argument, this set to fs.ExpirySeriesType.UNKNOWN
+    expiry_series_type  = fs.ExpirySeriesType.MONTHLY,
+)
+```
+
+And the european:
+```python3
+euro_put = fs.European(
+    gsid                = fs.GSID(1_234_890),
+    underlying_security = spx,
+    callput             = 'put',
+    strike              = 3_500,
+    expiry_date         = '2022-12-30', # string expiries like this also supported
+    expiry_time_of_day  = fs.ExpiryTimeOfDay.CLOSE,
+    primary_exc         = fs.Exchange.CBOE, 
+    expiry_series_type  = fs.ExpirySeriesType.QUARTERLY,
+    multiplier          = 100.0,
+    
+    # Isn't strictly necessary, since this will be inferred from index underlying without physical delivery available
+    settlement_type     = fs.SettlementType.CASH,
+)
+```
 
 
+## Run tests
 To run tests:
 ```bash
 $ python3.9 -m virtualenv venv
