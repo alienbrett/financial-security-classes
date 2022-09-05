@@ -1,4 +1,5 @@
 import unittest
+import json
 import finsec as fs
 
 
@@ -81,3 +82,26 @@ class TestCurrencyConstructor(unittest.TestCase):
 
         self.assertEqual(btc.ticker, 'BTC')
         self.assertIsNone(btc.issuer,)
+
+
+
+
+    def test_serialize_crypto_1(self,):
+        btc = fs.CryptoCurrency(
+            ticker = ' btc ',
+            gsid   = fs.GSID(100),
+            identifiers = [fs.FIGI('test')],
+        )
+
+        obj_dict = btc.to_dict()
+        obj_json = json.dumps(obj_dict)
+
+        obj_recovered = fs.Security.from_json(obj_json)
+        self.assertEqual(obj_recovered, btc)
+
+        # good_json = '''{"gsid": 100, "ticker": "BTC", "security_type": 2, "security_subtype": 510, "identifiers": [{"kind": 2, "value": "test"}], "primary_exchange": null, "denominated_ccy": null, "issuer": null, "description": null, "website": null}'''
+        # self.assertEqual(
+        #     obj_json,
+        #     good_json,
+        # )
+

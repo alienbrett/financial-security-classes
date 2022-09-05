@@ -1,7 +1,11 @@
 import unittest
 import datetime
+import json
 import finsec as fs
+import zoneinfo
 
+
+nyc = zoneinfo.ZoneInfo('US/Eastern')
 
 class TestFutureConstructor(unittest.TestCase):
 
@@ -57,6 +61,7 @@ class TestFutureConstructor(unittest.TestCase):
 
         )
 
+        exact_expiry_time = datetime.datetime( 2023,3,17, 9, 30,0, tzinfo = nyc)
 
         self.esh23 = fs.NewFuture(
             gsid                = fs.GSID('blah'),
@@ -67,6 +72,7 @@ class TestFutureConstructor(unittest.TestCase):
             primary_exc         = fs.Exchange.CME,
 
             expiry_time_of_day  = fs.ExpiryTimeOfDay.OPEN,
+            expiry_datetime     = exact_expiry_time,
 
             tick_size           = 0.25,
             multiplier          = 50.0,
@@ -123,14 +129,49 @@ class TestFutureConstructor(unittest.TestCase):
         self.assertEqual(self.esh23.denominated_ccy, fs.create_reference_from_security(self.jpy))
 
 
-    # @unittest.expectedFailure
-    # def test_create_stock_fail_2(self,):
-    #     esu2 = fs.Stock(
-    #         ticker = 'esu2',
-    #     )
-
-    #     self.assertEqual(esu2.option_flavor, fs.OptionFlavor.CALL)
 
 
+    def test_serialize_future_1(self,):
+        obj = self.esh23
+
+        obj_dict = obj.to_dict()
+        obj_json = json.dumps(obj_dict)
+
+        obj_recovered = fs.Future.from_json(obj_json)
+
+        self.assertEqual(obj_recovered, obj)
 
 
+    def test_serialize_future_2(self,):
+        obj = self.esu22
+
+        obj_dict = obj.to_dict()
+        obj_json = json.dumps(obj_dict)
+
+        obj_recovered = fs.Future.from_json(obj_json)
+
+        self.assertEqual(obj_recovered, obj)
+
+
+
+
+    def test_serialize_usd_1(self,):
+        obj = self.usd
+
+        obj_dict = obj.to_dict()
+        obj_json = json.dumps(obj_dict)
+
+        obj_recovered = fs.Security.from_json(obj_json)
+
+        self.assertEqual(obj_recovered, obj)
+
+
+    def test_serialize_jpy_1(self,):
+        obj = self.jpy
+
+        obj_dict = obj.to_dict()
+        obj_json = json.dumps(obj_dict)
+
+        obj_recovered = fs.Security.from_json(obj_json)
+
+        self.assertEqual(obj_recovered, obj)

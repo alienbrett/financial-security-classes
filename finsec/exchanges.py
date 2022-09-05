@@ -1,10 +1,7 @@
-from time import CLOCK_BOOTTIME
-# import typing
-# import dataclasses
 import enum
 
 
-class Exchange(enum.Enum):
+class Exchange(str, enum.Enum):
     UNKNOWN     = 'UNK'
 
     ### USA

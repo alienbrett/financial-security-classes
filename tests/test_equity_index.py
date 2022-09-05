@@ -45,3 +45,15 @@ class TestIndexConstructor(unittest.TestCase):
 
         usd_ref = fs.create_reference_from_security(self.usd)
         self.assertEqual(spx.denominated_ccy, usd_ref)
+
+
+
+    # def test_serialize_1(self,):
+    #     spx = fs.DerivedIndex(
+    #         ticker = 'spx',
+    #         issuer = 'Standard & Poor',
+    #         gsid   = fs.GSID(100),
+    #         identifiers = [
+    #             fs.FIGI('12345'),
+    #         ],
+    #     )

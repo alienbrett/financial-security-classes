@@ -2,25 +2,31 @@ import typing
 import dataclasses
 import datetime
 
-
-from .enums import *
-from .exceptions import *
-from .exchanges import *
+from dataclasses_json import dataclass_json
 
 
+from .enums         import *
+from .exceptions    import *
+from .exchanges     import *
+from .config        import *
 
+
+
+@dataclass_json
 @dataclasses.dataclass
 class SecurityIdentifier:
     kind    : SecurityIdentifierType
     value   : str
 
 
+@dataclass_json
 @dataclasses.dataclass
 class SecurityReference:
     gsid                : GSID
     ticker              : Ticker
 
 
+@dataclass_json
 @dataclasses.dataclass
 class Security:
     ### Application-level globally unique security id
@@ -52,6 +58,7 @@ class Security:
 
 
 
+@dataclass_json
 @dataclasses.dataclass
 class Derivative(Security):
 
@@ -62,20 +69,24 @@ class Derivative(Security):
     expiry_series_type  : ExpirySeriesType
     expiry_time_of_day  : ExpiryTimeOfDay
 
-    expiry_date         : datetime.date
-    expiry_datetime     : typing.Optional[datetime.datetime]
+    expiry_date         : datetime.date \
+        = dataclasses.field(metadata=date_field_config)
+    expiry_datetime     : typing.Optional[datetime.datetime] \
+        = dataclasses.field(metadata=maybe_datetime_field_config)
 
     ####### The multiplier vs underlier
     multiplier          : Multiplier
 
 
 
+@dataclass_json
 @dataclasses.dataclass
 class Future(Derivative):
     ####### The minimum tick sizerement
     tick_size           : CurrencyQty
 
 
+@dataclass_json
 @dataclasses.dataclass
 class Option(Derivative):
 

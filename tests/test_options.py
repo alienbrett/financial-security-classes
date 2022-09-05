@@ -1,5 +1,6 @@
 import unittest
 import datetime
+import json
 import finsec as fs
 
 
@@ -554,3 +555,38 @@ class TestOptionConstructor(unittest.TestCase):
             settlement_type     = fs.SettlementType.PHYSICAL,
 
         )
+
+
+    def test_serialize_option_1(self,):
+        obj = fs.American(
+            gsid                = fs.GSID(120),
+            underlying_security = self.spx,
+
+            ## I understand this dates the test, using SPX 4,000 calls!
+            ## Or I hope this dates the test...
+            callput             = 'put',
+            strike              = 4000,
+
+            expiry_date         = '2022-09-16',
+            primary_exc         = fs.Exchange.CBOE,
+
+            expiry_time_of_day  = fs.ExpiryTimeOfDay.OPEN,
+
+            multiplier          = 100.0,
+
+            identifiers         = [
+                fs.FIGI('234567'),
+            ],
+
+            #### This should be implied, since underlyer doesn't permit physical delivery
+            # settlement_type     = fs.SettlementType.CASH,
+            #### Without this argument, this should be set to UNKNOWN
+            expiry_series_type  = fs.ExpirySeriesType.MONTHLY,
+        )
+
+        obj_dict = obj.to_dict()
+        obj_json = json.dumps(obj_dict)
+
+        obj_recovered = fs.Option.from_json(obj_json)
+
+        self.assertEqual(obj_recovered, obj)
