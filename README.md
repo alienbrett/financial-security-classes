@@ -1,5 +1,16 @@
-# financial-security-classes
+# FinSec
 Pure python financial securities dataclasses, as foundation for other projects
+
+## Install
+```bash
+## Install from pypi
+pip install financial-security-classes
+
+## or from the repo directly
+git clone https://github.com/alienbrett/financial-security-classes
+cd financial-security-classes
+pip install -e .
+```
 
 ## Examples
 
