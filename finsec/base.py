@@ -4,13 +4,13 @@ import datetime
 
 from dataclasses_json import dataclass_json
 
-placeholder = lambda: dataclasses.field(default=False)
 
 from .enums         import *
 from .exceptions    import *
 from .exchanges     import *
 from .config        import *
 
+placeholder = lambda: dataclasses.field(default=False)
 
 
 @dataclass_json
