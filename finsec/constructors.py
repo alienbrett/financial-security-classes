@@ -1,6 +1,9 @@
 import typing
 from typing import List, Optional
-import dataclasses
+
+# import dataclasses
+# from pydantic import dataclass
+
 import enum
 
 import datetime
