@@ -4,6 +4,7 @@ import datetime
 
 from dataclasses_json import dataclass_json
 
+placeholder = lambda: dataclasses.field(default=False)
 
 from .enums         import *
 from .exceptions    import *
@@ -51,6 +52,9 @@ class Security:
     description         : typing.Optional[str]
     website             : typing.Optional[str]
 
+    #### Security data valid and recent as-of this data
+    as_of_date         : typing.Optional[datetime.datetime] \
+        = dataclasses.field(metadata=maybe_datetime_field_config, default=None)
 
     def __post_init__(self,):
         self.ticker = self.ticker.strip().upper()
@@ -63,19 +67,19 @@ class Security:
 class Derivative(Security):
 
     ### Underlying that determines settlement of the contract
-    underlying          : SecurityReference
+    underlying          : SecurityReference = placeholder()
 
-    settlement_type     : SettlementType
-    expiry_series_type  : ExpirySeriesType
-    expiry_time_of_day  : ExpiryTimeOfDay
+    settlement_type     : SettlementType = placeholder()
+    expiry_series_type  : ExpirySeriesType = placeholder()
+    expiry_time_of_day  : ExpiryTimeOfDay = placeholder()
 
     expiry_date         : datetime.date \
-        = dataclasses.field(metadata=date_field_config)
+        = dataclasses.field(metadata=date_field_config, default=None)
     expiry_datetime     : typing.Optional[datetime.datetime] \
-        = dataclasses.field(metadata=maybe_datetime_field_config)
+        = dataclasses.field(metadata=maybe_datetime_field_config, default=None)
 
     ####### The multiplier vs underlier
-    multiplier          : Multiplier
+    multiplier          : Multiplier = placeholder()
 
 
 
@@ -83,16 +87,16 @@ class Derivative(Security):
 @dataclasses.dataclass
 class Future(Derivative):
     ####### The minimum tick sizerement
-    tick_size           : CurrencyQty
+    tick_size           : CurrencyQty = placeholder()
 
 
 @dataclass_json
 @dataclasses.dataclass
 class Option(Derivative):
 
-    option_flavor   : OptionFlavor
-    option_exercise : OptionExerciseStyle
+    option_flavor   : OptionFlavor = placeholder()
+    option_exercise : OptionExerciseStyle = placeholder()
 
-    strike          : CurrencyQty
+    strike          : CurrencyQty = placeholder()
 
 
