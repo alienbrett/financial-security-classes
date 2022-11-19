@@ -14,4 +14,6 @@ from .constructors import *
 from .futures import *
 from .options import *
 
+from .quotes import *
+
 from .serializer import *

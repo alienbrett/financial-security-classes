@@ -1,16 +1,12 @@
+
+import decimal
 import typing
 import enum
 
-
-
 Ticker          = typing.NewType('Ticker', str)
 GSID            = typing.NewType('GSID', typing.Any)
-
-CurrencyQty     = float
-Multiplier      = float
-
-
-
+CurrencyQty     = typing.NewType('CurrencyQty',decimal.Decimal)
+Multiplier      = typing.NewType('Multiplier',decimal.Decimal)
 
 class SecurityType(int, enum.Enum):
     UNKNOWN             = 0
@@ -73,13 +69,11 @@ class SecuritySubtype(int, enum.Enum):
 
 
 
-
 class SettlementType(int, enum.Enum):
     UNKNOWN     = 0
 
     CASH        = 1
     PHYSICAL    = 2
-
 
 
 class SecurityIdentifierType(int, enum.Enum):

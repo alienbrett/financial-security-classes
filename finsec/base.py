@@ -1,63 +1,33 @@
-### Test optional dependencies
-# Strawberry #
-try:
-    import strawberry
-    strawberry_enabled = True
-except:
-    strawberry_enabled = False
-# print('Strawberry enabled: {0}'.format(str(strawberry_enabled)))
-
-# Pydantic #
-try:
-    from pydantic.dataclasses import dataclass
-    pydantic_enabled = True
-except:
-    from dataclasses import dataclass
-    pydantic_enabled = False
-# print('pydantic enabled: {0}'.format(str(pydantic_enabled)))
-
+import pydantic
+import pandas as pd
+BaseObject = pydantic.BaseModel
 
 ####################
 import typing
-import dataclasses
 import datetime
-from dataclasses_json import dataclass_json
 
 from .enums         import *
 from .exceptions    import *
 from .exchanges     import *
-from .config        import *
+from .utils         import *
 
 
-placeholder = lambda: dataclasses.field(default=False)
-
-
-
-@dataclass_json
-@dataclass
-class SecurityIdentifier:
+class SecurityIdentifier(BaseObject):
     id_type : SecurityIdentifierType
     value   : str
 
-if strawberry_enabled:
-    SecurityIdentifier = strawberry.type()(SecurityIdentifier)
+    class Config:
+        use_enum_values = True
 
 
 
-@dataclass_json
-@dataclass
-class SecurityReference:
+class SecurityReference(BaseObject):
     gsid                : GSID
     ticker              : Ticker
 
-if strawberry_enabled:
-    SecurityReference = strawberry.type()(SecurityReference)
 
 
-
-@dataclass_json
-@dataclass
-class Security:
+class Security(BaseObject):
     ### Application-level globally unique security id
     # Burden is on user to assign these in unique way,
     # if user chooses to use this
@@ -81,52 +51,59 @@ class Security:
     website             : typing.Optional[str]
 
     #### Security data valid and recent as-of this data
-    as_of_date         : typing.Optional[datetime.datetime] \
-        = dataclasses.field(metadata=maybe_datetime_field_config, default=None)
+    as_of_date         : typing.Optional[datetime.datetime]
 
-    def __post_init__(self,):
+    class Config:
+        json_encoders = {
+            datetime.date       : lambda v: v.strftime('%Y-%m-%d'),
+            datetime.datetime   : lambda v: v.timestamp(),
+            datetime.timedelta  : pydantic.json.timedelta_isoformat,
+        }
+        use_enum_values = True
+        extra   = 'forbid'
+
+    def __init__(self, **data: typing.Any):
+        super().__init__(**data)
+
+        ### Make sure gsid is explicitly set to None, not just unset
+        data['gsid'] = data.get('gsid', None)
+
         self.ticker = self.ticker.strip().upper()
 
-if strawberry_enabled:
-    Security = strawberry.type()(Security)
 
 
-
-@dataclass_json
-@dataclass
 class Derivative(Security):
 
     ### Underlying that determines settlement of the contract
     underlying          : SecurityReference = placeholder()
 
-    settlement_type     : SettlementType = placeholder()
-    expiry_series_type  : ExpirySeriesType = placeholder()
-    expiry_time_of_day  : ExpiryTimeOfDay = placeholder()
+    settlement_type     : SettlementType    = placeholder()
+    expiry_series_type  : ExpirySeriesType  = placeholder()
+    expiry_time_of_day  : ExpiryTimeOfDay   = placeholder()
 
-    expiry_date         : datetime.date \
-        = dataclasses.field(metadata=date_field_config, default=None)
-    expiry_datetime     : typing.Optional[datetime.datetime] \
-        = dataclasses.field(metadata=maybe_datetime_field_config, default=None)
+    expiry_date         : datetime.date
+    expiry_datetime     : typing.Optional[datetime.datetime]
 
     ####### The multiplier vs underlier
     multiplier          : Multiplier = placeholder()
 
-if strawberry_enabled:
-    Derivative = strawberry.type()(Derivative)
+    @pydantic.validator('expiry_date')
+    def date_str_to_datetime_date(cls, v):
+        if isinstance(v, datetime.date):
+            return v
+        elif isinstance(v, str):
+            return pd.to_datetime(v).date.to_pydatetime()
+        else:
+            raise TypeError('expiry_date has unknown type {0}'.format(type(v)))
 
 
-@dataclass_json
-@dataclass
+
 class Future(Derivative):
-    ####### The minimum tick sizerement
+    ####### The minimum tick size
     tick_size           : CurrencyQty = placeholder()
 
-if strawberry_enabled:
-    Future = strawberry.type()(Future)
 
 
-@dataclass_json
-@dataclass
 class Option(Derivative):
 
     option_flavor   : OptionFlavor = placeholder()
@@ -134,8 +111,10 @@ class Option(Derivative):
 
     strike          : CurrencyQty = placeholder()
 
-if strawberry_enabled:
-    Option = strawberry.type()(Option)
 
-
-
+AnySecurity = typing.Union[
+    Option,
+    Future,
+    Security,
+    Derivative,
+]

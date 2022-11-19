@@ -1,3 +1,9 @@
+# try:
+#     import strawberry
+#     strawberry_enabled = True
+# except:
+#     strawberry_enabled = False
+
 import enum
 
 
@@ -18,4 +24,5 @@ class Exchange(str, enum.Enum):
 
     ### Canadian
     TORONTO     = 'TSX'
-
+# if strawberry_enabled:
+#     Exchange = strawberry.type()(Exchange)

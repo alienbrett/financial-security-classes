@@ -584,9 +584,11 @@ class TestOptionConstructor(unittest.TestCase):
             expiry_series_type  = fs.ExpirySeriesType.MONTHLY,
         )
 
-        obj_dict = obj.to_dict()
-        obj_json = json.dumps(obj_dict)
+        # obj_dict = obj.to_dict()
+        # obj_json = json.dumps(obj_dict)
+        obj_json = obj.json()
 
-        obj_recovered = fs.Option.from_json(obj_json)
+        # obj_recovered = fs.Option.from_json(obj_json)
+        obj_recovered = fs.Option.parse_raw(obj_json)
 
         self.assertEqual(obj_recovered, obj)

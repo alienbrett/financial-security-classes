@@ -134,10 +134,11 @@ class TestFutureConstructor(unittest.TestCase):
     def test_serialize_future_1(self,):
         obj = self.esh23
 
-        obj_dict = obj.to_dict()
-        obj_json = json.dumps(obj_dict)
+        # obj_dict = obj.dict()
+        # obj_json = json.dumps(obj_dict)
+        obj_json = obj.json()
 
-        obj_recovered = fs.Future.from_json(obj_json)
+        obj_recovered = fs.Future.parse_raw(obj_json)
 
         self.assertEqual(obj_recovered, obj)
 
@@ -145,10 +146,11 @@ class TestFutureConstructor(unittest.TestCase):
     def test_serialize_future_2(self,):
         obj = self.esu22
 
-        obj_dict = obj.to_dict()
-        obj_json = json.dumps(obj_dict)
+        # obj_dict = obj.dict()
+        # obj_json = json.dumps(obj_dict)
+        obj_json = obj.json()
 
-        obj_recovered = fs.Future.from_json(obj_json)
+        obj_recovered = fs.Future.parse_raw(obj_json)
 
         self.assertEqual(obj_recovered, obj)
 
@@ -158,10 +160,11 @@ class TestFutureConstructor(unittest.TestCase):
     def test_serialize_usd_1(self,):
         obj = self.usd
 
-        obj_dict = obj.to_dict()
-        obj_json = json.dumps(obj_dict)
+        # obj_dict = obj.dict()
+        # obj_json = json.dumps(obj_dict)
+        obj_json = obj.json()
 
-        obj_recovered = fs.Security.from_json(obj_json)
+        obj_recovered = fs.Security.parse_raw(obj_json)
 
         self.assertEqual(obj_recovered, obj)
 
@@ -169,9 +172,11 @@ class TestFutureConstructor(unittest.TestCase):
     def test_serialize_jpy_1(self,):
         obj = self.jpy
 
-        obj_dict = obj.to_dict()
-        obj_json = json.dumps(obj_dict)
+        # obj_dict = obj.dict()
+        # obj_json = json.dumps(obj_dict)
+        obj_json = obj.json()
 
-        obj_recovered = fs.Security.from_json(obj_json)
+        obj_recovered = fs.Security.parse_raw(obj_json)
+        # obj_recovered = fs.Security.parse_raw(obj_json)
 
         self.assertEqual(obj_recovered, obj)

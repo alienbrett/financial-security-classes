@@ -9,7 +9,7 @@ from .exchanges import *
 from .exceptions import *
 from .constructors import *
 from .occ_symbology import *
-from .utils import *
+from .misc import *
 
 
 

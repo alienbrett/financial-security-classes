@@ -31,6 +31,7 @@ class TestCurrencyConstructor(unittest.TestCase):
                 fs.FIGI('12345'),
             ],
         )
+        
 
         self.assertIn(fs.FIGI('12345'), usd.identifiers,)
 
@@ -93,10 +94,12 @@ class TestCurrencyConstructor(unittest.TestCase):
             identifiers = [fs.FIGI('test')],
         )
 
-        obj_dict = btc.to_dict()
-        obj_json = json.dumps(obj_dict)
+        # obj_dict = btc.to_dict()
+        # obj_json = json.dumps(obj_dict)
+        obj_json = btc.json()
 
-        obj_recovered = fs.Security.from_json(obj_json)
+        # obj_recovered = fs.Security.from_json(obj_json)
+        obj_recovered = fs.Security.parse_raw(obj_json)
         self.assertEqual(obj_recovered, btc)
 
         # good_json = '''{"gsid": 100, "ticker": "BTC", "security_type": 2, "security_subtype": 510, "identifiers": [{"kind": 2, "value": "test"}], "primary_exchange": null, "denominated_ccy": null, "issuer": null, "description": null, "website": null}'''

@@ -64,10 +64,10 @@ def ETP (
 
 def FiatCurrency(
         ticker      : Ticker,
-        gsid        : GSID                  = None,
-        nation      : str                   = None,
-        identifiers : List[SecurityIdentifier]   = [],
-        description : Optional[str]              = None,
+        gsid        : GSID                      = None,
+        nation      : str                       = None,
+        identifiers : List[SecurityIdentifier]  = [],
+        description : Optional[str]             = None,
     ) -> Security:
     return Security(
         ticker          = ticker,
