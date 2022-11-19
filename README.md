@@ -100,7 +100,7 @@ esu22 = fs.NewFuture(
 ### Options
 The package supports americans and europeans:
 ```python3
-amer_call = fs.European(
+amer_call = fs.American(
     gsid                = fs.GSID(1_234_567),
     underlying_security = tsla,
     callput             = 'call',
