@@ -32,12 +32,14 @@ class AbstractQuote(BaseObject):
         extra   = 'forbid'
 
 
+
 class AbstractSnapshot(AbstractQuote):
     timestamp : datetime.datetime   = placeholder()
 
     @pydantic.validator('timestamp')
     def timestamp_must_have_timezone(cls, v:datetime.datetime):
         return ensure_timezone(v)
+
 
 
 class AbstractBar(AbstractQuote):
@@ -49,15 +51,24 @@ class AbstractBar(AbstractQuote):
         return ensure_timezone(v)
 
 
+class HLS(AbstractBar):
+    high        : Decimal   = placeholder()
+    low         : Decimal   = placeholder()
+    settle      : Decimal   = placeholder()
+
+
 class OHLC(AbstractBar):
     open        : Decimal   = placeholder()
-    high        : Decimal   = placeholder
+    high        : Decimal   = placeholder()
     low         : Decimal   = placeholder()
     close       : Decimal   = placeholder()
+
 
 class OHLCWithVolume(OHLC):
     volume      : Decimal    = placeholder()
 
+
+LevelOneQuote = None
 class LevelOneQuote(AbstractSnapshot):
     bid         : Decimal           = placeholder()
     ask         : Decimal           = placeholder()
@@ -69,3 +80,51 @@ class LevelOneQuote(AbstractSnapshot):
     last_sz     : typing.Optional[int]              = placeholder()
     last_time   : typing.Optional[datetime.datetime]= placeholder()
 
+
+    def __add__(self, obj: LevelOneQuote):
+        if type(obj) == type(self):
+            return LevelOneQuote(
+                bid     = self.bid + obj.bid,
+                ask     = self.ask + obj.ask,
+                last    = self.last + obj.last,
+
+                bid_sz  = min(self.bid_sz, obj.bid_sz),
+                ask_sz  = min(self.ask_sz, obj.ask_sz),
+                last_sz = min(self.last_sz, obj.last_sz),
+
+                last_time = max(self.last_time, obj.last_time),
+                timestamp = max(self.timestamp, obj.timestamp),
+            )
+        else:
+            raise TypeError('unknown object type {0}'.format(type(obj)))
+
+    def __sub__(self, obj):
+        if type(obj) == type(self):
+            return LevelOneQuote(
+                bid     = self.bid - obj.bid,
+                ask     = self.ask - obj.ask,
+                last    = self.last - obj.last,
+
+                bid_sz  = min(self.bid_sz, obj.ask_sz),
+                ask_sz  = min(self.ask_sz, obj.bid_sz),
+                last_sz = min(self.last_sz, obj.last_sz),
+
+                last_time = max(self.last_time, obj.last_time),
+                timestamp = max(self.timestamp, obj.timestamp),
+            )
+        else:
+            raise TypeError('unknown object type {0}'.format(type(obj)))
+
+
+    def __mul__(self, obj: decimal.Decimal):
+        ret = self.copy()
+
+        ret.bid *= obj
+        ret.ask *= obj
+        ret.last *= obj
+
+        if obj < 0:
+            ret.bid_sz, ret.ask_sz = ret.ask_sz, ret.bid_sz
+            ret.bid, ret.ask = ret.ask, ret.bid
+
+        return ret

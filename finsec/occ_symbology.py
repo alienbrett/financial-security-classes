@@ -28,7 +28,7 @@ def option_format(
             symbol: the underlying symbol, case insensitive
             exp_date: date of expiration, in string-form.
             strike: strike price of the option
-            direction: 'C' or 'call' or the like, for call, otherwise 'p' or 'Put' for put
+            flavor: 'C' or 'call' or the like, for call, otherwise 'p' or 'Put' for put
     Returns:
             OCC string, like 'IBM201231C00301000'
     .. code-block:: python
@@ -36,7 +36,7 @@ def option_format(
             >>> ibm_call = option_format(
                     exp_date = '2020-12-31',
                     symbol = 'IBM', # case insensitive
-                    direction = 'call',
+                    flavor = 'call',
                     strike = 301
             )
             >>> ibm_call

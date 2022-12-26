@@ -49,8 +49,9 @@ def European (
 
         ### Currency will be used, if it cannot be inferred from underlying
         currency            : Union[Security,SecurityReference,None] = None,
+
+        **kwargs
     ) -> Option:
-    description = None
 
     good_callput = callput.strip().lower()
     if good_callput == 'call':
@@ -117,10 +118,9 @@ def European (
 
         primary_exchange    = primary_exc,
 
-        description         = description,
         identifiers         = identifiers,
-        website             = website,
         issuer              = None,
+        **kwargs
     )
 
 
@@ -157,8 +157,9 @@ def American (
 
         ### Currency will be used, if it cannot be inferred from underlying
         currency            : Union[Security,SecurityReference,None] = None,
+
+        **kwargs,
     ) -> Option:
-    description = None
 
     good_callput = callput.strip().lower()
     if good_callput == 'call':
@@ -225,8 +226,9 @@ def American (
 
         primary_exchange    = primary_exc,
 
-        description         = description,
         identifiers         = identifiers,
         website             = website,
         issuer              = None,
+
+        **kwargs,
     )

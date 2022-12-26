@@ -16,4 +16,6 @@ from .options import *
 
 from .quotes import *
 
+from .quote_grid import *
+
 from .serializer import *

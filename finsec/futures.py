@@ -46,12 +46,10 @@ def NewFuture (
 
         ### Currency will be used, if it cannot be inferred from underlying
         currency            : Union[Security,SecurityReference,None] = None,
+
+        description         : Optional[str]                 = None,
     ) -> Future:
 
-
-    description = None
-
-    
 
     if is_physical_settlement_available( underlying_security ):
         if settlement_type is None:
@@ -106,4 +104,3 @@ def NewFuture (
         
         denominated_ccy     = currency,
     )
-
