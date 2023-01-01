@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import glob
 import os
 import sys
@@ -51,7 +49,7 @@ if extras_require:
 # are installed.
 # https://packaging.python.org/guides/single-sourcing-package-version/
 meta = {}
-exec(read("package_name/__meta__.py"), meta)
+exec(read("finsec/__meta__.py"), meta)
 
 
 # Import the README and use it as the long-description.

@@ -113,7 +113,7 @@ amer_call = fs.American(
         fs.FIGI('blahblahblah123'),
     ],
     settlement_type     = fs.SettlementType.PHYSICAL,
-    
+
     # Without this argument, this set to fs.ExpirySeriesType.UNKNOWN
     expiry_series_type  = fs.ExpirySeriesType.MONTHLY,
 )
@@ -128,10 +128,10 @@ euro_put = fs.European(
     strike              = 3_500,
     expiry_date         = '2022-12-30', # string expiries like this also supported
     expiry_time_of_day  = fs.ExpiryTimeOfDay.CLOSE,
-    primary_exc         = fs.Exchange.CBOE, 
+    primary_exc         = fs.Exchange.CBOE,
     expiry_series_type  = fs.ExpirySeriesType.QUARTERLY,
     multiplier          = 100.0,
-    
+
     # Isn't strictly necessary, since this will be inferred from index underlying without physical delivery available
     settlement_type     = fs.SettlementType.CASH,
 )
