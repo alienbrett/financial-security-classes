@@ -4,5 +4,9 @@ import pydantic
 class MissingTimezone(Exception):
     pass
 
-placeholder = lambda: None
+
+def placeholder():
+    return None
+
+
 forbid_extra = pydantic.Extra.forbid
