@@ -11,7 +11,7 @@ from .enums import SecuritySubtype, SecurityType
 
 def get_constructor_from_types(
     security_type: SecurityType, security_subtype: SecuritySubtype
-) -> Callable[[...], Security]:
+) -> Callable[..., Security]:
     """Returns the constructor which builds a security from a dict of kwargs."""
     result = Security
 
@@ -39,7 +39,7 @@ def get_constructor_from_types(
     return result
 
 
-def get_constructor(obj_dict: Dict[Any, Any]) -> Optional[Callable[[...], Security]]:
+def get_constructor(obj_dict: Dict[Any, Any]) -> Optional[Callable[..., Security]]:
     """Infers the necessary constructor from the dict provided, and returns that constructor."""
     security_type = SecurityType(obj_dict["security_type"])
     security_subtype = SecuritySubtype(obj_dict["security_subtype"])
