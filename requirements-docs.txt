@@ -1,8 +1,8 @@
 docutils>=0.18.1
 myst-parser
-pypandoc>=1.6.3
-readthedocs-sphinx-search; python_version>='3.9'
-sphinx<5,>=3
+pypando
+readthedocs-sphinx-search
+sphinx
 sphinx-autobuild
 sphinx_book_theme
-watchdog<1.0.0
+watchdog
