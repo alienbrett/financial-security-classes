@@ -1,98 +1,104 @@
 import unittest
-import json
-import finsec as fs
 
 from base_test import BaseTestCase
 
-class TestCurrencyConstructor(BaseTestCase):
+import finsec as fs
 
-    def test_create_currency_1(self,):
+
+class TestCurrencyConstructor(BaseTestCase):
+    def test_create_currency_1(
+        self,
+    ):
         usd = fs.FiatCurrency(
-            ticker = 'USD',
-            nation = 'United States',
-            gsid   = fs.GSID(100),
+            ticker="USD",
+            nation="United States",
+            gsid=fs.GSID(100),
         )
 
         self.assertEqual(usd.security_type, fs.SecurityType.CURRENCY)
         self.assertEqual(usd.security_subtype, fs.SecuritySubtype.NATIONAL_FIAT)
 
-        self.assertEqual(usd.ticker, 'USD')
-        self.assertEqual(usd.issuer, 'United States')
+        self.assertEqual(usd.ticker, "USD")
+        self.assertEqual(usd.issuer, "United States")
         self.assertEqual(usd.identifiers, [])
 
-
-
-
-    def test_create_currency_2(self,):
+    def test_create_currency_2(
+        self,
+    ):
         usd = fs.FiatCurrency(
-            ticker = 'USD',
-            nation = 'United States',
-            gsid   = fs.GSID(100),
-            identifiers = [
-                fs.FIGI('12345'),
+            ticker="USD",
+            nation="United States",
+            gsid=fs.GSID(100),
+            identifiers=[
+                fs.FIGI("12345"),
             ],
         )
-        
 
-        self.assertIn(fs.FIGI('12345'), usd.identifiers,)
-
-
-
-
+        self.assertIn(
+            fs.FIGI("12345"),
+            usd.identifiers,
+        )
 
     @unittest.expectedFailure
-    def test_create_usd_fail_1(self,):
+    def test_create_usd_fail_1(
+        self,
+    ):
         usd = fs.FiatCurrency(
-            ticker = 'USD',
-            nation = 'United States',
-            gsid   = fs.GSID(100),
-            identifiers = [
-                fs.FIGI('12345'),
+            ticker="USD",
+            nation="United States",
+            gsid=fs.GSID(100),
+            identifiers=[
+                fs.FIGI("12345"),
             ],
         )
 
         self.assertEqual(usd.settlement_type, fs.SettlementType.UNKNOWN)
 
-
     @unittest.expectedFailure
-    def test_create_usd_fail_2(self,):
+    def test_create_usd_fail_2(
+        self,
+    ):
         usd = fs.FiatCurrency(
-            ticker = 'USD',
-            nation = 'United States',
-            gsid   = fs.GSID(100),
-            identifiers = [
-                fs.FIGI('12345'),
+            ticker="USD",
+            nation="United States",
+            gsid=fs.GSID(100),
+            identifiers=[
+                fs.FIGI("12345"),
             ],
         )
 
         self.assertEqual(usd.primary_exchange, fs.Exchange.NYSE)
-        # self.assertEqual(usd.settlement_type, fs.SettlementType.UNKNOWN)
-    
 
-    ################## Crypto
+    # Crypto
 
-    def test_create_crypto_currency_1(self,):
+    def test_create_crypto_currency_1(
+        self,
+    ):
         btc = fs.CryptoCurrency(
-            ticker = ' btc ',
-            gsid   = fs.GSID(100),
-            identifiers = [fs.FIGI('test')],
+            ticker=" btc ",
+            gsid=fs.GSID(100),
+            identifiers=[fs.FIGI("test")],
         )
 
-        self.assertIn(fs.FIGI('test'), btc.identifiers,)
+        self.assertIn(
+            fs.FIGI("test"),
+            btc.identifiers,
+        )
         self.assertEqual(btc.security_type, fs.SecurityType.CURRENCY)
         self.assertEqual(btc.security_subtype, fs.SecuritySubtype.CRYPTOCURRENCY)
 
-        self.assertEqual(btc.ticker, 'BTC')
-        self.assertIsNone(btc.issuer,)
+        self.assertEqual(btc.ticker, "BTC")
+        self.assertIsNone(
+            btc.issuer,
+        )
 
-
-
-
-    def test_serialize_crypto_1(self,):
+    def test_serialize_crypto_1(
+        self,
+    ):
         btc = fs.CryptoCurrency(
-            ticker = ' btc ',
-            gsid   = fs.GSID(100),
-            identifiers = [fs.FIGI('test')],
+            ticker=" btc ",
+            gsid=fs.GSID(100),
+            identifiers=[fs.FIGI("test")],
         )
 
         # obj_dict = btc.to_dict()
@@ -108,4 +114,3 @@ class TestCurrencyConstructor(BaseTestCase):
         #     obj_json,
         #     good_json,
         # )
-
