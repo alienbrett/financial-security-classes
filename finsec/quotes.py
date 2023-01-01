@@ -4,20 +4,6 @@ from decimal import Decimal
 
 import pydantic
 
-# from .base import Option, Security, SecurityIdentifier, SecurityReference
-# from .constructors import create_reference_from_security
-# from .enums import (
-#     CurrencyQty,
-#     ExpirySeriesType,
-#     ExpiryTimeOfDay,
-#     Multiplier,
-#     OptionExerciseStyle,
-#     OptionFlavor,
-#     SecuritySubtype,
-#     SecurityType,
-#     SettlementType,
-# )
-# from .enums import *
 from .exceptions import MissingTimezone
 from .exchanges import Exchange
 from .utils import placeholder

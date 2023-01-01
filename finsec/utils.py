@@ -1,12 +1,7 @@
 import pydantic
 
-
-class MissingTimezone(Exception):
-    pass
+forbid_extra = pydantic.Extra.forbid
 
 
 def placeholder():
     return None
-
-
-forbid_extra = pydantic.Extra.forbid
