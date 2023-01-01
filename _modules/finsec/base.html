@@ -1,0 +1,454 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>finsec.base &#8212; financial-security-classes 0.2.dev0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/rtd_sphinx_search.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="../../_static/js/rtd_sphinx_search.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">financial-security-classes 0.2.dev0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contents:
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../source/packages/modules.html">
+   API Reference
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../../source/packages/finsec.html">
+     finsec package
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+    <label for="toctree-checkbox-2">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.base.html">
+       finsec.base module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.constructors.html">
+       finsec.constructors module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.enums.html">
+       finsec.enums module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.exceptions.html">
+       finsec.exceptions module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.exchanges.html">
+       finsec.exchanges module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.futures.html">
+       finsec.futures module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.misc.html">
+       finsec.misc module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.occ_symbology.html">
+       finsec.occ_symbology module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.options.html">
+       finsec.options module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.quote_grid.html">
+       finsec.quote_grid module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.quotes.html">
+       finsec.quotes module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.serializer.html">
+       finsec.serializer module
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../source/packages/finsec.utils.html">
+       finsec.utils module
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../source/changelog.html">
+   Changelog
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../py-modindex.html">
+   Module Index
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../genindex.html">
+   Index
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1></h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <h1>Source code for finsec.base</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">typing</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pydantic</span>
+
+<span class="kn">from</span> <span class="nn">.enums</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">GSID</span><span class="p">,</span>
+    <span class="n">CurrencyQty</span><span class="p">,</span>
+    <span class="n">ExpirySeriesType</span><span class="p">,</span>
+    <span class="n">ExpiryTimeOfDay</span><span class="p">,</span>
+    <span class="n">Multiplier</span><span class="p">,</span>
+    <span class="n">OptionExerciseStyle</span><span class="p">,</span>
+    <span class="n">OptionFlavor</span><span class="p">,</span>
+    <span class="n">SecurityIdentifierType</span><span class="p">,</span>
+    <span class="n">SecuritySubtype</span><span class="p">,</span>
+    <span class="n">SecurityType</span><span class="p">,</span>
+    <span class="n">SettlementType</span><span class="p">,</span>
+    <span class="n">Ticker</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.exchanges</span> <span class="kn">import</span> <span class="n">Exchange</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">placeholder</span>
+
+<span class="c1"># from .misc import is_physical_settlement_available</span>
+
+
+<span class="n">BaseObject</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span>
+
+
+<div class="viewcode-block" id="SecurityIdentifier"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.SecurityIdentifier">[docs]</a><span class="k">class</span> <span class="nc">SecurityIdentifier</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Object that identifies an existing security. This should be like ISIN, FIGI, etc.&quot;&quot;&quot;</span>
+
+    <span class="n">id_type</span><span class="p">:</span> <span class="n">SecurityIdentifierType</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span>
+
+<div class="viewcode-block" id="SecurityIdentifier.Config"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.SecurityIdentifier.Config">[docs]</a>    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">use_enum_values</span> <span class="o">=</span> <span class="kc">True</span></div></div>
+
+
+<div class="viewcode-block" id="SecurityReference"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.SecurityReference">[docs]</a><span class="k">class</span> <span class="nc">SecurityReference</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;References an existing security. Should be treated like pointer of sorts.&quot;&quot;&quot;</span>
+
+    <span class="n">gsid</span><span class="p">:</span> <span class="n">GSID</span>
+    <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span></div>
+
+
+<div class="viewcode-block" id="Security"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Security">[docs]</a><span class="k">class</span> <span class="nc">Security</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Foundational financial security object.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Application-level globally unique security id</span>
+    <span class="c1"># Burden is on user to assign these in unique way,</span>
+    <span class="c1"># if user chooses to use this</span>
+    <span class="n">gsid</span><span class="p">:</span> <span class="n">GSID</span>
+
+    <span class="c1"># The common ticker name</span>
+    <span class="c1"># Different vendors may use different variations,</span>
+    <span class="c1">#    but they&#39;ll be responsible for formatting correctly given this object</span>
+    <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span>
+
+    <span class="n">security_type</span><span class="p">:</span> <span class="n">SecurityType</span>
+    <span class="n">security_subtype</span><span class="p">:</span> <span class="n">SecuritySubtype</span>
+    <span class="n">identifiers</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">SecurityIdentifier</span><span class="p">]</span>
+
+    <span class="n">primary_exchange</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">Exchange</span><span class="p">]</span>
+
+    <span class="n">denominated_ccy</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">SecurityReference</span><span class="p">]</span>
+
+    <span class="n">issuer</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">website</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+
+    <span class="c1"># Security data valid and recent as-of this data</span>
+    <span class="n">as_of_date</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Security.Config"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Security.Config">[docs]</a>    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">json_encoders</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(),</span>
+            <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">:</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">timedelta_isoformat</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">use_enum_values</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="s2">&quot;forbid&quot;</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># Make sure gsid is explicitly set to None, not just unset</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;gsid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;gsid&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Derivative"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Derivative">[docs]</a><span class="k">class</span> <span class="nc">Derivative</span><span class="p">(</span><span class="n">Security</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Derivative security, with some specified underlyer.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Underlying that determines settlement of the contract</span>
+    <span class="n">underlying</span><span class="p">:</span> <span class="n">SecurityReference</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+
+    <span class="n">settlement_type</span><span class="p">:</span> <span class="n">SettlementType</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">expiry_series_type</span><span class="p">:</span> <span class="n">ExpirySeriesType</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">expiry_time_of_day</span><span class="p">:</span> <span class="n">ExpiryTimeOfDay</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+
+    <span class="n">expiry_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span>
+    <span class="n">expiry_datetime</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span>
+
+    <span class="c1"># The multiplier vs underlier</span>
+    <span class="n">multiplier</span><span class="p">:</span> <span class="n">Multiplier</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Derivative.date_str_to_datetime_date"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Derivative.date_str_to_datetime_date">[docs]</a>    <span class="nd">@pydantic</span><span class="o">.</span><span class="n">validator</span><span class="p">(</span><span class="s2">&quot;expiry_date&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">date_str_to_datetime_date</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">v</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expiry_date has unknown type </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span></div></div>
+
+
+<div class="viewcode-block" id="Future"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Future">[docs]</a><span class="k">class</span> <span class="nc">Future</span><span class="p">(</span><span class="n">Derivative</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Exchange-traded future object, derived from some underlying.&quot;&quot;&quot;</span>
+
+    <span class="n">tick_size</span><span class="p">:</span> <span class="n">CurrencyQty</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Option"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Option">[docs]</a><span class="k">class</span> <span class="nc">Option</span><span class="p">(</span><span class="n">Derivative</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Option object, derived from some underlying.&quot;&quot;&quot;</span>
+
+    <span class="n">option_flavor</span><span class="p">:</span> <span class="n">OptionFlavor</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">option_exercise</span><span class="p">:</span> <span class="n">OptionExerciseStyle</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+
+    <span class="n">strike</span><span class="p">:</span> <span class="n">CurrencyQty</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span></div>
+
+
+<span class="n">AnySecurity</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span>
+    <span class="n">Option</span><span class="p">,</span>
+    <span class="n">Future</span><span class="p">,</span>
+    <span class="n">Security</span><span class="p">,</span>
+    <span class="n">Derivative</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Brett Graves<br/>
+  
+      &copy; Copyright 2023, Brett Graves.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

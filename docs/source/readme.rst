@@ -1,1 +1,0 @@
-/home/coder/financial-security-classes/README.rst
