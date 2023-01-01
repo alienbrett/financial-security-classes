@@ -1,10 +1,10 @@
-
 import unittest
 import datetime
 import finsec as fs
 
+from base_test import BaseTestCase
 
-class TestOCCSymbology(unittest.TestCase):
+class TestOCCSymbology(BaseTestCase):
 
     def setUp(self,):
         pass

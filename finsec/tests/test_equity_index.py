@@ -1,8 +1,9 @@
 import unittest
 import finsec as fs
 
+from base_test import BaseTestCase
 
-class TestIndexConstructor(unittest.TestCase):
+class TestIndexConstructor(BaseTestCase):
 
     def setUp(self,):
         self.usd = fs.FiatCurrency(

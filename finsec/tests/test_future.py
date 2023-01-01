@@ -4,10 +4,11 @@ import json
 import finsec as fs
 import zoneinfo
 
+from base_test import BaseTestCase
 
 nyc = zoneinfo.ZoneInfo('US/Eastern')
 
-class TestFutureConstructor(unittest.TestCase):
+class TestFutureConstructor(BaseTestCase):
 
     def setUp(self,):
         self.usd = fs.FiatCurrency(

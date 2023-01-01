@@ -3,8 +3,9 @@ import datetime
 import json
 import finsec as fs
 
+from base_test import BaseTestCase
 
-class TestOptionConstructor(unittest.TestCase):
+class TestOptionConstructor(BaseTestCase):
 
     def setUp(self,):
         self.usd = fs.FiatCurrency(

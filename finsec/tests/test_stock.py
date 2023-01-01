@@ -1,8 +1,9 @@
 import unittest
 import finsec as fs
 
+from base_test import BaseTestCase
 
-class TestStockConstructor(unittest.TestCase):
+class TestStockConstructor(BaseTestCase):
 
     def test_create_stock_1(self,):
         tsla = fs.Stock(
@@ -90,7 +91,7 @@ class TestStockConstructor(unittest.TestCase):
 ################## Test ETP ######################
 
 
-class TestETPConstructor(unittest.TestCase):
+class TestETPConstructor(BaseTestCase):
 
     def test_create_etp_1(self,):
         hyg = fs.ETP(

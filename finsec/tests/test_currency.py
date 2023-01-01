@@ -2,8 +2,9 @@ import unittest
 import json
 import finsec as fs
 
+from base_test import BaseTestCase
 
-class TestCurrencyConstructor(unittest.TestCase):
+class TestCurrencyConstructor(BaseTestCase):
 
     def test_create_currency_1(self,):
         usd = fs.FiatCurrency(

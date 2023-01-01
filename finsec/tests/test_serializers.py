@@ -6,11 +6,12 @@ import unittest
 
 import finsec as fs
 
+from base_test import BaseTestCase
 
 nyc = zoneinfo.ZoneInfo('US/Eastern')
 
 
-class TestSerializers(unittest.TestCase):
+class TestSerializers(BaseTestCase):
 
     def setUp(self,):
         self.usd = fs.FiatCurrency(
