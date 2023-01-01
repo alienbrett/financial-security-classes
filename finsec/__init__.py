@@ -57,7 +57,7 @@ from .quote_grid import (
     OptionChain,
     QuoteGrid,
     SecurityCache,
-    securitychain,
+    SecurityChain,
 )
 from .quotes import (
     HLS,
