@@ -1,4 +1,5 @@
 # <img src="https://raw.githubusercontent.com/alienbrett/financial-security-classes/main/contract-icon.png" alt="FinSec icon" width="60"/> FinSec
+[![codecov](https://codecov.io/gh/alienbrett/financial-security-classes/branch/main/graph/badge.svg?token=NEZT9SDMIU)](https://codecov.io/gh/alienbrett/financial-security-classes)
 ![open issues](https://img.shields.io/github/issues/alienbrett/financial-security-classes)
 ![pypi version](https://img.shields.io/pypi/v/financial-security-classes)
 ![license](https://img.shields.io/pypi/l/financial-security-classes)
