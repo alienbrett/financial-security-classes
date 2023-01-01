@@ -47,9 +47,7 @@ version = ".".join(release.split(".")[0:2])
 
 
 def run_apidoc(_):
-    """
-    Call apidoc, with customised set up.
-    """
+    """Call apidoc, with customised set up."""
     ignore_paths = [
         os.path.join("..", project_path, "tests"),
     ]
@@ -78,9 +76,7 @@ def run_apidoc(_):
 
 
 def retitle_modules(_):
-    """
-    Overwrite the title of the modules.rst file.
-    """
+    """Overwrite the title of the modules.rst file."""
     pth = "source/packages/modules.rst"
     lines = open(pth).read().splitlines()
     # Overwrite the junk in the first two lines with a better title
@@ -90,8 +86,7 @@ def retitle_modules(_):
 
 
 def auto_convert_readme(_):
-    """
-    Handle README.rst or README.md as available.
+    """Handle README.rst or README.md as available.
 
     If it exists, makes a symbolic link to README.rst at docs/source/readme.rst.
     Otherwise, and if it exists, converts README.md to to rST format, the
@@ -147,9 +142,7 @@ def auto_convert_readme(_):
 
 
 def setup(app):
-    """
-    Set up our apidoc commands to run whenever sphinx is built.
-    """
+    """Set up our apidoc commands to run whenever sphinx is built."""
     app.connect("builder-inited", auto_convert_readme)
     app.connect("builder-inited", run_apidoc)
     app.connect("builder-inited", retitle_modules)

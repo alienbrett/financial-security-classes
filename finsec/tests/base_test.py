@@ -1,5 +1,4 @@
-"""
-Provides a base test class for other test classes to inherit from.
+"""Provides a base test class for other test classes to inherit from.
 
 Includes the numpy testing functions as methods.
 """
@@ -30,8 +29,7 @@ TEST_DIRECTORY = os.path.dirname(os.path.abspath(getsourcefile(lambda: 0)))
 
 
 def assert_starts_with(actual, desired):
-    """
-    Check that a string starts with a certain substring.
+    """Check that a string starts with a certain substring.
 
     Parameters
     ----------
@@ -67,9 +65,7 @@ def assert_starts_with(actual, desired):
 
 
 class BaseTestCase(unittest.TestCase):
-    """
-    Superclass for test cases, including support for numpy.
-    """
+    """Superclass for test cases, including support for numpy."""
 
     # The attribute `test_directory` provides the path to the directory
     # containing the file `base_test.py`, which is useful to obtain
@@ -86,8 +82,7 @@ class BaseTestCase(unittest.TestCase):
 
     @pytest.fixture(autouse=True)
     def capsys(self, capsys):
-        r"""
-        Pass-through for accessing pytest.capsys fixture with class methods.
+        r"""Pass-through for accessing pytest.capsys fixture with class methods.
 
         Returns
         -------
@@ -119,8 +114,7 @@ class BaseTestCase(unittest.TestCase):
         self.capsys = capsys
 
     def recapsys(self, *captures):
-        r"""
-        Capture stdout and stderr, then write them back to stdout and stderr.
+        r"""Capture stdout and stderr, then write them back to stdout and stderr.
 
         Capture is done using the :func:`pytest.capsys` fixture. Used on its
         own, :func:`~pytest.capsys` captures outputs to stdout and stderr,
@@ -168,75 +162,51 @@ class BaseTestCase(unittest.TestCase):
     # Add assertions provided by numpy to this class, so they will be
     # available as methods to all subclasses when we do our tests.
     def assert_almost_equal(self, *args, **kwargs):
-        """
-        Check if two items are not equal up to desired precision.
-        """
+        """Check if two items are not equal up to desired precision."""
         return assert_almost_equal(*args, **kwargs)
 
     def assert_approx_equal(self, *args, **kwargs):
-        """
-        Check if two items are not equal up to significant digits.
-        """
+        """Check if two items are not equal up to significant digits."""
         return assert_approx_equal(*args, **kwargs)
 
     def assert_array_almost_equal(self, *args, **kwargs):
-        """
-        Check if two objects are not equal up to desired precision.
-        """
+        """Check if two objects are not equal up to desired precision."""
         return assert_array_almost_equal(*args, **kwargs)
 
     def assert_allclose(self, *args, **kwargs):
-        """
-        Check if two objects are equal up to desired tolerance.
-        """
+        """Check if two objects are equal up to desired tolerance."""
         return assert_allclose(*args, **kwargs)
 
     def assert_array_almost_equal_nulp(self, *args, **kwargs):
-        """
-        Compare two arrays relatively to their spacing.
-        """
+        """Compare two arrays relatively to their spacing."""
         return assert_array_almost_equal_nulp(*args, **kwargs)
 
     def assert_array_max_ulp(self, *args, **kwargs):
-        """
-        Check that all items of arrays differ in at most N Units in the Last Place.
-        """
+        """Check that all items of arrays differ in at most N Units in the Last Place."""
         return assert_array_max_ulp(*args, **kwargs)
 
     def assert_array_equal(self, *args, **kwargs):
-        """
-        Check if two array_like objects are equal.
-        """
+        """Check if two array_like objects are equal."""
         return assert_array_equal(*args, **kwargs)
 
     def assert_array_less(self, *args, **kwargs):
-        """
-        Check if two array_like objects are not ordered by less than.
-        """
+        """Check if two array_like objects are not ordered by less than."""
         return assert_array_less(*args, **kwargs)
 
     def assert_equal(self, *args, **kwargs):
-        """
-        Check if two objects are not equal.
-        """
+        """Check if two objects are not equal."""
         return assert_equal(*args, **kwargs)
 
     def assert_raises(self, *args, **kwargs):
-        """
-        Check that an exception of class exception_class is thrown by callable.
-        """
+        """Check that an exception of class exception_class is thrown by callable."""
         return assert_raises(*args, **kwargs)
 
     def assert_warns(self, *args, **kwargs):
-        """
-        Check that the given callable throws the specified warning.
-        """
+        """Check that the given callable throws the specified warning."""
         return assert_warns(*args, **kwargs)
 
     def assert_string_equal(self, *args, **kwargs):
-        """
-        Test if two strings are equal.
-        """
+        """Test if two strings are equal."""
         return assert_string_equal(*args, **kwargs)
 
     def assert_starts_with(self, *args, **kwargs):

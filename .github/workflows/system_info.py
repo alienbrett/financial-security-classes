@@ -1,5 +1,4 @@
-"""
-Print out some handy system info.
+"""Print out some handy system info.
 """
 
 import os

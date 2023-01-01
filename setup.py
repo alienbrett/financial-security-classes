@@ -8,8 +8,7 @@ from setuptools.command.test import test as TestCommand
 
 
 def read(fname):
-    """
-    Read the contents of a file.
+    """Read the contents of a file.
 
     Parameters
     ----------
