@@ -28,6 +28,8 @@ from .enums import (
     ExpirySeriesType,
     ExpiryTimeOfDay,
     Multiplier,
+    OptionExerciseStyle,
+    OptionFlavor,
     SecuritySubtype,
     SecurityType,
     SettlementType,

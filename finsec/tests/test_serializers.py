@@ -1,9 +1,9 @@
 import datetime
 import zoneinfo
 
-from base_test import BaseTestCase
-
 import finsec as fs
+
+from .base_test import BaseTestCase
 
 nyc = zoneinfo.ZoneInfo("US/Eastern")
 

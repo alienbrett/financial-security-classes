@@ -1,6 +1,6 @@
-from base_test import BaseTestCase
-
 import finsec as fs
+
+from .base_test import BaseTestCase
 
 
 class TestIndexConstructor(BaseTestCase):
