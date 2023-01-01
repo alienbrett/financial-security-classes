@@ -8,4 +8,4 @@ max-line-length = 88
 extend-ignore = E203,E402,D100,D101,D102,D103,D104,D105,D106,D107,D200,D401,E501
 docstring-convention = google
 # Ignore missing docstrings within unit testing functions.
-per-file-ignores = **/tests/:D100,D101,D102,D103,D104,D105,D106,D107
+per-file-ignores = **/tests/:D100,D101,D102,D103,D104,D105,D106,D107 __init__.py:F401
