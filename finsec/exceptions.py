@@ -1,6 +1,14 @@
-class InvalidSettlementTypeException(Exception):
+class InvalidSettlementType(Exception):
     pass
 
 
-class UnknownDenominatedCurrencyException(Exception):
+class UnknownDenominatedCurrency(Exception):
+    pass
+
+
+class MissingTimezone(Exception):
+    pass
+
+
+class MissingGSID(Exception):
     pass
