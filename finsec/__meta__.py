@@ -13,4 +13,4 @@ author = "Brett Graves"
 author_email = "alienbrett648@gmail.com"
 description = "Pure python financial securities dataclasses"
 url = "https://github.com/alienbrett/financial-security-classes"
-license = "all-rights-reserved"  # See https://choosealicense.com
+license = "apache"  # See https://choosealicense.com
