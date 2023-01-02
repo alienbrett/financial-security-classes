@@ -43,7 +43,7 @@ class TestFutureConstructor(BaseTestCase):
             gsid=fs.GSID(120),
             ticker="ESU22",
             underlying_security=self.spx,
-            expiry_date=datetime.date(2022, 9, 16),
+            expiry_date="2022-09-16",
             primary_exc=fs.Exchange.CME,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             tick_size=0.25,
@@ -78,9 +78,7 @@ class TestFutureConstructor(BaseTestCase):
             currency=self.jpy,
         )
 
-    def test_create_future_1(
-        self,
-    ):
+    def test_create_future_1(self):
 
         self.assertEqual(self.esu22.security_type, fs.SecurityType.DERIVATIVE)
         self.assertEqual(self.esu22.security_subtype, fs.SecuritySubtype.FUTURE)
@@ -113,9 +111,7 @@ class TestFutureConstructor(BaseTestCase):
             self.esu22.denominated_ccy, fs.create_reference_from_security(self.usd)
         )
 
-    def test_create_future_2(
-        self,
-    ):
+    def test_create_future_2(self):
 
         self.assertEqual(self.esh23.security_type, fs.SecurityType.DERIVATIVE)
         self.assertEqual(self.esh23.security_subtype, fs.SecuritySubtype.FUTURE)
@@ -137,33 +133,25 @@ class TestFutureConstructor(BaseTestCase):
             self.esh23.denominated_ccy, fs.create_reference_from_security(self.jpy)
         )
 
-    def test_serialize_future_1(
-        self,
-    ):
+    def test_serialize_future_1(self):
         obj = self.esh23
         obj_json = obj.json()
         obj_recovered = fs.Future.parse_raw(obj_json)
         self.assertEqual(obj_recovered, obj)
 
-    def test_serialize_future_2(
-        self,
-    ):
+    def test_serialize_future_2(self):
         obj = self.esu22
         obj_json = obj.json()
         obj_recovered = fs.Future.parse_raw(obj_json)
         self.assertEqual(obj_recovered, obj)
 
-    def test_serialize_usd_1(
-        self,
-    ):
+    def test_serialize_usd_1(self):
         obj = self.usd
         obj_json = obj.json()
         obj_recovered = fs.Security.parse_raw(obj_json)
         self.assertEqual(obj_recovered, obj)
 
-    def test_serialize_jpy_1(
-        self,
-    ):
+    def test_serialize_jpy_1(self):
         obj = self.jpy
         obj_json = obj.json()
         obj_recovered = fs.Security.parse_raw(obj_json)
