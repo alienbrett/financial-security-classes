@@ -105,8 +105,8 @@ class LevelOneQuote(AbstractSnapshot):
         if type(obj) == type(self):
             use_last = self.last_time is not None and self.last_time == obj.last_time
             return LevelOneQuote(
-                bid=self.bid - obj.bid,
-                ask=self.ask - obj.ask,
+                bid=self.bid - obj.ask,
+                ask=self.ask - obj.bid,
                 last=self.last - obj.last if use_last else None,
                 bid_sz=mmin(self.bid_sz, obj.ask_sz),
                 ask_sz=mmin(self.ask_sz, obj.bid_sz),
