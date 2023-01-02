@@ -278,13 +278,13 @@ title="Fullscreen mode"
               <div>
                 
   <h1>Source code for finsec.quote_grid</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">pydantic</span>
 
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">GSID</span><span class="p">,</span> <span class="n">Security</span>
+<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">GSID</span><span class="p">,</span> <span class="n">Security</span><span class="p">,</span> <span class="n">SecurityReference</span>
+<span class="kn">from</span> <span class="nn">.constructors</span> <span class="kn">import</span> <span class="n">create_reference_from_security</span>
 
-<span class="c1"># from .constructors import *</span>
 <span class="c1"># from .enums import *</span>
 <span class="c1"># from .exceptions import</span>
 <span class="c1"># from .exchanges import Exchange</span>
@@ -293,30 +293,40 @@ title="Fullscreen mode"
 <span class="c1"># from .utils import *</span>
 
 
+<span class="n">SecurityLookupKey</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">GSID</span><span class="p">,</span> <span class="n">Security</span><span class="p">,</span> <span class="n">SecurityReference</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="as_gsid"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.as_gsid">[docs]</a><span class="k">def</span> <span class="nf">as_gsid</span><span class="p">(</span><span class="n">k</span><span class="p">:</span> <span class="n">SecurityLookupKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GSID</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">Security</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">create_reference_from_security</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">SecurityReference</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">gsid</span>
+    <span class="k">return</span> <span class="n">k</span></div>
+
+
 <div class="viewcode-block" id="SecurityCache"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityCache">[docs]</a><span class="k">class</span> <span class="nc">SecurityCache</span><span class="p">(</span><span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Caches securities against GSID, and operates kinda like a dict.&quot;&quot;&quot;</span>
 
     <span class="n">securities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">GSID</span><span class="p">,</span> <span class="n">Security</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">GSID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Security</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">securities</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">SecurityLookupKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Security</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">securities</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">as_gsid</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">GSID</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Security</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">securities</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">SecurityLookupKey</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Security</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">securities</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">as_gsid</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">GSID</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">securities</span><span class="o">.</span><span class="fm">__delitem__</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">SecurityLookupKey</span><span class="p">,</span> <span class="n">Security</span><span class="p">,</span> <span class="n">SecurityReference</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">securities</span><span class="o">.</span><span class="fm">__delitem__</span><span class="p">(</span><span class="n">as_gsid</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">GSID</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">SecurityLookupKey</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">as_gsid</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">securities</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">securities</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
 
 <div class="viewcode-block" id="SecurityCache.add"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityCache.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">:</span> <span class="n">Security</span><span class="p">):</span>
-        <span class="c1"># print(&#39;adding security to cache&#39;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">gsid</span><span class="p">,</span> <span class="n">sec</span><span class="p">)</span>
-        <span class="c1"># print(self.securities)</span>
         <span class="k">return</span> <span class="n">sec</span><span class="o">.</span><span class="n">gsid</span></div></div>
 
 
@@ -326,14 +336,27 @@ title="Fullscreen mode"
     <span class="n">quotes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">GSID</span><span class="p">,</span> <span class="n">AbstractQuote</span><span class="p">]</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">sec_cache</span><span class="p">:</span> <span class="n">SecurityCache</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">SecurityCache</span><span class="p">)</span>
 
-<div class="viewcode-block" id="QuoteGrid.ingest"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.QuoteGrid.ingest">[docs]</a>    <span class="k">def</span> <span class="nf">ingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Security</span><span class="p">,</span> <span class="n">GSID</span><span class="p">],</span> <span class="n">quote</span><span class="p">:</span> <span class="n">AbstractQuote</span><span class="p">):</span>
+<div class="viewcode-block" id="QuoteGrid.ingest"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.QuoteGrid.ingest">[docs]</a>    <span class="k">def</span> <span class="nf">ingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">:</span> <span class="n">Security</span><span class="p">,</span> <span class="n">quote</span><span class="p">:</span> <span class="n">AbstractQuote</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Incorporates a security and quote into the object.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">Security</span><span class="p">):</span>
             <span class="n">sec_gsid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sec_cache</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sec_gsid</span> <span class="o">=</span> <span class="n">sec</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">quotes</span><span class="p">[</span><span class="n">sec_gsid</span><span class="p">]</span> <span class="o">=</span> <span class="n">quote</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">quotes</span><span class="p">[</span><span class="n">sec_gsid</span><span class="p">]</span> <span class="o">=</span> <span class="n">quote</span></div>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">SecurityLookupKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Security</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">quotes</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">as_gsid</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">SecurityLookupKey</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Security</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">quotes</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">as_gsid</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">v</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">SecurityLookupKey</span><span class="p">,</span> <span class="n">Security</span><span class="p">,</span> <span class="n">SecurityReference</span><span class="p">]):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">quotes</span><span class="o">.</span><span class="fm">__delitem__</span><span class="p">(</span><span class="n">as_gsid</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">SecurityLookupKey</span><span class="p">):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">as_gsid</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quotes</span></div>
 
 
 <div class="viewcode-block" id="SecurityChain"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityChain">[docs]</a><span class="k">class</span> <span class="nc">SecurityChain</span><span class="p">(</span><span class="n">QuoteGrid</span><span class="p">,</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
@@ -345,14 +368,18 @@ title="Fullscreen mode"
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Searches all securities in this chain, and returns list of the unique attribute values for specified attribute.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">({</span><span class="nb">getattr</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sec_cache</span><span class="p">})</span></div>
 
+<div class="viewcode-block" id="SecurityChain.filter"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityChain.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Security</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns generator that yields all securities matching some criteria function.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sec_cache</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">sec</span></div>
+
 <div class="viewcode-block" id="SecurityChain.subset"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityChain.subset">[docs]</a>    <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterates through all securities with attributes matching the kwargs specified.&quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">match_func</span><span class="p">(</span><span class="n">sec</span><span class="p">:</span> <span class="n">Security</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">v</span> <span class="o">==</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
-        <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="n">match_func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sec_cache</span><span class="p">):</span>
-            <span class="k">yield</span> <span class="n">sec</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">match_func</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="FutureChain"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.FutureChain">[docs]</a><span class="k">class</span> <span class="nc">FutureChain</span><span class="p">(</span><span class="n">SecurityChain</span><span class="p">,</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
