@@ -61,7 +61,6 @@ class TestQuoteGrids(BaseTestCase):
             identifiers=[fs.FIGI("234568")],
         )
 
-        exact_expiry_time = datetime.datetime(2023, 3, 17, 9, 30, 0, tzinfo=nyc)
         self.esh23 = fs.NewFuture(
             gsid=fs.GSID("blah"),
             ticker="ESH23",
@@ -69,7 +68,6 @@ class TestQuoteGrids(BaseTestCase):
             expiry_date=datetime.date(2023, 3, 17),
             primary_exc=fs.Exchange.CME,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
-            expiry_datetime=exact_expiry_time,
             tick_size=0.25,
             multiplier=50.0,
             identifiers=[fs.FIGI("234467")],
@@ -83,7 +81,6 @@ class TestQuoteGrids(BaseTestCase):
             expiry_date=datetime.date(2023, 12, 16),
             primary_exc=fs.Exchange.CME,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
-            expiry_datetime=exact_expiry_time,
             tick_size=0.25,
             multiplier=50.0,
             identifiers=[fs.FIGI("2369")],

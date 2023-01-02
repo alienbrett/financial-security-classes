@@ -40,6 +40,10 @@ def option_format(
         d_char = "C"
     elif flavor == "put":
         d_char = "P"
+    else:
+        raise ValueError(
+            "Unknown option flavor of type {0} [{1}]".format(type(flavor), flavor)
+        )
 
     symbol = str(symbol).strip().upper()
 

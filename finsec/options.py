@@ -10,6 +10,7 @@ from .enums import (
     ExpiryTimeOfDay,
     Multiplier,
     OptionExerciseStyle,
+    OptionFlavor,
     SecurityType,
     SettlementType,
 )
@@ -63,7 +64,7 @@ def NewOption(
     occ_ticker = option_format(
         symbol=underlying_ref.ticker,
         exp_date=expiry_date,
-        flavor=callput,
+        flavor="call" if flavor == OptionFlavor.CALL else "put",
         strike=strike,
     )
     sec_subtype = determine_option_subtype(

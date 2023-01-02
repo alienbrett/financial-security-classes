@@ -53,10 +53,9 @@ class TestSerializers(BaseTestCase):
             gsid=fs.GSID("blah"),
             ticker="ESH23",
             underlying_security=self.spx,
-            expiry_date=datetime.date(2023, 3, 17),
+            expiry_date=exact_expiry_time,
             primary_exc=fs.Exchange.CME,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
-            expiry_datetime=exact_expiry_time,
             tick_size=0.25,
             multiplier=50.0,
             identifiers=[
@@ -68,9 +67,7 @@ class TestSerializers(BaseTestCase):
             currency=self.usd,
         )
 
-    def test_serializers_1(
-        self,
-    ):
+    def test_serializers_1(self):
         for obj in [self.usd, self.spx, self.esh23, self.option]:
 
             obj_dict = fs.dict_encode(obj)
@@ -78,9 +75,7 @@ class TestSerializers(BaseTestCase):
 
             self.assertEqual(obj, recovered_obj)
 
-    def test_serializers_2(
-        self,
-    ):
+    def test_serializers_2(self):
         for obj in [self.usd, self.spx, self.esh23, self.option]:
 
             obj_dict = fs.json_encode(obj)

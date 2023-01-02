@@ -63,10 +63,9 @@ class TestFutureConstructor(BaseTestCase):
             gsid=fs.GSID("blah"),
             ticker="ESH23",
             underlying_security=self.spx,
-            expiry_date=datetime.date(2023, 3, 17),
+            expiry_date=exact_expiry_time.date(),
             primary_exc=fs.Exchange.CME,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
-            expiry_datetime=exact_expiry_time,
             tick_size=0.25,
             multiplier=50.0,
             identifiers=[
@@ -76,6 +75,19 @@ class TestFutureConstructor(BaseTestCase):
             # settlement_type     = fs.SettlementType.CASH,
             expiry_series_type=fs.ExpirySeriesType.QUARTERLY,
             currency=self.jpy,
+        )
+        self.esz23 = fs.NewFuture(
+            gsid=fs.GSID("blah"),
+            ticker="ESH23",
+            underlying_security=self.spx,
+            expiry_date=datetime.datetime(2023, 12, 16, 9, 30, tzinfo=nyc),
+            primary_exc=fs.Exchange.CME,
+            expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
+            tick_size=0.25,
+            multiplier=50.0,
+            identifiers=[fs.FIGI("2369")],
+            expiry_series_type=fs.ExpirySeriesType.QUARTERLY,
+            currency=self.usd,
         )
 
     def test_create_future_1(self):
@@ -92,10 +104,6 @@ class TestFutureConstructor(BaseTestCase):
         self.assertEqual(
             self.esu22.exercise.exercise.settlement_type, fs.SettlementType.CASH
         )
-        self.assertEqual(
-            self.esu22.exercise.exercise.expiry_date, datetime.date(2022, 9, 16)
-        )
-
         self.assertEqual(self.esu22.ticker, "ESU22")
         self.assertEqual(
             self.esu22.gsid,
@@ -131,6 +139,10 @@ class TestFutureConstructor(BaseTestCase):
 
         self.assertEqual(
             self.esh23.denominated_ccy, fs.create_reference_from_security(self.jpy)
+        )
+        self.assertEqual(
+            self.esz23.exercise.exercise.expiry_datetime,
+            datetime.datetime(2023, 12, 16, 9, 30, tzinfo=nyc),
         )
 
     def test_serialize_future_1(self):

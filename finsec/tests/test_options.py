@@ -1,9 +1,12 @@
 import datetime
 import unittest
+import zoneinfo
 
 import finsec as fs
 
 from .base_test import BaseTestCase
+
+nyc = zoneinfo.ZoneInfo("US/Eastern")
 
 
 class TestOptionConstructor(BaseTestCase):
@@ -153,11 +156,9 @@ class TestOptionConstructor(BaseTestCase):
         option = fs.European(
             gsid=fs.GSID(120),
             underlying_security=self.spx,
-            # I understand this dates the test, using SPX 4,000 calls!
-            # Or I hope this dates the test...
-            callput="put",
+            callput=fs.OptionFlavor.PUT,
             strike=4000,
-            expiry_date=datetime.date(2022, 9, 16),
+            expiry_date=datetime.datetime(2022, 9, 16, 9, 30, tzinfo=nyc),
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
@@ -168,6 +169,10 @@ class TestOptionConstructor(BaseTestCase):
             option.exercise.exercise.expiry_date, datetime.date(2022, 9, 16)
         )
         self.assertEqual(
+            option.exercise.exercise.expiry_datetime,
+            datetime.datetime(2022, 9, 16, 9, 30, tzinfo=nyc),
+        )
+        self.assertEqual(
             option.exercise.exercise.expiry_series_type, fs.ExpirySeriesType.UNKNOWN
         )
         self.assertEqual(
@@ -176,15 +181,10 @@ class TestOptionConstructor(BaseTestCase):
         self.assertEqual(
             option.exercise.exercise.expiry_time_of_day, fs.ExpiryTimeOfDay.OPEN
         )
-
         self.assertEqual(option.security_type, fs.SecurityType.DERIVATIVE)
         self.assertEqual(option.security_subtype, fs.SecuritySubtype.INDEX_OPTION)
         self.assertEqual(option.option_flavor, fs.OptionFlavor.PUT)
-
         self.assertEqual(option.primary_exchange, fs.Exchange.CBOE)
-
-        # # THese should berred without needing to be explicitly set
-
         self.assertEqual(option.ticker, "SPX220916P04000000")
         self.assertEqual(option.gsid, fs.GSID(120))
         self.assertEqual(option.multiplier, 100)

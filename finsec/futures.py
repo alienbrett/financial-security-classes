@@ -25,7 +25,6 @@ def NewFuture(
     multiplier: Multiplier,
     expiry_time_of_day: ExpiryTimeOfDay,
     expiry_date: datetime.date,
-    expiry_datetime: Optional[datetime.datetime] = None,
     settlement_type: SettlementType = SettlementType.UNKNOWN,
     expiry_series_type: ExpirySeriesType = ExpirySeriesType.UNKNOWN,
     currency: Union[Security, SecurityReference, None] = None,
@@ -47,6 +46,7 @@ def NewFuture(
         expiry_date,
         settlement_type=settlement_type,
         expiry_series_type=expiry_series_type,
+        expiry_time_of_day=expiry_time_of_day,
     )
 
     return Future(

@@ -82,8 +82,8 @@ def get_future_exercise(
         expiry_datetime = None
 
     elif isinstance(expiry_date, datetime.datetime):
-        expiry_date = expiry_date.date()
         expiry_datetime = expiry_date
+        expiry_date = expiry_date.date()
     elif isinstance(expiry_date, datetime.date):
         expiry_date = expiry_date
         expiry_datetime = None
@@ -113,8 +113,8 @@ def get_option_exercise(
         expiry_datetime = None
 
     elif isinstance(expiry_date, datetime.datetime):
-        expiry_date = expiry_date.date()
         expiry_datetime = expiry_date
+        expiry_date = expiry_date.date()
     elif isinstance(expiry_date, datetime.date):
         expiry_date = expiry_date
         expiry_datetime = None
