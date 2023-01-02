@@ -152,4 +152,6 @@ def create_reference_from_security(security: Security) -> SecurityReference:
     return SecurityReference(
         gsid=security.gsid,
         ticker=security.ticker,
+        security_type=security.security_type,
+        security_subtype=security.security_subtype,
     )

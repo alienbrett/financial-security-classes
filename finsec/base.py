@@ -1,5 +1,5 @@
 import datetime
-import typing
+from typing import Any, List, Optional, Union
 
 import pandas as pd
 import pydantic
@@ -27,14 +27,26 @@ from .utils import placeholder
 BaseObject = pydantic.BaseModel
 
 
+class standard_model_config:
+    json_encoders = {
+        datetime.date: lambda v: v.strftime("%Y-%m-%d"),
+        datetime.datetime: lambda v: v.timestamp(),
+        datetime.timedelta: pydantic.json.timedelta_isoformat,
+    }
+    use_enum_values = True
+    extra = "forbid"
+
+
 class SecurityIdentifier(BaseObject):
     """Object that identifies an existing security. This should be like ISIN, FIGI, etc."""
 
     id_type: SecurityIdentifierType
     value: str
 
-    class Config:
-        use_enum_values = True
+    Config = standard_model_config
+
+    # class Config:
+    #     use_enum_values = True
 
 
 class SecurityReference(BaseObject):
@@ -42,6 +54,8 @@ class SecurityReference(BaseObject):
 
     gsid: GSID
     ticker: Ticker
+    security_type: SecurityType
+    security_subtype: SecuritySubtype
 
 
 class Security(BaseObject):
@@ -59,29 +73,22 @@ class Security(BaseObject):
 
     security_type: SecurityType
     security_subtype: SecuritySubtype
-    identifiers: typing.List[SecurityIdentifier]
+    identifiers: List[SecurityIdentifier]
 
-    primary_exchange: typing.Optional[Exchange]
+    primary_exchange: Optional[Exchange]
 
-    denominated_ccy: typing.Optional[SecurityReference]
+    denominated_ccy: Optional[SecurityReference]
 
-    issuer: typing.Optional[str]
-    description: typing.Optional[str]
-    website: typing.Optional[str]
+    issuer: Optional[str]
+    description: Optional[str]
+    website: Optional[str]
 
     # Security data valid and recent as-of this data
-    as_of_date: typing.Optional[datetime.datetime]
+    as_of_date: Optional[datetime.datetime]
 
-    class Config:
-        json_encoders = {
-            datetime.date: lambda v: v.strftime("%Y-%m-%d"),
-            datetime.datetime: lambda v: v.timestamp(),
-            datetime.timedelta: pydantic.json.timedelta_isoformat,
-        }
-        use_enum_values = True
-        extra = "forbid"
+    Config = standard_model_config
 
-    def __init__(self, **data: typing.Any):
+    def __init__(self, **data: Any):
         super().__init__(**data)
 
         # Make sure gsid is explicitly set to None, not just unset
@@ -90,21 +97,14 @@ class Security(BaseObject):
         self.ticker = self.ticker.strip().upper()
 
 
-class Derivative(Security):
-    """Derivative security, with some specified underlyer."""
-
-    # Underlying that determines settlement of the contract
-    underlying: SecurityReference = placeholder()
-
-    settlement_type: SettlementType = placeholder()
-    expiry_series_type: ExpirySeriesType = placeholder()
-    expiry_time_of_day: ExpiryTimeOfDay = placeholder()
+class ExerciseDatetime(BaseObject):
+    """Encodes information about a single exercise/expiration date/time a derivative."""
 
     expiry_date: datetime.date
-    expiry_datetime: typing.Optional[datetime.datetime]
-
-    # The multiplier vs underlier
-    multiplier: Multiplier = placeholder()
+    expiry_datetime: Optional[datetime.datetime] = None
+    settlement_type: SettlementType = SettlementType.UNKNOWN
+    expiry_time_of_day: ExpiryTimeOfDay = ExpiryTimeOfDay.UNKNOWN
+    expiry_series_type: ExpirySeriesType = ExpirySeriesType.UNKNOWN
 
     @pydantic.validator("expiry_date")
     def date_str_to_datetime_date(cls, v):
@@ -116,22 +116,59 @@ class Derivative(Security):
             raise TypeError("expiry_date has unknown type {0}".format(type(v)))
 
 
+class DerivativeExercise(BaseObject):
+    exercise: Union[List[ExerciseDatetime], ExerciseDatetime]
+    Config = standard_model_config
+
+
+class ForwardExercise(DerivativeExercise):
+    exercise: ExerciseDatetime
+
+
+class OptionExercise(DerivativeExercise):
+    style: OptionExerciseStyle
+
+
+class AmericanOptionExercise(BaseObject):
+    exercise: ExerciseDatetime
+    style: OptionExerciseStyle = OptionExerciseStyle.AMERICAN
+
+
+class EuropeanOptionExercise(BaseObject):
+    exercise: ExerciseDatetime
+    style: OptionExerciseStyle = OptionExerciseStyle.EUROPEAN
+
+
+class BermudanOptionExercise(BaseObject):
+    exercise: List[ExerciseDatetime]
+    style: OptionExerciseStyle = OptionExerciseStyle.BERMUDAN
+
+
+class Derivative(Security):
+    """Derivative security, with some specified underlyer."""
+
+    underlying: SecurityReference = placeholder()
+    multiplier: Multiplier = placeholder()
+    exercise: DerivativeExercise = placeholder()
+
+
 class Future(Derivative):
     """Exchange-traded future object, derived from some underlying."""
 
     tick_size: CurrencyQty = placeholder()
+    exercise: ForwardExercise = placeholder()
 
 
 class Option(Derivative):
     """Option object, derived from some underlying."""
 
-    option_flavor: OptionFlavor = placeholder()
-    option_exercise: OptionExerciseStyle = placeholder()
-
     strike: CurrencyQty = placeholder()
+    option_flavor: OptionFlavor = placeholder()
+    exercise: OptionExercise = placeholder()
+    # option_exercise: OptionExerciseStyle = placeholder()
 
 
-AnySecurity = typing.Union[
+AnySecurity = Union[
     Option,
     Future,
     Security,

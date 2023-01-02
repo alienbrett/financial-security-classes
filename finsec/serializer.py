@@ -6,7 +6,7 @@ log = logging.getLogger(__name__)
 
 
 from .base import Derivative, Future, Option, Security
-from .enums import SecuritySubtype, SecurityType
+from .enums import SecuritySubtype, SecurityType, future_subtypes, option_subtypes
 
 
 def get_constructor_from_types(
@@ -16,9 +16,9 @@ def get_constructor_from_types(
     result = Security
 
     if security_type in (SecurityType.DERIVATIVE,):
-        if security_subtype in (SecuritySubtype.EQUITY_OPTION,):
+        if security_subtype in option_subtypes:
             result = Option
-        elif security_subtype in (SecuritySubtype.FUTURE,):
+        elif security_subtype in future_subtypes:
             result = Future
         else:
             # Maybe this should be an assertion error...

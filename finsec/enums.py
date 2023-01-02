@@ -27,6 +27,8 @@ class SecuritySubtype(int, enum.Enum):
     # Reserved 0-999
     UNKNOWN = 0
     DERIVED_INDEX = 10
+    OVERNIGHT_RATE = 80
+    TERM_RATE = 85
 
     SOFT_COMMODITY = 110
     ENERGY = 115
@@ -49,26 +51,21 @@ class SecuritySubtype(int, enum.Enum):
     FUTURE = 2001
     SINGLE_STOCK_FUTURE = 2002
     PERPETUAL_FUTURE = 2003
+    FORWARD = 2010
 
-    # Calls end in 2, puts end in 1 (x % 10)
-    EQUITY_OPTION = 2005
-    # SWAPTION            = 20
-
-    # structures (fits, and whatnot)
-    # like LIBOR cash, or US treasury cash
-    # rates curve quotes will reference an underlyer like this
+    INDEX_OPTION = 2030
+    EQUITY_OPTION = 2040
+    CURRENCY_OPTION = 2050
 
 
 class SettlementType(int, enum.Enum):
     UNKNOWN = 0
-
     CASH = 1
     PHYSICAL = 2
 
 
 class SecurityIdentifierType(int, enum.Enum):
     UNKNOWN = 0
-
     FIGI = 2
     ISIN = 3
     CUSIP = 4
@@ -77,34 +74,40 @@ class SecurityIdentifierType(int, enum.Enum):
 
 class OptionFlavor(int, enum.Enum):
     UNKNOWN = 0
-
     PUT = 1
     CALL = 2
 
 
 class OptionExerciseStyle(int, enum.Enum):
     UNKNOWN = 0
-    # Exercise only possible at expiration
     EUROPEAN = 1
-
-    # Expiry possible any day up until and including expiration
     AMERICAN = 2
-
-    # Expiry possible on a subset of days prior to, and including expiration
-    # BERMUDAN    = 3
+    BERMUDAN = 3
 
 
 class ExpirySeriesType(int, enum.Enum):
     UNKNOWN = 0
-
     QUARTERLY = 10
     MONTHLY = 20
     WEEKLY = 30
 
 
 class ExpiryTimeOfDay(int, enum.Enum):
-    UNKOWN = 0
-
+    UNKNOWN = 0
     OPEN = 1
     EDSP = 2
     CLOSE = 3
+
+
+option_subtypes = (
+    SecuritySubtype.EQUITY_OPTION,
+    SecuritySubtype.INDEX_OPTION,
+    SecuritySubtype.CURRENCY_OPTION,
+)
+
+future_subtypes = (
+    SecuritySubtype.FUTURE,
+    SecuritySubtype.SINGLE_STOCK_FUTURE,
+    SecuritySubtype.PERPETUAL_FUTURE,
+    SecuritySubtype.FORWARD,
+)

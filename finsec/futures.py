@@ -14,9 +14,8 @@ from .enums import (
     SettlementType,
     Ticker,
 )
-from .exceptions import InvalidSettlementType, UnknownDenominatedCurrency
 from .exchanges import Exchange
-from .misc import is_physical_settlement_available
+from .misc import get_deriv_currency, get_future_exercise, get_settlement_type
 
 
 def NewFuture(
@@ -27,8 +26,8 @@ def NewFuture(
     expiry_time_of_day: ExpiryTimeOfDay,
     expiry_date: datetime.date,
     expiry_datetime: Optional[datetime.datetime] = None,
-    settlement_type: Optional[SettlementType] = None,
-    expiry_series_type: Optional[ExpirySeriesType] = None,
+    settlement_type: SettlementType = SettlementType.UNKNOWN,
+    expiry_series_type: ExpirySeriesType = ExpirySeriesType.UNKNOWN,
     currency: Union[Security, SecurityReference, None] = None,
     primary_exc: Optional[Exchange] = None,
     description: Optional[str] = None,
@@ -36,39 +35,19 @@ def NewFuture(
     gsid: GSID = None,
     identifiers: Optional[List[SecurityIdentifier]] = None,
 ) -> Future:
+
     if identifiers is None:
         identifiers = []
-    # Will link against this underlier
-    # If underlier is an index, then settlement inferred as cash-settled
-    # If none, this is set to UNKNOWN
-    # Currency will be used, if it cannot be inferred from underlying
 
-    if is_physical_settlement_available(underlying_security):
-        if settlement_type is None:
-            raise InvalidSettlementType(
-                "Must specify settlement type, since underlying permits physical delivery"
-            )
-    else:
-
-        if settlement_type == SettlementType.PHYSICAL:
-            raise InvalidSettlementType("Cannot physically-settle a derived index")
-        else:
-            settlement_type = SettlementType.CASH
-
-    if expiry_series_type is None:
-        expiry_series_type = ExpirySeriesType.UNKNOWN
-
+    settlement_type = get_settlement_type(underlying_security, settlement_type)
     underlying_ref = create_reference_from_security(underlying_security)
+    currency = get_deriv_currency(underlying_security, currency)
 
-    if currency is None:
-        if underlying_security.denominated_ccy is None:
-            raise UnknownDenominatedCurrency(
-                "Must declare denominated currency, if not supplied by underlier"
-            )
-        else:
-            currency = underlying_security.denominated_ccy
-    elif isinstance(currency, Security):
-        currency = create_reference_from_security(currency)
+    exercise = get_future_exercise(
+        expiry_date,
+        settlement_type=settlement_type,
+        expiry_series_type=expiry_series_type,
+    )
 
     return Future(
         ticker=ticker,
@@ -78,11 +57,7 @@ def NewFuture(
         multiplier=multiplier,
         security_type=SecurityType.DERIVATIVE,
         security_subtype=SecuritySubtype.FUTURE,
-        settlement_type=settlement_type,
-        expiry_series_type=expiry_series_type,
-        expiry_time_of_day=expiry_time_of_day,
-        expiry_date=expiry_date,
-        expiry_datetime=expiry_datetime,
+        exercise=exercise,
         primary_exchange=primary_exc,
         description=description,
         identifiers=identifiers,
