@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>finsec.enums &#8212; financial-security-classes 0.2.dev0 documentation</title>
+    <title>finsec.enums &#8212; financial-security-classes 0.3.dev0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -71,7 +71,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">financial-security-classes 0.2.dev0 documentation</h1>
+      <h1 class="site-logo" id="site-title">financial-security-classes 0.3.dev0 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -307,6 +307,8 @@ title="Fullscreen mode"
     <span class="c1"># Reserved 0-999</span>
     <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">DERIVED_INDEX</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">OVERNIGHT_RATE</span> <span class="o">=</span> <span class="mi">80</span>
+    <span class="n">TERM_RATE</span> <span class="o">=</span> <span class="mi">85</span>
 
     <span class="n">SOFT_COMMODITY</span> <span class="o">=</span> <span class="mi">110</span>
     <span class="n">ENERGY</span> <span class="o">=</span> <span class="mi">115</span>
@@ -329,26 +331,21 @@ title="Fullscreen mode"
     <span class="n">FUTURE</span> <span class="o">=</span> <span class="mi">2001</span>
     <span class="n">SINGLE_STOCK_FUTURE</span> <span class="o">=</span> <span class="mi">2002</span>
     <span class="n">PERPETUAL_FUTURE</span> <span class="o">=</span> <span class="mi">2003</span>
+    <span class="n">FORWARD</span> <span class="o">=</span> <span class="mi">2010</span>
 
-    <span class="c1"># Calls end in 2, puts end in 1 (x % 10)</span>
-    <span class="n">EQUITY_OPTION</span> <span class="o">=</span> <span class="mi">2005</span></div>
-    <span class="c1"># SWAPTION            = 20</span>
-
-    <span class="c1"># structures (fits, and whatnot)</span>
-    <span class="c1"># like LIBOR cash, or US treasury cash</span>
-    <span class="c1"># rates curve quotes will reference an underlyer like this</span>
+    <span class="n">INDEX_OPTION</span> <span class="o">=</span> <span class="mi">2030</span>
+    <span class="n">EQUITY_OPTION</span> <span class="o">=</span> <span class="mi">2040</span>
+    <span class="n">CURRENCY_OPTION</span> <span class="o">=</span> <span class="mi">2050</span></div>
 
 
 <div class="viewcode-block" id="SettlementType"><a class="viewcode-back" href="../../source/packages/finsec.enums.html#finsec.enums.SettlementType">[docs]</a><span class="k">class</span> <span class="nc">SettlementType</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span>
-
     <span class="n">CASH</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">PHYSICAL</span> <span class="o">=</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="SecurityIdentifierType"><a class="viewcode-back" href="../../source/packages/finsec.enums.html#finsec.enums.SecurityIdentifierType">[docs]</a><span class="k">class</span> <span class="nc">SecurityIdentifierType</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span>
-
     <span class="n">FIGI</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">ISIN</span> <span class="o">=</span> <span class="mi">3</span>
     <span class="n">CUSIP</span> <span class="o">=</span> <span class="mi">4</span>
@@ -357,37 +354,43 @@ title="Fullscreen mode"
 
 <div class="viewcode-block" id="OptionFlavor"><a class="viewcode-back" href="../../source/packages/finsec.enums.html#finsec.enums.OptionFlavor">[docs]</a><span class="k">class</span> <span class="nc">OptionFlavor</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span>
-
     <span class="n">PUT</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">CALL</span> <span class="o">=</span> <span class="mi">2</span></div>
 
 
 <div class="viewcode-block" id="OptionExerciseStyle"><a class="viewcode-back" href="../../source/packages/finsec.enums.html#finsec.enums.OptionExerciseStyle">[docs]</a><span class="k">class</span> <span class="nc">OptionExerciseStyle</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="c1"># Exercise only possible at expiration</span>
     <span class="n">EUROPEAN</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="c1"># Expiry possible any day up until and including expiration</span>
-    <span class="n">AMERICAN</span> <span class="o">=</span> <span class="mi">2</span></div>
-
-    <span class="c1"># Expiry possible on a subset of days prior to, and including expiration</span>
-    <span class="c1"># BERMUDAN    = 3</span>
+    <span class="n">AMERICAN</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">BERMUDAN</span> <span class="o">=</span> <span class="mi">3</span></div>
 
 
 <div class="viewcode-block" id="ExpirySeriesType"><a class="viewcode-back" href="../../source/packages/finsec.enums.html#finsec.enums.ExpirySeriesType">[docs]</a><span class="k">class</span> <span class="nc">ExpirySeriesType</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span>
-
     <span class="n">QUARTERLY</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">MONTHLY</span> <span class="o">=</span> <span class="mi">20</span>
     <span class="n">WEEKLY</span> <span class="o">=</span> <span class="mi">30</span></div>
 
 
 <div class="viewcode-block" id="ExpiryTimeOfDay"><a class="viewcode-back" href="../../source/packages/finsec.enums.html#finsec.enums.ExpiryTimeOfDay">[docs]</a><span class="k">class</span> <span class="nc">ExpiryTimeOfDay</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="n">UNKOWN</span> <span class="o">=</span> <span class="mi">0</span>
-
+    <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">OPEN</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">EDSP</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">CLOSE</span> <span class="o">=</span> <span class="mi">3</span></div>
+
+
+<span class="n">option_subtypes</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">SecuritySubtype</span><span class="o">.</span><span class="n">EQUITY_OPTION</span><span class="p">,</span>
+    <span class="n">SecuritySubtype</span><span class="o">.</span><span class="n">INDEX_OPTION</span><span class="p">,</span>
+    <span class="n">SecuritySubtype</span><span class="o">.</span><span class="n">CURRENCY_OPTION</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">future_subtypes</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">SecuritySubtype</span><span class="o">.</span><span class="n">FUTURE</span><span class="p">,</span>
+    <span class="n">SecuritySubtype</span><span class="o">.</span><span class="n">SINGLE_STOCK_FUTURE</span><span class="p">,</span>
+    <span class="n">SecuritySubtype</span><span class="o">.</span><span class="n">PERPETUAL_FUTURE</span><span class="p">,</span>
+    <span class="n">SecuritySubtype</span><span class="o">.</span><span class="n">FORWARD</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 
               </div>

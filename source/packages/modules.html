@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>API Reference &#8212; financial-security-classes 0.2.dev0 documentation</title>
+    <title>API Reference &#8212; financial-security-classes 0.3.dev0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -74,7 +74,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">financial-security-classes 0.2.dev0 documentation</h1>
+      <h1 class="site-logo" id="site-title">financial-security-classes 0.3.dev0 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -333,12 +333,20 @@ title="Print to PDF"
 <li class="toctree-l1"><a class="reference internal" href="finsec.html">finsec package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="finsec.html#submodules">Submodules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="finsec.base.html">finsec.base module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.AmericanOptionExercise"><code class="docutils literal notranslate"><span class="pre">AmericanOptionExercise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.BermudanOptionExercise"><code class="docutils literal notranslate"><span class="pre">BermudanOptionExercise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.Derivative"><code class="docutils literal notranslate"><span class="pre">Derivative</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.DerivativeExercise"><code class="docutils literal notranslate"><span class="pre">DerivativeExercise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.EuropeanOptionExercise"><code class="docutils literal notranslate"><span class="pre">EuropeanOptionExercise</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.ExerciseDatetime"><code class="docutils literal notranslate"><span class="pre">ExerciseDatetime</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.ForwardExercise"><code class="docutils literal notranslate"><span class="pre">ForwardExercise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.Future"><code class="docutils literal notranslate"><span class="pre">Future</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.Option"><code class="docutils literal notranslate"><span class="pre">Option</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.OptionExercise"><code class="docutils literal notranslate"><span class="pre">OptionExercise</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.Security"><code class="docutils literal notranslate"><span class="pre">Security</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.SecurityIdentifier"><code class="docutils literal notranslate"><span class="pre">SecurityIdentifier</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.SecurityReference"><code class="docutils literal notranslate"><span class="pre">SecurityReference</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.base.html#finsec.base.standard_model_config"><code class="docutils literal notranslate"><span class="pre">standard_model_config</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="finsec.constructors.html">finsec.constructors module</a><ul>
@@ -380,6 +388,12 @@ title="Print to PDF"
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="finsec.misc.html">finsec.misc module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="finsec.misc.html#finsec.misc.determine_option_subtype"><code class="docutils literal notranslate"><span class="pre">determine_option_subtype()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.misc.html#finsec.misc.get_deriv_currency"><code class="docutils literal notranslate"><span class="pre">get_deriv_currency()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.misc.html#finsec.misc.get_flavor"><code class="docutils literal notranslate"><span class="pre">get_flavor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.misc.html#finsec.misc.get_future_exercise"><code class="docutils literal notranslate"><span class="pre">get_future_exercise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.misc.html#finsec.misc.get_option_exercise"><code class="docutils literal notranslate"><span class="pre">get_option_exercise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.misc.html#finsec.misc.get_settlement_type"><code class="docutils literal notranslate"><span class="pre">get_settlement_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="finsec.misc.html#finsec.misc.is_physical_settlement_available"><code class="docutils literal notranslate"><span class="pre">is_physical_settlement_available()</span></code></a></li>
 </ul>
 </li>
@@ -395,6 +409,7 @@ title="Print to PDF"
 <li class="toctree-l3"><a class="reference internal" href="finsec.options.html">finsec.options module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="finsec.options.html#finsec.options.American"><code class="docutils literal notranslate"><span class="pre">American()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="finsec.options.html#finsec.options.European"><code class="docutils literal notranslate"><span class="pre">European()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="finsec.options.html#finsec.options.NewOption"><code class="docutils literal notranslate"><span class="pre">NewOption()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="finsec.quote_grid.html">finsec.quote_grid module</a><ul>

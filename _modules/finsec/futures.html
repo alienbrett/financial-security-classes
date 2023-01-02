@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>finsec.futures &#8212; financial-security-classes 0.2.dev0 documentation</title>
+    <title>finsec.futures &#8212; financial-security-classes 0.3.dev0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -71,7 +71,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">financial-security-classes 0.2.dev0 documentation</h1>
+      <h1 class="site-logo" id="site-title">financial-security-classes 0.3.dev0 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -294,9 +294,8 @@ title="Fullscreen mode"
     <span class="n">SettlementType</span><span class="p">,</span>
     <span class="n">Ticker</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">InvalidSettlementType</span><span class="p">,</span> <span class="n">UnknownDenominatedCurrency</span>
 <span class="kn">from</span> <span class="nn">.exchanges</span> <span class="kn">import</span> <span class="n">Exchange</span>
-<span class="kn">from</span> <span class="nn">.misc</span> <span class="kn">import</span> <span class="n">is_physical_settlement_available</span>
+<span class="kn">from</span> <span class="nn">.misc</span> <span class="kn">import</span> <span class="n">get_deriv_currency</span><span class="p">,</span> <span class="n">get_future_exercise</span><span class="p">,</span> <span class="n">get_settlement_type</span>
 
 
 <div class="viewcode-block" id="NewFuture"><a class="viewcode-back" href="../../source/packages/finsec.futures.html#finsec.futures.NewFuture">[docs]</a><span class="k">def</span> <span class="nf">NewFuture</span><span class="p">(</span>
@@ -307,8 +306,8 @@ title="Fullscreen mode"
     <span class="n">expiry_time_of_day</span><span class="p">:</span> <span class="n">ExpiryTimeOfDay</span><span class="p">,</span>
     <span class="n">expiry_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
     <span class="n">expiry_datetime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">settlement_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SettlementType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">expiry_series_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ExpirySeriesType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">settlement_type</span><span class="p">:</span> <span class="n">SettlementType</span> <span class="o">=</span> <span class="n">SettlementType</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">,</span>
+    <span class="n">expiry_series_type</span><span class="p">:</span> <span class="n">ExpirySeriesType</span> <span class="o">=</span> <span class="n">ExpirySeriesType</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">,</span>
     <span class="n">currency</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Security</span><span class="p">,</span> <span class="n">SecurityReference</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">primary_exc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Exchange</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -316,39 +315,19 @@ title="Fullscreen mode"
     <span class="n">gsid</span><span class="p">:</span> <span class="n">GSID</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">identifiers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">SecurityIdentifier</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Future</span><span class="p">:</span>
+
     <span class="k">if</span> <span class="n">identifiers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">identifiers</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="c1"># Will link against this underlier</span>
-    <span class="c1"># If underlier is an index, then settlement inferred as cash-settled</span>
-    <span class="c1"># If none, this is set to UNKNOWN</span>
-    <span class="c1"># Currency will be used, if it cannot be inferred from underlying</span>
 
-    <span class="k">if</span> <span class="n">is_physical_settlement_available</span><span class="p">(</span><span class="n">underlying_security</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">settlement_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">InvalidSettlementType</span><span class="p">(</span>
-                <span class="s2">&quot;Must specify settlement type, since underlying permits physical delivery&quot;</span>
-            <span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-
-        <span class="k">if</span> <span class="n">settlement_type</span> <span class="o">==</span> <span class="n">SettlementType</span><span class="o">.</span><span class="n">PHYSICAL</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">InvalidSettlementType</span><span class="p">(</span><span class="s2">&quot;Cannot physically-settle a derived index&quot;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">settlement_type</span> <span class="o">=</span> <span class="n">SettlementType</span><span class="o">.</span><span class="n">CASH</span>
-
-    <span class="k">if</span> <span class="n">expiry_series_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">expiry_series_type</span> <span class="o">=</span> <span class="n">ExpirySeriesType</span><span class="o">.</span><span class="n">UNKNOWN</span>
-
+    <span class="n">settlement_type</span> <span class="o">=</span> <span class="n">get_settlement_type</span><span class="p">(</span><span class="n">underlying_security</span><span class="p">,</span> <span class="n">settlement_type</span><span class="p">)</span>
     <span class="n">underlying_ref</span> <span class="o">=</span> <span class="n">create_reference_from_security</span><span class="p">(</span><span class="n">underlying_security</span><span class="p">)</span>
+    <span class="n">currency</span> <span class="o">=</span> <span class="n">get_deriv_currency</span><span class="p">(</span><span class="n">underlying_security</span><span class="p">,</span> <span class="n">currency</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">currency</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">underlying_security</span><span class="o">.</span><span class="n">denominated_ccy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">UnknownDenominatedCurrency</span><span class="p">(</span>
-                <span class="s2">&quot;Must declare denominated currency, if not supplied by underlier&quot;</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">currency</span> <span class="o">=</span> <span class="n">underlying_security</span><span class="o">.</span><span class="n">denominated_ccy</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">currency</span><span class="p">,</span> <span class="n">Security</span><span class="p">):</span>
-        <span class="n">currency</span> <span class="o">=</span> <span class="n">create_reference_from_security</span><span class="p">(</span><span class="n">currency</span><span class="p">)</span>
+    <span class="n">exercise</span> <span class="o">=</span> <span class="n">get_future_exercise</span><span class="p">(</span>
+        <span class="n">expiry_date</span><span class="p">,</span>
+        <span class="n">settlement_type</span><span class="o">=</span><span class="n">settlement_type</span><span class="p">,</span>
+        <span class="n">expiry_series_type</span><span class="o">=</span><span class="n">expiry_series_type</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">Future</span><span class="p">(</span>
         <span class="n">ticker</span><span class="o">=</span><span class="n">ticker</span><span class="p">,</span>
@@ -358,11 +337,7 @@ title="Fullscreen mode"
         <span class="n">multiplier</span><span class="o">=</span><span class="n">multiplier</span><span class="p">,</span>
         <span class="n">security_type</span><span class="o">=</span><span class="n">SecurityType</span><span class="o">.</span><span class="n">DERIVATIVE</span><span class="p">,</span>
         <span class="n">security_subtype</span><span class="o">=</span><span class="n">SecuritySubtype</span><span class="o">.</span><span class="n">FUTURE</span><span class="p">,</span>
-        <span class="n">settlement_type</span><span class="o">=</span><span class="n">settlement_type</span><span class="p">,</span>
-        <span class="n">expiry_series_type</span><span class="o">=</span><span class="n">expiry_series_type</span><span class="p">,</span>
-        <span class="n">expiry_time_of_day</span><span class="o">=</span><span class="n">expiry_time_of_day</span><span class="p">,</span>
-        <span class="n">expiry_date</span><span class="o">=</span><span class="n">expiry_date</span><span class="p">,</span>
-        <span class="n">expiry_datetime</span><span class="o">=</span><span class="n">expiry_datetime</span><span class="p">,</span>
+        <span class="n">exercise</span><span class="o">=</span><span class="n">exercise</span><span class="p">,</span>
         <span class="n">primary_exchange</span><span class="o">=</span><span class="n">primary_exc</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span>
         <span class="n">identifiers</span><span class="o">=</span><span class="n">identifiers</span><span class="p">,</span>

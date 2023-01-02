@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>finsec.serializer &#8212; financial-security-classes 0.2.dev0 documentation</title>
+    <title>finsec.serializer &#8212; financial-security-classes 0.3.dev0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -71,7 +71,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">financial-security-classes 0.2.dev0 documentation</h1>
+      <h1 class="site-logo" id="site-title">financial-security-classes 0.3.dev0 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -286,7 +286,7 @@ title="Fullscreen mode"
 
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">Derivative</span><span class="p">,</span> <span class="n">Future</span><span class="p">,</span> <span class="n">Option</span><span class="p">,</span> <span class="n">Security</span>
-<span class="kn">from</span> <span class="nn">.enums</span> <span class="kn">import</span> <span class="n">SecuritySubtype</span><span class="p">,</span> <span class="n">SecurityType</span>
+<span class="kn">from</span> <span class="nn">.enums</span> <span class="kn">import</span> <span class="n">SecuritySubtype</span><span class="p">,</span> <span class="n">SecurityType</span><span class="p">,</span> <span class="n">future_subtypes</span><span class="p">,</span> <span class="n">option_subtypes</span>
 
 
 <div class="viewcode-block" id="get_constructor_from_types"><a class="viewcode-back" href="../../source/packages/finsec.serializer.html#finsec.serializer.get_constructor_from_types">[docs]</a><span class="k">def</span> <span class="nf">get_constructor_from_types</span><span class="p">(</span>
@@ -296,9 +296,9 @@ title="Fullscreen mode"
     <span class="n">result</span> <span class="o">=</span> <span class="n">Security</span>
 
     <span class="k">if</span> <span class="n">security_type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">SecurityType</span><span class="o">.</span><span class="n">DERIVATIVE</span><span class="p">,):</span>
-        <span class="k">if</span> <span class="n">security_subtype</span> <span class="ow">in</span> <span class="p">(</span><span class="n">SecuritySubtype</span><span class="o">.</span><span class="n">EQUITY_OPTION</span><span class="p">,):</span>
+        <span class="k">if</span> <span class="n">security_subtype</span> <span class="ow">in</span> <span class="n">option_subtypes</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">Option</span>
-        <span class="k">elif</span> <span class="n">security_subtype</span> <span class="ow">in</span> <span class="p">(</span><span class="n">SecuritySubtype</span><span class="o">.</span><span class="n">FUTURE</span><span class="p">,):</span>
+        <span class="k">elif</span> <span class="n">security_subtype</span> <span class="ow">in</span> <span class="n">future_subtypes</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">Future</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Maybe this should be an assertion error...</span>

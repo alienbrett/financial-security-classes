@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>finsec.base module &#8212; financial-security-classes 0.2.dev0 documentation</title>
+    <title>finsec.base module &#8212; financial-security-classes 0.3.dev0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -74,7 +74,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">financial-security-classes 0.2.dev0 documentation</h1>
+      <h1 class="site-logo" id="site-title">financial-security-classes 0.3.dev0 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -325,6 +325,64 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.AmericanOptionExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     AmericanOptionExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.AmericanOptionExercise.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       AmericanOptionExercise.exercise
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.AmericanOptionExercise.style">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       AmericanOptionExercise.style
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.BermudanOptionExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     BermudanOptionExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.BermudanOptionExercise.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       BermudanOptionExercise.exercise
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.BermudanOptionExercise.style">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       BermudanOptionExercise.style
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#finsec.base.Derivative">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -334,46 +392,10 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.date_str_to_datetime_date">
+    <a class="reference internal nav-link" href="#finsec.base.Derivative.exercise">
      <code class="docutils literal notranslate">
       <span class="pre">
-       Derivative.date_str_to_datetime_date()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.expiry_date">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Derivative.expiry_date
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.expiry_datetime">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Derivative.expiry_datetime
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.expiry_series_type">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Derivative.expiry_series_type
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.expiry_time_of_day">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Derivative.expiry_time_of_day
+       Derivative.exercise
       </span>
      </code>
     </a>
@@ -383,15 +405,6 @@ title="Print to PDF"
      <code class="docutils literal notranslate">
       <span class="pre">
        Derivative.multiplier
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.settlement_type">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Derivative.settlement_type
       </span>
      </code>
     </a>
@@ -408,6 +421,149 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.DerivativeExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     DerivativeExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.DerivativeExercise.Config">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       DerivativeExercise.Config
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.DerivativeExercise.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       DerivativeExercise.exercise
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.EuropeanOptionExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     EuropeanOptionExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.EuropeanOptionExercise.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       EuropeanOptionExercise.exercise
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.EuropeanOptionExercise.style">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       EuropeanOptionExercise.style
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     ExerciseDatetime
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.date_str_to_datetime_date">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.date_str_to_datetime_date()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.expiry_date">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.expiry_date
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.expiry_datetime">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.expiry_datetime
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.expiry_series_type">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.expiry_series_type
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.expiry_time_of_day">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.expiry_time_of_day
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.settlement_type">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.settlement_type
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.ForwardExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     ForwardExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ForwardExercise.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ForwardExercise.exercise
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#finsec.base.Future">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -416,6 +572,15 @@ title="Print to PDF"
    </code>
   </a>
   <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.Future.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Future.exercise
+      </span>
+     </code>
+    </a>
+   </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#finsec.base.Future.tick_size">
      <code class="docutils literal notranslate">
@@ -437,10 +602,10 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Option.option_exercise">
+    <a class="reference internal nav-link" href="#finsec.base.Option.exercise">
      <code class="docutils literal notranslate">
       <span class="pre">
-       Option.option_exercise
+       Option.exercise
       </span>
      </code>
     </a>
@@ -466,6 +631,26 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.OptionExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     OptionExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.OptionExercise.style">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       OptionExercise.style
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#finsec.base.Security">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -482,35 +667,6 @@ title="Print to PDF"
       </span>
      </code>
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#finsec.base.Security.Config.extra">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Security.Config.extra
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#finsec.base.Security.Config.json_encoders">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Security.Config.json_encoders
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#finsec.base.Security.Config.use_enum_values">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Security.Config.use_enum_values
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#finsec.base.Security.as_of_date">
@@ -630,17 +786,6 @@ title="Print to PDF"
       </span>
      </code>
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#finsec.base.SecurityIdentifier.Config.use_enum_values">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         SecurityIdentifier.Config.use_enum_values
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#finsec.base.SecurityIdentifier.id_type">
@@ -681,10 +826,66 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.SecurityReference.security_subtype">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       SecurityReference.security_subtype
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.SecurityReference.security_type">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       SecurityReference.security_type
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#finsec.base.SecurityReference.ticker">
      <code class="docutils literal notranslate">
       <span class="pre">
        SecurityReference.ticker
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.standard_model_config">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     standard_model_config
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.standard_model_config.extra">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       standard_model_config.extra
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.standard_model_config.json_encoders">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       standard_model_config.json_encoders
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.standard_model_config.use_enum_values">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       standard_model_config.use_enum_values
       </span>
      </code>
     </a>
@@ -711,6 +912,64 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.AmericanOptionExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     AmericanOptionExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.AmericanOptionExercise.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       AmericanOptionExercise.exercise
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.AmericanOptionExercise.style">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       AmericanOptionExercise.style
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.BermudanOptionExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     BermudanOptionExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.BermudanOptionExercise.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       BermudanOptionExercise.exercise
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.BermudanOptionExercise.style">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       BermudanOptionExercise.style
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#finsec.base.Derivative">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -720,46 +979,10 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.date_str_to_datetime_date">
+    <a class="reference internal nav-link" href="#finsec.base.Derivative.exercise">
      <code class="docutils literal notranslate">
       <span class="pre">
-       Derivative.date_str_to_datetime_date()
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.expiry_date">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Derivative.expiry_date
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.expiry_datetime">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Derivative.expiry_datetime
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.expiry_series_type">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Derivative.expiry_series_type
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.expiry_time_of_day">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Derivative.expiry_time_of_day
+       Derivative.exercise
       </span>
      </code>
     </a>
@@ -769,15 +992,6 @@ title="Print to PDF"
      <code class="docutils literal notranslate">
       <span class="pre">
        Derivative.multiplier
-      </span>
-     </code>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Derivative.settlement_type">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       Derivative.settlement_type
       </span>
      </code>
     </a>
@@ -794,6 +1008,149 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.DerivativeExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     DerivativeExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.DerivativeExercise.Config">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       DerivativeExercise.Config
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.DerivativeExercise.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       DerivativeExercise.exercise
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.EuropeanOptionExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     EuropeanOptionExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.EuropeanOptionExercise.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       EuropeanOptionExercise.exercise
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.EuropeanOptionExercise.style">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       EuropeanOptionExercise.style
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     ExerciseDatetime
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.date_str_to_datetime_date">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.date_str_to_datetime_date()
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.expiry_date">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.expiry_date
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.expiry_datetime">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.expiry_datetime
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.expiry_series_type">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.expiry_series_type
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.expiry_time_of_day">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.expiry_time_of_day
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ExerciseDatetime.settlement_type">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ExerciseDatetime.settlement_type
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.ForwardExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     ForwardExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.ForwardExercise.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ForwardExercise.exercise
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#finsec.base.Future">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -802,6 +1159,15 @@ title="Print to PDF"
    </code>
   </a>
   <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.Future.exercise">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Future.exercise
+      </span>
+     </code>
+    </a>
+   </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#finsec.base.Future.tick_size">
      <code class="docutils literal notranslate">
@@ -823,10 +1189,10 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#finsec.base.Option.option_exercise">
+    <a class="reference internal nav-link" href="#finsec.base.Option.exercise">
      <code class="docutils literal notranslate">
       <span class="pre">
-       Option.option_exercise
+       Option.exercise
       </span>
      </code>
     </a>
@@ -852,6 +1218,26 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.OptionExercise">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     OptionExercise
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.OptionExercise.style">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       OptionExercise.style
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#finsec.base.Security">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -868,35 +1254,6 @@ title="Print to PDF"
       </span>
      </code>
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#finsec.base.Security.Config.extra">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Security.Config.extra
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#finsec.base.Security.Config.json_encoders">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Security.Config.json_encoders
-        </span>
-       </code>
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#finsec.base.Security.Config.use_enum_values">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         Security.Config.use_enum_values
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#finsec.base.Security.as_of_date">
@@ -1016,17 +1373,6 @@ title="Print to PDF"
       </span>
      </code>
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#finsec.base.SecurityIdentifier.Config.use_enum_values">
-       <code class="docutils literal notranslate">
-        <span class="pre">
-         SecurityIdentifier.Config.use_enum_values
-        </span>
-       </code>
-      </a>
-     </li>
-    </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#finsec.base.SecurityIdentifier.id_type">
@@ -1067,10 +1413,66 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.SecurityReference.security_subtype">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       SecurityReference.security_subtype
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.SecurityReference.security_type">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       SecurityReference.security_type
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#finsec.base.SecurityReference.ticker">
      <code class="docutils literal notranslate">
       <span class="pre">
        SecurityReference.ticker
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finsec.base.standard_model_config">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     standard_model_config
+    </span>
+   </code>
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.standard_model_config.extra">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       standard_model_config.extra
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.standard_model_config.json_encoders">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       standard_model_config.json_encoders
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#finsec.base.standard_model_config.use_enum_values">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       standard_model_config.use_enum_values
       </span>
      </code>
     </a>
@@ -1090,43 +1492,50 @@ title="Print to PDF"
   <section id="module-finsec.base">
 <span id="finsec-base-module"></span><h1>finsec.base module<a class="headerlink" href="#module-finsec.base" title="Permalink to this heading">#</a></h1>
 <dl class="py class">
+<dt class="sig sig-object py" id="finsec.base.AmericanOptionExercise">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">AmericanOptionExercise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionExerciseStyle" title="finsec.enums.OptionExerciseStyle"><span class="pre">OptionExerciseStyle</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">OptionExerciseStyle.AMERICAN</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#AmericanOptionExercise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.AmericanOptionExercise" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.AmericanOptionExercise.exercise">
+<span class="sig-name descname"><span class="pre">exercise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a></em><a class="headerlink" href="#finsec.base.AmericanOptionExercise.exercise" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.AmericanOptionExercise.style">
+<span class="sig-name descname"><span class="pre">style</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionExerciseStyle" title="finsec.enums.OptionExerciseStyle"><span class="pre">OptionExerciseStyle</span></a></em><a class="headerlink" href="#finsec.base.AmericanOptionExercise.style" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="finsec.base.BermudanOptionExercise">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">BermudanOptionExercise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionExerciseStyle" title="finsec.enums.OptionExerciseStyle"><span class="pre">OptionExerciseStyle</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">OptionExerciseStyle.BERMUDAN</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#BermudanOptionExercise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.BermudanOptionExercise" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.BermudanOptionExercise.exercise">
+<span class="sig-name descname"><span class="pre">exercise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#finsec.base.BermudanOptionExercise.exercise" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.BermudanOptionExercise.style">
+<span class="sig-name descname"><span class="pre">style</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionExerciseStyle" title="finsec.enums.OptionExerciseStyle"><span class="pre">OptionExerciseStyle</span></a></em><a class="headerlink" href="#finsec.base.BermudanOptionExercise.style" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="finsec.base.Derivative">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">Derivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GSID</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecurityType" title="finsec.enums.SecurityType"><span class="pre">SecurityType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_subtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecuritySubtype" title="finsec.enums.SecuritySubtype"><span class="pre">SecuritySubtype</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifiers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityIdentifier" title="finsec.base.SecurityIdentifier"><span class="pre">SecurityIdentifier</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_exchange</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="finsec.exchanges.html#finsec.exchanges.Exchange" title="finsec.exchanges.Exchange"><span class="pre">Exchange</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">denominated_ccy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issuer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">website</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_of_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">underlying</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settlement_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SettlementType" title="finsec.enums.SettlementType"><span class="pre">SettlementType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_series_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpirySeriesType" title="finsec.enums.ExpirySeriesType"><span class="pre">ExpirySeriesType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_time_of_day</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpiryTimeOfDay" title="finsec.enums.ExpiryTimeOfDay"><span class="pre">ExpiryTimeOfDay</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.11)"><span class="pre">date</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_datetime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Multiplier</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#Derivative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.Derivative" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">Derivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GSID</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecurityType" title="finsec.enums.SecurityType"><span class="pre">SecurityType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_subtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecuritySubtype" title="finsec.enums.SecuritySubtype"><span class="pre">SecuritySubtype</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifiers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityIdentifier" title="finsec.base.SecurityIdentifier"><span class="pre">SecurityIdentifier</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_exchange</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="finsec.exchanges.html#finsec.exchanges.Exchange" title="finsec.exchanges.Exchange"><span class="pre">Exchange</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">denominated_ccy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issuer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">website</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_of_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">underlying</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Multiplier</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.DerivativeExercise" title="finsec.base.DerivativeExercise"><span class="pre">DerivativeExercise</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#Derivative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.Derivative" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#finsec.base.Security" title="finsec.base.Security"><code class="xref py py-class docutils literal notranslate"><span class="pre">Security</span></code></a></p>
 <p>Derivative security, with some specified underlyer.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="finsec.base.Derivative.date_str_to_datetime_date">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">date_str_to_datetime_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#Derivative.date_str_to_datetime_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.Derivative.date_str_to_datetime_date" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
 <dl class="py attribute">
-<dt class="sig sig-object py" id="finsec.base.Derivative.expiry_date">
-<span class="sig-name descname"><span class="pre">expiry_date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.11)"><span class="pre">date</span></a></em><a class="headerlink" href="#finsec.base.Derivative.expiry_date" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="finsec.base.Derivative.expiry_datetime">
-<span class="sig-name descname"><span class="pre">expiry_datetime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#finsec.base.Derivative.expiry_datetime" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="finsec.base.Derivative.expiry_series_type">
-<span class="sig-name descname"><span class="pre">expiry_series_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpirySeriesType" title="finsec.enums.ExpirySeriesType"><span class="pre">ExpirySeriesType</span></a></em><a class="headerlink" href="#finsec.base.Derivative.expiry_series_type" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="finsec.base.Derivative.expiry_time_of_day">
-<span class="sig-name descname"><span class="pre">expiry_time_of_day</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpiryTimeOfDay" title="finsec.enums.ExpiryTimeOfDay"><span class="pre">ExpiryTimeOfDay</span></a></em><a class="headerlink" href="#finsec.base.Derivative.expiry_time_of_day" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="finsec.base.Derivative.exercise">
+<span class="sig-name descname"><span class="pre">exercise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#finsec.base.DerivativeExercise" title="finsec.base.DerivativeExercise"><span class="pre">DerivativeExercise</span></a></em><a class="headerlink" href="#finsec.base.Derivative.exercise" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="finsec.base.Derivative.multiplier">
 <span class="sig-name descname"><span class="pre">multiplier</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Multiplier</span></em><a class="headerlink" href="#finsec.base.Derivative.multiplier" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="finsec.base.Derivative.settlement_type">
-<span class="sig-name descname"><span class="pre">settlement_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.SettlementType" title="finsec.enums.SettlementType"><span class="pre">SettlementType</span></a></em><a class="headerlink" href="#finsec.base.Derivative.settlement_type" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1137,10 +1546,96 @@ title="Print to PDF"
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="finsec.base.DerivativeExercise">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">DerivativeExercise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#DerivativeExercise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.DerivativeExercise" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.DerivativeExercise.Config">
+<span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#finsec.base.DerivativeExercise.Config" title="Permalink to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#finsec.base.standard_model_config" title="finsec.base.standard_model_config"><code class="xref py py-class docutils literal notranslate"><span class="pre">standard_model_config</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.DerivativeExercise.exercise">
+<span class="sig-name descname"><span class="pre">exercise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#finsec.base.DerivativeExercise.exercise" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="finsec.base.EuropeanOptionExercise">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">EuropeanOptionExercise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionExerciseStyle" title="finsec.enums.OptionExerciseStyle"><span class="pre">OptionExerciseStyle</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">OptionExerciseStyle.EUROPEAN</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#EuropeanOptionExercise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.EuropeanOptionExercise" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.EuropeanOptionExercise.exercise">
+<span class="sig-name descname"><span class="pre">exercise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a></em><a class="headerlink" href="#finsec.base.EuropeanOptionExercise.exercise" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.EuropeanOptionExercise.style">
+<span class="sig-name descname"><span class="pre">style</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionExerciseStyle" title="finsec.enums.OptionExerciseStyle"><span class="pre">OptionExerciseStyle</span></a></em><a class="headerlink" href="#finsec.base.EuropeanOptionExercise.style" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="finsec.base.ExerciseDatetime">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">ExerciseDatetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.11)"><span class="pre">date</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_datetime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settlement_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SettlementType" title="finsec.enums.SettlementType"><span class="pre">SettlementType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SettlementType.UNKNOWN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_time_of_day</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpiryTimeOfDay" title="finsec.enums.ExpiryTimeOfDay"><span class="pre">ExpiryTimeOfDay</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ExpiryTimeOfDay.UNKNOWN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_series_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpirySeriesType" title="finsec.enums.ExpirySeriesType"><span class="pre">ExpirySeriesType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ExpirySeriesType.UNKNOWN</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#ExerciseDatetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.ExerciseDatetime" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Encodes information about a single exercise/expiration date/time a derivative.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="finsec.base.ExerciseDatetime.date_str_to_datetime_date">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">date_str_to_datetime_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#ExerciseDatetime.date_str_to_datetime_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.ExerciseDatetime.date_str_to_datetime_date" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.ExerciseDatetime.expiry_date">
+<span class="sig-name descname"><span class="pre">expiry_date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.11)"><span class="pre">date</span></a></em><a class="headerlink" href="#finsec.base.ExerciseDatetime.expiry_date" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.ExerciseDatetime.expiry_datetime">
+<span class="sig-name descname"><span class="pre">expiry_datetime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#finsec.base.ExerciseDatetime.expiry_datetime" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.ExerciseDatetime.expiry_series_type">
+<span class="sig-name descname"><span class="pre">expiry_series_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpirySeriesType" title="finsec.enums.ExpirySeriesType"><span class="pre">ExpirySeriesType</span></a></em><a class="headerlink" href="#finsec.base.ExerciseDatetime.expiry_series_type" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.ExerciseDatetime.expiry_time_of_day">
+<span class="sig-name descname"><span class="pre">expiry_time_of_day</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpiryTimeOfDay" title="finsec.enums.ExpiryTimeOfDay"><span class="pre">ExpiryTimeOfDay</span></a></em><a class="headerlink" href="#finsec.base.ExerciseDatetime.expiry_time_of_day" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.ExerciseDatetime.settlement_type">
+<span class="sig-name descname"><span class="pre">settlement_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.SettlementType" title="finsec.enums.SettlementType"><span class="pre">SettlementType</span></a></em><a class="headerlink" href="#finsec.base.ExerciseDatetime.settlement_type" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="finsec.base.ForwardExercise">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">ForwardExercise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#ForwardExercise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.ForwardExercise" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#finsec.base.DerivativeExercise" title="finsec.base.DerivativeExercise"><code class="xref py py-class docutils literal notranslate"><span class="pre">DerivativeExercise</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.ForwardExercise.exercise">
+<span class="sig-name descname"><span class="pre">exercise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a></em><a class="headerlink" href="#finsec.base.ForwardExercise.exercise" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="finsec.base.Future">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">Future</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GSID</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecurityType" title="finsec.enums.SecurityType"><span class="pre">SecurityType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_subtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecuritySubtype" title="finsec.enums.SecuritySubtype"><span class="pre">SecuritySubtype</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifiers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityIdentifier" title="finsec.base.SecurityIdentifier"><span class="pre">SecurityIdentifier</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_exchange</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="finsec.exchanges.html#finsec.exchanges.Exchange" title="finsec.exchanges.Exchange"><span class="pre">Exchange</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">denominated_ccy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issuer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">website</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_of_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">underlying</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settlement_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SettlementType" title="finsec.enums.SettlementType"><span class="pre">SettlementType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_series_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpirySeriesType" title="finsec.enums.ExpirySeriesType"><span class="pre">ExpirySeriesType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_time_of_day</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpiryTimeOfDay" title="finsec.enums.ExpiryTimeOfDay"><span class="pre">ExpiryTimeOfDay</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.11)"><span class="pre">date</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_datetime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Multiplier</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CurrencyQty</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#Future"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.Future" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">Future</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GSID</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecurityType" title="finsec.enums.SecurityType"><span class="pre">SecurityType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_subtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecuritySubtype" title="finsec.enums.SecuritySubtype"><span class="pre">SecuritySubtype</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifiers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityIdentifier" title="finsec.base.SecurityIdentifier"><span class="pre">SecurityIdentifier</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_exchange</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="finsec.exchanges.html#finsec.exchanges.Exchange" title="finsec.exchanges.Exchange"><span class="pre">Exchange</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">denominated_ccy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issuer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">website</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_of_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">underlying</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Multiplier</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.ForwardExercise" title="finsec.base.ForwardExercise"><span class="pre">ForwardExercise</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CurrencyQty</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#Future"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.Future" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#finsec.base.Derivative" title="finsec.base.Derivative"><code class="xref py py-class docutils literal notranslate"><span class="pre">Derivative</span></code></a></p>
 <p>Exchange-traded future object, derived from some underlying.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.Future.exercise">
+<span class="sig-name descname"><span class="pre">exercise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#finsec.base.ForwardExercise" title="finsec.base.ForwardExercise"><span class="pre">ForwardExercise</span></a></em><a class="headerlink" href="#finsec.base.Future.exercise" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="finsec.base.Future.tick_size">
 <span class="sig-name descname"><span class="pre">tick_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">CurrencyQty</span></em><a class="headerlink" href="#finsec.base.Future.tick_size" title="Permalink to this definition">#</a></dt>
@@ -1150,12 +1645,12 @@ title="Print to PDF"
 
 <dl class="py class">
 <dt class="sig sig-object py" id="finsec.base.Option">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">Option</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GSID</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecurityType" title="finsec.enums.SecurityType"><span class="pre">SecurityType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_subtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecuritySubtype" title="finsec.enums.SecuritySubtype"><span class="pre">SecuritySubtype</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifiers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityIdentifier" title="finsec.base.SecurityIdentifier"><span class="pre">SecurityIdentifier</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_exchange</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="finsec.exchanges.html#finsec.exchanges.Exchange" title="finsec.exchanges.Exchange"><span class="pre">Exchange</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">denominated_ccy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issuer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">website</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_of_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">underlying</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settlement_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SettlementType" title="finsec.enums.SettlementType"><span class="pre">SettlementType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_series_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpirySeriesType" title="finsec.enums.ExpirySeriesType"><span class="pre">ExpirySeriesType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_time_of_day</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.ExpiryTimeOfDay" title="finsec.enums.ExpiryTimeOfDay"><span class="pre">ExpiryTimeOfDay</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.11)"><span class="pre">date</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiry_datetime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Multiplier</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_flavor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionFlavor" title="finsec.enums.OptionFlavor"><span class="pre">OptionFlavor</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionExerciseStyle" title="finsec.enums.OptionExerciseStyle"><span class="pre">OptionExerciseStyle</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strike</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CurrencyQty</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#Option"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.Option" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">Option</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GSID</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecurityType" title="finsec.enums.SecurityType"><span class="pre">SecurityType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_subtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecuritySubtype" title="finsec.enums.SecuritySubtype"><span class="pre">SecuritySubtype</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifiers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityIdentifier" title="finsec.base.SecurityIdentifier"><span class="pre">SecurityIdentifier</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_exchange</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="finsec.exchanges.html#finsec.exchanges.Exchange" title="finsec.exchanges.Exchange"><span class="pre">Exchange</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">denominated_ccy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issuer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">website</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_of_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">underlying</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplier</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Multiplier</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#finsec.base.OptionExercise" title="finsec.base.OptionExercise"><span class="pre">OptionExercise</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strike</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CurrencyQty</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option_flavor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionFlavor" title="finsec.enums.OptionFlavor"><span class="pre">OptionFlavor</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#Option"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.Option" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#finsec.base.Derivative" title="finsec.base.Derivative"><code class="xref py py-class docutils literal notranslate"><span class="pre">Derivative</span></code></a></p>
 <p>Option object, derived from some underlying.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="finsec.base.Option.option_exercise">
-<span class="sig-name descname"><span class="pre">option_exercise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionExerciseStyle" title="finsec.enums.OptionExerciseStyle"><span class="pre">OptionExerciseStyle</span></a></em><a class="headerlink" href="#finsec.base.Option.option_exercise" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="finsec.base.Option.exercise">
+<span class="sig-name descname"><span class="pre">exercise</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#finsec.base.OptionExercise" title="finsec.base.OptionExercise"><span class="pre">OptionExercise</span></a></em><a class="headerlink" href="#finsec.base.Option.exercise" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1171,29 +1666,25 @@ title="Print to PDF"
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="finsec.base.OptionExercise">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">OptionExercise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exercise</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#finsec.base.ExerciseDatetime" title="finsec.base.ExerciseDatetime"><span class="pre">ExerciseDatetime</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionExerciseStyle" title="finsec.enums.OptionExerciseStyle"><span class="pre">OptionExerciseStyle</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#OptionExercise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.OptionExercise" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#finsec.base.DerivativeExercise" title="finsec.base.DerivativeExercise"><code class="xref py py-class docutils literal notranslate"><span class="pre">DerivativeExercise</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.OptionExercise.style">
+<span class="sig-name descname"><span class="pre">style</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.OptionExerciseStyle" title="finsec.enums.OptionExerciseStyle"><span class="pre">OptionExerciseStyle</span></a></em><a class="headerlink" href="#finsec.base.OptionExercise.style" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="finsec.base.Security">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">Security</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GSID</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecurityType" title="finsec.enums.SecurityType"><span class="pre">SecurityType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_subtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecuritySubtype" title="finsec.enums.SecuritySubtype"><span class="pre">SecuritySubtype</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifiers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityIdentifier" title="finsec.base.SecurityIdentifier"><span class="pre">SecurityIdentifier</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">primary_exchange</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="finsec.exchanges.html#finsec.exchanges.Exchange" title="finsec.exchanges.Exchange"><span class="pre">Exchange</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">denominated_ccy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#finsec.base.SecurityReference" title="finsec.base.SecurityReference"><span class="pre">SecurityReference</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">issuer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">website</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_of_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.11)"><span class="pre">datetime</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#Security"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.Security" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>Foundational financial security object.</p>
-<dl class="py class">
+<dl class="py attribute">
 <dt class="sig sig-object py" id="finsec.base.Security.Config">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../_modules/finsec/base.html#Security.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.Security.Config" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="finsec.base.Security.Config.extra">
-<span class="sig-name descname"><span class="pre">extra</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'forbid'</span></em><a class="headerlink" href="#finsec.base.Security.Config.extra" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="finsec.base.Security.Config.json_encoders">
-<span class="sig-name descname"><span class="pre">json_encoders</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;class</span> <span class="pre">'datetime.date'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">Security.Config.&lt;lambda&gt;&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'datetime.datetime'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">Security.Config.&lt;lambda&gt;&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'datetime.timedelta'&gt;:</span> <span class="pre">&lt;cyfunction</span> <span class="pre">timedelta_isoformat&gt;}</span></em><a class="headerlink" href="#finsec.base.Security.Config.json_encoders" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="finsec.base.Security.Config.use_enum_values">
-<span class="sig-name descname"><span class="pre">use_enum_values</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#finsec.base.Security.Config.use_enum_values" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
+<span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#finsec.base.Security.Config" title="Permalink to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#finsec.base.standard_model_config" title="finsec.base.standard_model_config"><code class="xref py py-class docutils literal notranslate"><span class="pre">standard_model_config</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1258,15 +1749,10 @@ title="Print to PDF"
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">SecurityIdentifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecurityIdentifierType" title="finsec.enums.SecurityIdentifierType"><span class="pre">SecurityIdentifierType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#SecurityIdentifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.SecurityIdentifier" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>Object that identifies an existing security. This should be like ISIN, FIGI, etc.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="finsec.base.SecurityIdentifier.Config">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="../../_modules/finsec/base.html#SecurityIdentifier.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.SecurityIdentifier.Config" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="finsec.base.SecurityIdentifier.Config.use_enum_values">
-<span class="sig-name descname"><span class="pre">use_enum_values</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#finsec.base.SecurityIdentifier.Config.use_enum_values" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
+<dt class="sig sig-object py" id="finsec.base.SecurityIdentifier.Config">
+<span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#finsec.base.SecurityIdentifier.Config" title="Permalink to this definition">#</a></dt>
+<dd><p>alias of <a class="reference internal" href="#finsec.base.standard_model_config" title="finsec.base.standard_model_config"><code class="xref py py-class docutils literal notranslate"><span class="pre">standard_model_config</span></code></a></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1283,7 +1769,7 @@ title="Print to PDF"
 
 <dl class="py class">
 <dt class="sig sig-object py" id="finsec.base.SecurityReference">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">SecurityReference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GSID</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Ticker</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#SecurityReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.SecurityReference" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">SecurityReference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gsid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GSID</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticker</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Ticker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecurityType" title="finsec.enums.SecurityType"><span class="pre">SecurityType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">security_subtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="finsec.enums.html#finsec.enums.SecuritySubtype" title="finsec.enums.SecuritySubtype"><span class="pre">SecuritySubtype</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/finsec/base.html#SecurityReference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.SecurityReference" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
 <p>References an existing security. Should be treated like pointer of sorts.</p>
 <dl class="py attribute">
@@ -1292,8 +1778,39 @@ title="Print to PDF"
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.SecurityReference.security_subtype">
+<span class="sig-name descname"><span class="pre">security_subtype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.SecuritySubtype" title="finsec.enums.SecuritySubtype"><span class="pre">SecuritySubtype</span></a></em><a class="headerlink" href="#finsec.base.SecurityReference.security_subtype" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.SecurityReference.security_type">
+<span class="sig-name descname"><span class="pre">security_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="finsec.enums.html#finsec.enums.SecurityType" title="finsec.enums.SecurityType"><span class="pre">SecurityType</span></a></em><a class="headerlink" href="#finsec.base.SecurityReference.security_type" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="finsec.base.SecurityReference.ticker">
 <span class="sig-name descname"><span class="pre">ticker</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Ticker</span></em><a class="headerlink" href="#finsec.base.SecurityReference.ticker" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="finsec.base.standard_model_config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">finsec.base.</span></span><span class="sig-name descname"><span class="pre">standard_model_config</span></span><a class="reference internal" href="../../_modules/finsec/base.html#standard_model_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#finsec.base.standard_model_config" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.standard_model_config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'forbid'</span></em><a class="headerlink" href="#finsec.base.standard_model_config.extra" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.standard_model_config.json_encoders">
+<span class="sig-name descname"><span class="pre">json_encoders</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;class</span> <span class="pre">'datetime.date'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">standard_model_config.&lt;lambda&gt;&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'datetime.datetime'&gt;:</span> <span class="pre">&lt;function</span> <span class="pre">standard_model_config.&lt;lambda&gt;&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'datetime.timedelta'&gt;:</span> <span class="pre">&lt;cyfunction</span> <span class="pre">timedelta_isoformat&gt;}</span></em><a class="headerlink" href="#finsec.base.standard_model_config.json_encoders" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="finsec.base.standard_model_config.use_enum_values">
+<span class="sig-name descname"><span class="pre">use_enum_values</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#finsec.base.standard_model_config.use_enum_values" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

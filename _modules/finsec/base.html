@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>finsec.base &#8212; financial-security-classes 0.2.dev0 documentation</title>
+    <title>finsec.base &#8212; financial-security-classes 0.3.dev0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -71,7 +71,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">financial-security-classes 0.2.dev0 documentation</h1>
+      <h1 class="site-logo" id="site-title">financial-security-classes 0.3.dev0 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -279,7 +279,7 @@ title="Fullscreen mode"
                 
   <h1>Source code for finsec.base</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">typing</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">pydantic</span>
@@ -307,21 +307,35 @@ title="Fullscreen mode"
 <span class="n">BaseObject</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span>
 
 
+<div class="viewcode-block" id="standard_model_config"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.standard_model_config">[docs]</a><span class="k">class</span> <span class="nc">standard_model_config</span><span class="p">:</span>
+    <span class="n">json_encoders</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(),</span>
+        <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">:</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">timedelta_isoformat</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">use_enum_values</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">extra</span> <span class="o">=</span> <span class="s2">&quot;forbid&quot;</span></div>
+
+
 <div class="viewcode-block" id="SecurityIdentifier"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.SecurityIdentifier">[docs]</a><span class="k">class</span> <span class="nc">SecurityIdentifier</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Object that identifies an existing security. This should be like ISIN, FIGI, etc.&quot;&quot;&quot;</span>
 
     <span class="n">id_type</span><span class="p">:</span> <span class="n">SecurityIdentifierType</span>
     <span class="n">value</span><span class="p">:</span> <span class="nb">str</span>
 
-<div class="viewcode-block" id="SecurityIdentifier.Config"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.SecurityIdentifier.Config">[docs]</a>    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
-        <span class="n">use_enum_values</span> <span class="o">=</span> <span class="kc">True</span></div></div>
+    <span class="n">Config</span> <span class="o">=</span> <span class="n">standard_model_config</span></div>
+
+    <span class="c1"># class Config:</span>
+    <span class="c1">#     use_enum_values = True</span>
 
 
 <div class="viewcode-block" id="SecurityReference"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.SecurityReference">[docs]</a><span class="k">class</span> <span class="nc">SecurityReference</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;References an existing security. Should be treated like pointer of sorts.&quot;&quot;&quot;</span>
 
     <span class="n">gsid</span><span class="p">:</span> <span class="n">GSID</span>
-    <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span></div>
+    <span class="n">ticker</span><span class="p">:</span> <span class="n">Ticker</span>
+    <span class="n">security_type</span><span class="p">:</span> <span class="n">SecurityType</span>
+    <span class="n">security_subtype</span><span class="p">:</span> <span class="n">SecuritySubtype</span></div>
 
 
 <div class="viewcode-block" id="Security"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Security">[docs]</a><span class="k">class</span> <span class="nc">Security</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
@@ -339,29 +353,22 @@ title="Fullscreen mode"
 
     <span class="n">security_type</span><span class="p">:</span> <span class="n">SecurityType</span>
     <span class="n">security_subtype</span><span class="p">:</span> <span class="n">SecuritySubtype</span>
-    <span class="n">identifiers</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">List</span><span class="p">[</span><span class="n">SecurityIdentifier</span><span class="p">]</span>
+    <span class="n">identifiers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SecurityIdentifier</span><span class="p">]</span>
 
-    <span class="n">primary_exchange</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">Exchange</span><span class="p">]</span>
+    <span class="n">primary_exchange</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Exchange</span><span class="p">]</span>
 
-    <span class="n">denominated_ccy</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">SecurityReference</span><span class="p">]</span>
+    <span class="n">denominated_ccy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SecurityReference</span><span class="p">]</span>
 
-    <span class="n">issuer</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-    <span class="n">website</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">issuer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">website</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 
     <span class="c1"># Security data valid and recent as-of this data</span>
-    <span class="n">as_of_date</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span>
+    <span class="n">as_of_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span>
 
-<div class="viewcode-block" id="Security.Config"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Security.Config">[docs]</a>    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
-        <span class="n">json_encoders</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
-            <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(),</span>
-            <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">:</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">json</span><span class="o">.</span><span class="n">timedelta_isoformat</span><span class="p">,</span>
-        <span class="p">}</span>
-        <span class="n">use_enum_values</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">extra</span> <span class="o">=</span> <span class="s2">&quot;forbid&quot;</span></div>
+    <span class="n">Config</span> <span class="o">=</span> <span class="n">standard_model_config</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Any</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
 
         <span class="c1"># Make sure gsid is explicitly set to None, not just unset</span>
@@ -370,23 +377,16 @@ title="Fullscreen mode"
         <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="Derivative"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Derivative">[docs]</a><span class="k">class</span> <span class="nc">Derivative</span><span class="p">(</span><span class="n">Security</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Derivative security, with some specified underlyer.&quot;&quot;&quot;</span>
-
-    <span class="c1"># Underlying that determines settlement of the contract</span>
-    <span class="n">underlying</span><span class="p">:</span> <span class="n">SecurityReference</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
-
-    <span class="n">settlement_type</span><span class="p">:</span> <span class="n">SettlementType</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
-    <span class="n">expiry_series_type</span><span class="p">:</span> <span class="n">ExpirySeriesType</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
-    <span class="n">expiry_time_of_day</span><span class="p">:</span> <span class="n">ExpiryTimeOfDay</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+<div class="viewcode-block" id="ExerciseDatetime"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.ExerciseDatetime">[docs]</a><span class="k">class</span> <span class="nc">ExerciseDatetime</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Encodes information about a single exercise/expiration date/time a derivative.&quot;&quot;&quot;</span>
 
     <span class="n">expiry_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span>
-    <span class="n">expiry_datetime</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span>
+    <span class="n">expiry_datetime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">settlement_type</span><span class="p">:</span> <span class="n">SettlementType</span> <span class="o">=</span> <span class="n">SettlementType</span><span class="o">.</span><span class="n">UNKNOWN</span>
+    <span class="n">expiry_time_of_day</span><span class="p">:</span> <span class="n">ExpiryTimeOfDay</span> <span class="o">=</span> <span class="n">ExpiryTimeOfDay</span><span class="o">.</span><span class="n">UNKNOWN</span>
+    <span class="n">expiry_series_type</span><span class="p">:</span> <span class="n">ExpirySeriesType</span> <span class="o">=</span> <span class="n">ExpirySeriesType</span><span class="o">.</span><span class="n">UNKNOWN</span>
 
-    <span class="c1"># The multiplier vs underlier</span>
-    <span class="n">multiplier</span><span class="p">:</span> <span class="n">Multiplier</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
-
-<div class="viewcode-block" id="Derivative.date_str_to_datetime_date"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Derivative.date_str_to_datetime_date">[docs]</a>    <span class="nd">@pydantic</span><span class="o">.</span><span class="n">validator</span><span class="p">(</span><span class="s2">&quot;expiry_date&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="ExerciseDatetime.date_str_to_datetime_date"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.ExerciseDatetime.date_str_to_datetime_date">[docs]</a>    <span class="nd">@pydantic</span><span class="o">.</span><span class="n">validator</span><span class="p">(</span><span class="s2">&quot;expiry_date&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">date_str_to_datetime_date</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">v</span>
@@ -396,22 +396,59 @@ title="Fullscreen mode"
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expiry_date has unknown type </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span></div></div>
 
 
+<div class="viewcode-block" id="DerivativeExercise"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.DerivativeExercise">[docs]</a><span class="k">class</span> <span class="nc">DerivativeExercise</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ExerciseDatetime</span><span class="p">],</span> <span class="n">ExerciseDatetime</span><span class="p">]</span>
+    <span class="n">Config</span> <span class="o">=</span> <span class="n">standard_model_config</span></div>
+
+
+<div class="viewcode-block" id="ForwardExercise"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.ForwardExercise">[docs]</a><span class="k">class</span> <span class="nc">ForwardExercise</span><span class="p">(</span><span class="n">DerivativeExercise</span><span class="p">):</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">ExerciseDatetime</span></div>
+
+
+<div class="viewcode-block" id="OptionExercise"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.OptionExercise">[docs]</a><span class="k">class</span> <span class="nc">OptionExercise</span><span class="p">(</span><span class="n">DerivativeExercise</span><span class="p">):</span>
+    <span class="n">style</span><span class="p">:</span> <span class="n">OptionExerciseStyle</span></div>
+
+
+<div class="viewcode-block" id="AmericanOptionExercise"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.AmericanOptionExercise">[docs]</a><span class="k">class</span> <span class="nc">AmericanOptionExercise</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">ExerciseDatetime</span>
+    <span class="n">style</span><span class="p">:</span> <span class="n">OptionExerciseStyle</span> <span class="o">=</span> <span class="n">OptionExerciseStyle</span><span class="o">.</span><span class="n">AMERICAN</span></div>
+
+
+<div class="viewcode-block" id="EuropeanOptionExercise"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.EuropeanOptionExercise">[docs]</a><span class="k">class</span> <span class="nc">EuropeanOptionExercise</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">ExerciseDatetime</span>
+    <span class="n">style</span><span class="p">:</span> <span class="n">OptionExerciseStyle</span> <span class="o">=</span> <span class="n">OptionExerciseStyle</span><span class="o">.</span><span class="n">EUROPEAN</span></div>
+
+
+<div class="viewcode-block" id="BermudanOptionExercise"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.BermudanOptionExercise">[docs]</a><span class="k">class</span> <span class="nc">BermudanOptionExercise</span><span class="p">(</span><span class="n">BaseObject</span><span class="p">):</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ExerciseDatetime</span><span class="p">]</span>
+    <span class="n">style</span><span class="p">:</span> <span class="n">OptionExerciseStyle</span> <span class="o">=</span> <span class="n">OptionExerciseStyle</span><span class="o">.</span><span class="n">BERMUDAN</span></div>
+
+
+<div class="viewcode-block" id="Derivative"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Derivative">[docs]</a><span class="k">class</span> <span class="nc">Derivative</span><span class="p">(</span><span class="n">Security</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Derivative security, with some specified underlyer.&quot;&quot;&quot;</span>
+
+    <span class="n">underlying</span><span class="p">:</span> <span class="n">SecurityReference</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">multiplier</span><span class="p">:</span> <span class="n">Multiplier</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">DerivativeExercise</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span></div>
+
+
 <div class="viewcode-block" id="Future"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Future">[docs]</a><span class="k">class</span> <span class="nc">Future</span><span class="p">(</span><span class="n">Derivative</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Exchange-traded future object, derived from some underlying.&quot;&quot;&quot;</span>
 
-    <span class="n">tick_size</span><span class="p">:</span> <span class="n">CurrencyQty</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span></div>
+    <span class="n">tick_size</span><span class="p">:</span> <span class="n">CurrencyQty</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">ForwardExercise</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Option"><a class="viewcode-back" href="../../source/packages/finsec.base.html#finsec.base.Option">[docs]</a><span class="k">class</span> <span class="nc">Option</span><span class="p">(</span><span class="n">Derivative</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Option object, derived from some underlying.&quot;&quot;&quot;</span>
 
+    <span class="n">strike</span><span class="p">:</span> <span class="n">CurrencyQty</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
     <span class="n">option_flavor</span><span class="p">:</span> <span class="n">OptionFlavor</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
-    <span class="n">option_exercise</span><span class="p">:</span> <span class="n">OptionExerciseStyle</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">exercise</span><span class="p">:</span> <span class="n">OptionExercise</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span></div>
+    <span class="c1"># option_exercise: OptionExerciseStyle = placeholder()</span>
 
-    <span class="n">strike</span><span class="p">:</span> <span class="n">CurrencyQty</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span></div>
 
-
-<span class="n">AnySecurity</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">Union</span><span class="p">[</span>
+<span class="n">AnySecurity</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span>
     <span class="n">Option</span><span class="p">,</span>
     <span class="n">Future</span><span class="p">,</span>
     <span class="n">Security</span><span class="p">,</span>
