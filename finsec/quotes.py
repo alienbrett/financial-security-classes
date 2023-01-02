@@ -66,6 +66,14 @@ class OHLCWithVolume(OHLC):
 LevelOneQuote = None
 
 
+def mmax(x, y):
+    return None if x is None or y is None else max(x, y)
+
+
+def mmin(x, y):
+    return None if x is None or y is None else min(x, y)
+
+
 class LevelOneQuote(AbstractSnapshot):
     bid: Decimal = placeholder()
     ask: Decimal = placeholder()
@@ -79,30 +87,32 @@ class LevelOneQuote(AbstractSnapshot):
 
     def __add__(self, obj: LevelOneQuote):
         if type(obj) == type(self):
+            use_last = self.last_time is not None and self.last_time == obj.last_time
             return LevelOneQuote(
                 bid=self.bid + obj.bid,
                 ask=self.ask + obj.ask,
-                last=self.last + obj.last,
-                bid_sz=min(self.bid_sz, obj.bid_sz),
-                ask_sz=min(self.ask_sz, obj.ask_sz),
-                last_sz=min(self.last_sz, obj.last_sz),
-                last_time=max(self.last_time, obj.last_time),
-                timestamp=max(self.timestamp, obj.timestamp),
+                last=self.last + obj.last if use_last else None,
+                bid_sz=mmin(self.bid_sz, obj.bid_sz),
+                ask_sz=mmin(self.ask_sz, obj.ask_sz),
+                last_sz=mmin(self.last_sz, obj.last_sz) if use_last else None,
+                last_time=mmax(self.last_time, obj.last_time) if use_last else None,
+                timestamp=mmax(self.timestamp, obj.timestamp),
             )
         else:
             raise TypeError("unknown object type {0}".format(type(obj)))
 
     def __sub__(self, obj):
         if type(obj) == type(self):
+            use_last = self.last_time is not None and self.last_time == obj.last_time
             return LevelOneQuote(
                 bid=self.bid - obj.bid,
                 ask=self.ask - obj.ask,
-                last=self.last - obj.last,
-                bid_sz=min(self.bid_sz, obj.ask_sz),
-                ask_sz=min(self.ask_sz, obj.bid_sz),
-                last_sz=min(self.last_sz, obj.last_sz),
-                last_time=max(self.last_time, obj.last_time),
-                timestamp=max(self.timestamp, obj.timestamp),
+                last=self.last - obj.last if use_last else None,
+                bid_sz=mmin(self.bid_sz, obj.ask_sz),
+                ask_sz=mmin(self.ask_sz, obj.bid_sz),
+                last_sz=mmin(self.last_sz, obj.last_sz) if use_last else None,
+                last_time=mmax(self.last_time, obj.last_time) if use_last else None,
+                timestamp=mmax(self.timestamp, obj.timestamp),
             )
         else:
             raise TypeError("unknown object type {0}".format(type(obj)))
@@ -110,9 +120,10 @@ class LevelOneQuote(AbstractSnapshot):
     def __mul__(self, obj: Decimal):
         ret = self.copy()
 
-        ret.bid *= obj
-        ret.ask *= obj
-        ret.last *= obj
+        for k in ("bid", "ask", "last"):
+            v = getattr(ret, k)
+            if v is not None:
+                setattr(ret, k, v * obj)
 
         if obj < 0:
             ret.bid_sz, ret.ask_sz = ret.ask_sz, ret.bid_sz

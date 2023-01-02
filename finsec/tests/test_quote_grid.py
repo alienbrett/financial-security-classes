@@ -145,3 +145,85 @@ class TestQuoteGrids(BaseTestCase):
         for x in chain.subset():
             self.assertIn(x, ys)
         self.assertEqual(chain[self.esh23], quotes[0])
+
+    def test_quote_ops1(self):
+        q1 = fs.LevelOneQuote(
+            bid=100,
+            ask=101,
+            bid_sz=10,
+            ask_sz=20,
+            last=100.5,
+            last_sz=12,
+            last_time=datetime.datetime(2021, 12, 31, 9, 30, 0, tzinfo=nyc),
+            timestamp=datetime.datetime(2022, 1, 1, 0, 0, 1, tzinfo=nyc),
+        )
+        q2 = fs.LevelOneQuote(
+            bid=5,
+            ask=6,
+            bid_sz=500,
+            ask_sz=1,
+            last=7.5,
+            last_sz=100,
+            last_time=datetime.datetime(2021, 12, 31, 9, 30, 0, tzinfo=nyc),
+            timestamp=datetime.datetime(2023, 1, 1, 0, 0, 1, tzinfo=nyc),
+        )
+
+        q3 = fs.LevelOneQuote(
+            bid=105,
+            ask=107,
+            bid_sz=10,
+            ask_sz=1,
+            last=108,
+            last_sz=12,
+            last_time=datetime.datetime(2021, 12, 31, 9, 30, 0, tzinfo=nyc),
+            timestamp=datetime.datetime(2023, 1, 1, 0, 0, 1, tzinfo=nyc),
+        )
+
+        self.assertEqual(q1 + q2, q3)
+        self.assertEqual(q1 * 2, q1 + q1)
+        self.assertEqual(q3 * 2, q3 + q3)
+
+        # test commutative
+        self.assertEqual(q1 + q2, q2 + q1)
+        # test associative
+        self.assertEqual((q1 + q2) + q3, q1 + (q2 + q3))
+
+    def test_quote_ops2(self):
+        q1 = fs.LevelOneQuote(
+            bid=100,
+            ask=101,
+            bid_sz=10,
+            ask_sz=20,
+            last=100.5,
+            last_sz=12,
+            last_time=datetime.datetime(2021, 12, 31, 9, 30, 0, tzinfo=nyc),
+            timestamp=datetime.datetime(2022, 1, 1, 0, 0, 1, tzinfo=nyc),
+        )
+        q2 = fs.LevelOneQuote(
+            bid=5,
+            ask=6,
+            bid_sz=500,
+            ask_sz=1,
+            last=7.5,
+            last_sz=100,
+            # last time not equal to q1
+            last_time=datetime.datetime(2020, 1, 15, 9, 30, 0, tzinfo=nyc),
+            timestamp=datetime.datetime(2023, 1, 1, 0, 0, 1, tzinfo=nyc),
+        )
+
+        q3 = fs.LevelOneQuote(
+            bid=105,
+            ask=107,
+            bid_sz=10,
+            ask_sz=1,
+            timestamp=datetime.datetime(2023, 1, 1, 0, 0, 1, tzinfo=nyc),
+        )
+
+        self.assertEqual(q1 + q2, q3)
+        self.assertEqual(q1 * 2, q1 + q1)
+        self.assertEqual(q3 * 2, q3 + q3)
+
+        # test commutative
+        self.assertEqual(q1 + q2, q2 + q1)
+        # test associative
+        self.assertEqual((q1 + q2) + q3, q1 + (q2 + q3))
