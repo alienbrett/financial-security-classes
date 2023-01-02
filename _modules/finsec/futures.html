@@ -305,7 +305,6 @@ title="Fullscreen mode"
     <span class="n">multiplier</span><span class="p">:</span> <span class="n">Multiplier</span><span class="p">,</span>
     <span class="n">expiry_time_of_day</span><span class="p">:</span> <span class="n">ExpiryTimeOfDay</span><span class="p">,</span>
     <span class="n">expiry_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">,</span>
-    <span class="n">expiry_datetime</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">settlement_type</span><span class="p">:</span> <span class="n">SettlementType</span> <span class="o">=</span> <span class="n">SettlementType</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">,</span>
     <span class="n">expiry_series_type</span><span class="p">:</span> <span class="n">ExpirySeriesType</span> <span class="o">=</span> <span class="n">ExpirySeriesType</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">,</span>
     <span class="n">currency</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Security</span><span class="p">,</span> <span class="n">SecurityReference</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -327,6 +326,7 @@ title="Fullscreen mode"
         <span class="n">expiry_date</span><span class="p">,</span>
         <span class="n">settlement_type</span><span class="o">=</span><span class="n">settlement_type</span><span class="p">,</span>
         <span class="n">expiry_series_type</span><span class="o">=</span><span class="n">expiry_series_type</span><span class="p">,</span>
+        <span class="n">expiry_time_of_day</span><span class="o">=</span><span class="n">expiry_time_of_day</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">Future</span><span class="p">(</span>

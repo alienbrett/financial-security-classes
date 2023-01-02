@@ -290,6 +290,7 @@ title="Fullscreen mode"
     <span class="n">ExpiryTimeOfDay</span><span class="p">,</span>
     <span class="n">Multiplier</span><span class="p">,</span>
     <span class="n">OptionExerciseStyle</span><span class="p">,</span>
+    <span class="n">OptionFlavor</span><span class="p">,</span>
     <span class="n">SecurityType</span><span class="p">,</span>
     <span class="n">SettlementType</span><span class="p">,</span>
 <span class="p">)</span>
@@ -343,7 +344,7 @@ title="Fullscreen mode"
     <span class="n">occ_ticker</span> <span class="o">=</span> <span class="n">option_format</span><span class="p">(</span>
         <span class="n">symbol</span><span class="o">=</span><span class="n">underlying_ref</span><span class="o">.</span><span class="n">ticker</span><span class="p">,</span>
         <span class="n">exp_date</span><span class="o">=</span><span class="n">expiry_date</span><span class="p">,</span>
-        <span class="n">flavor</span><span class="o">=</span><span class="n">callput</span><span class="p">,</span>
+        <span class="n">flavor</span><span class="o">=</span><span class="s2">&quot;call&quot;</span> <span class="k">if</span> <span class="n">flavor</span> <span class="o">==</span> <span class="n">OptionFlavor</span><span class="o">.</span><span class="n">CALL</span> <span class="k">else</span> <span class="s2">&quot;put&quot;</span><span class="p">,</span>
         <span class="n">strike</span><span class="o">=</span><span class="n">strike</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">sec_subtype</span> <span class="o">=</span> <span class="n">determine_option_subtype</span><span class="p">(</span>
