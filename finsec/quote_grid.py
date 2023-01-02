@@ -88,7 +88,7 @@ class SecurityChain(QuoteGrid, pydantic.BaseModel):
         """Searches all securities in this chain, and returns list of the unique attribute values for specified attribute."""
         return list({getattr(sec, attr) for sec in self.sec_cache})
 
-    def filter(self, func: Callable[Security, bool]):
+    def filter(self, func: Callable[[Security], bool]):
         """Returns generator that yields all securities matching some criteria function."""
         for sec in filter(func, self.sec_cache):
             yield sec
