@@ -3,10 +3,16 @@ from . import __meta__
 __version__ = __meta__.version
 
 from .base import (
+    AmericanOptionExercise,
     AnySecurity,
+    BermudanOptionExercise,
     Derivative,
+    DerivativeExercise,
+    EuropeanOptionExercise,
+    ExerciseDatetime,
     Future,
     Option,
+    OptionExercise,
     Security,
     SecurityIdentifier,
     SecurityReference,

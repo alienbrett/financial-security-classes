@@ -141,7 +141,7 @@ setup(
     package_dir={meta["name"]: os.path.join(".", meta["path"])},
     # If any package contains *.txt or *.rst files, include them:
     # package_data={"": ["*.txt", "*.rst"],}
-    python_requires=">=3.6",
+    python_requires=">=3.9",
     install_requires=install_requires,
     extras_require=extras_require,
     # Metadata to display on PyPI
