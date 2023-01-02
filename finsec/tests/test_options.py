@@ -46,9 +46,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
             # This should be implied, since underlyer doesn't permit physical delivery
             # settlement_type     = fs.SettlementType.CASH,
             # Without this argument, this should be set to UNKNOWN
@@ -73,20 +71,11 @@ class TestOptionConstructor(BaseTestCase):
         self.assertEqual(option.primary_exchange, fs.Exchange.CBOE)
 
         self.assertEqual(option.ticker, "SPX220916C04000000")
-        self.assertEqual(
-            option.gsid,
-            fs.GSID(120),
-        )
+        self.assertEqual(option.gsid, fs.GSID(120))
 
-        self.assertEqual(
-            option.multiplier,
-            100,
-        )
+        self.assertEqual(option.multiplier, 100)
 
-        self.assertIn(
-            fs.FIGI("234567"),
-            option.identifiers,
-        )
+        self.assertIn(fs.FIGI("234567"), option.identifiers)
 
         self.assertEqual(
             option.denominated_ccy, fs.create_reference_from_security(self.usd)
@@ -102,9 +91,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
             # This should be implied, since underlyer doesn't permit physical delivery
             # settlement_type     = fs.SettlementType.CASH,
             # Without this argument, this should be set to UNKNOWN
@@ -126,10 +113,7 @@ class TestOptionConstructor(BaseTestCase):
             option.exercise.exercise.expiry_series_type, fs.ExpirySeriesType.MONTHLY
         )
 
-        self.assertEqual(
-            option.multiplier,
-            100,
-        )
+        self.assertEqual(option.multiplier, 100)
 
         self.assertEqual(option.primary_exchange, fs.Exchange.CBOE)
 
@@ -139,10 +123,7 @@ class TestOptionConstructor(BaseTestCase):
             fs.GSID(120),
         )
 
-        self.assertIn(
-            fs.FIGI("234567"),
-            option.identifiers,
-        )
+        self.assertIn(fs.FIGI("234567"), option.identifiers)
 
         self.assertEqual(
             option.denominated_ccy, fs.create_reference_from_security(self.usd)
@@ -161,9 +142,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
             # THis line should generate an exception
             settlement_type=fs.SettlementType.PHYSICAL,
         )
@@ -182,9 +161,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
         )
         self.assertEqual(option.exercise.style, fs.OptionExerciseStyle.EUROPEAN)
         self.assertEqual(
@@ -209,18 +186,9 @@ class TestOptionConstructor(BaseTestCase):
         # # THese should berred without needing to be explicitly set
 
         self.assertEqual(option.ticker, "SPX220916P04000000")
-        self.assertEqual(
-            option.gsid,
-            fs.GSID(120),
-        )
-        self.assertEqual(
-            option.multiplier,
-            100,
-        )
-        self.assertIn(
-            fs.FIGI("234567"),
-            option.identifiers,
-        )
+        self.assertEqual(option.gsid, fs.GSID(120))
+        self.assertEqual(option.multiplier, 100)
+        self.assertIn(fs.FIGI("234567"), option.identifiers)
 
         self.assertEqual(
             option.denominated_ccy, fs.create_reference_from_security(self.usd)
@@ -239,9 +207,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
             # This should be implied, since underlyer doesn't permit physical delivery
             # settlement_type     = fs.SettlementType.CASH,
             # Without this argument, this should be set to UNKNOWN
@@ -266,10 +232,7 @@ class TestOptionConstructor(BaseTestCase):
         self.assertEqual(option.security_subtype, fs.SecuritySubtype.INDEX_OPTION)
         self.assertEqual(option.option_flavor, fs.OptionFlavor.PUT)
 
-        self.assertEqual(
-            option.multiplier,
-            100,
-        )
+        self.assertEqual(option.multiplier, 100)
 
         self.assertEqual(option.primary_exchange, fs.Exchange.CBOE)
         self.assertEqual(option.ticker, "SPX220916P04000000")
@@ -300,9 +263,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
             # THis line should generate an exception
             settlement_type=fs.SettlementType.PHYSICAL,
         )
@@ -321,9 +282,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
             # This should be implied, since underlyer doesn't permit physical delivery
             # settlement_type     = fs.SettlementType.CASH,
             # Without this argument, this should be set to UNKNOWN
@@ -354,14 +313,8 @@ class TestOptionConstructor(BaseTestCase):
             option.gsid,
             fs.GSID(120),
         )
-        self.assertEqual(
-            option.multiplier,
-            100,
-        )
-        self.assertIn(
-            fs.FIGI("234567"),
-            option.identifiers,
-        )
+        self.assertEqual(option.multiplier, 100)
+        self.assertIn(fs.FIGI("234567"), option.identifiers)
         self.assertEqual(
             option.denominated_ccy, fs.create_reference_from_security(self.usd)
         )
@@ -379,9 +332,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
             # This should be implied, since underlyer doesn't permit physical delivery
             # settlement_type     = fs.SettlementType.CASH,
             # Without this argument, this should be set to UNKNOWN
@@ -404,20 +355,11 @@ class TestOptionConstructor(BaseTestCase):
         self.assertEqual(option.security_type, fs.SecurityType.DERIVATIVE)
         self.assertEqual(option.security_subtype, fs.SecuritySubtype.INDEX_OPTION)
         self.assertEqual(option.option_flavor, fs.OptionFlavor.CALL)
-        self.assertEqual(
-            option.multiplier,
-            100,
-        )
+        self.assertEqual(option.multiplier, 100)
         self.assertEqual(option.primary_exchange, fs.Exchange.CBOE)
         self.assertEqual(option.ticker, "SPX220916C04000000")
-        self.assertEqual(
-            option.gsid,
-            fs.GSID(120),
-        )
-        self.assertIn(
-            fs.FIGI("234567"),
-            option.identifiers,
-        )
+        self.assertEqual(option.gsid, fs.GSID(120))
+        self.assertIn(fs.FIGI("234567"), option.identifiers)
         self.assertEqual(
             option.denominated_ccy, fs.create_reference_from_security(self.usd)
         )
@@ -436,9 +378,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
             # THis line should generate an exception
             settlement_type=fs.SettlementType.PHYSICAL,
         )
@@ -458,9 +398,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
         )
         self.assertEqual(option.exercise.style, fs.OptionExerciseStyle.AMERICAN)
         self.assertEqual(
@@ -485,14 +423,8 @@ class TestOptionConstructor(BaseTestCase):
             option.gsid,
             fs.GSID(120),
         )
-        self.assertEqual(
-            option.multiplier,
-            100,
-        )
-        self.assertIn(
-            fs.FIGI("234567"),
-            option.identifiers,
-        )
+        self.assertEqual(option.multiplier, 100)
+        self.assertIn(fs.FIGI("234567"), option.identifiers)
         self.assertEqual(
             option.denominated_ccy, fs.create_reference_from_security(self.usd)
         )
@@ -510,9 +442,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
             # This should be implied, since underlyer doesn't permit physical delivery
             # settlement_type     = fs.SettlementType.CASH,
             # Without this argument, this should be set to UNKNOWN
@@ -535,20 +465,11 @@ class TestOptionConstructor(BaseTestCase):
         self.assertEqual(option.security_type, fs.SecurityType.DERIVATIVE)
         self.assertEqual(option.security_subtype, fs.SecuritySubtype.INDEX_OPTION)
         self.assertEqual(option.option_flavor, fs.OptionFlavor.PUT)
-        self.assertEqual(
-            option.multiplier,
-            100,
-        )
+        self.assertEqual(option.multiplier, 100)
         self.assertEqual(option.primary_exchange, fs.Exchange.CBOE)
         self.assertEqual(option.ticker, "SPX220916P04000000")
-        self.assertEqual(
-            option.gsid,
-            fs.GSID(120),
-        )
-        self.assertIn(
-            fs.FIGI("234567"),
-            option.identifiers,
-        )
+        self.assertEqual(option.gsid, fs.GSID(120))
+        self.assertIn(fs.FIGI("234567"), option.identifiers)
 
         self.assertEqual(
             option.denominated_ccy, fs.create_reference_from_security(self.usd)
@@ -567,9 +488,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
             # THis line should generate an exception
             settlement_type=fs.SettlementType.PHYSICAL,
         )
@@ -588,9 +507,7 @@ class TestOptionConstructor(BaseTestCase):
             primary_exc=fs.Exchange.CBOE,
             expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
             multiplier=100.0,
-            identifiers=[
-                fs.FIGI("234567"),
-            ],
+            identifiers=[fs.FIGI("234567")],
             # This should be implied, since underlyer doesn't permit physical delivery
             # settlement_type     = fs.SettlementType.CASH,
             # Without this argument, this should be set to UNKNOWN
@@ -626,9 +543,7 @@ class TestOptionConstructor(BaseTestCase):
                 primary_exc=fs.Exchange.CBOE,
                 expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
                 multiplier=100.0,
-                identifiers=[
-                    fs.FIGI("234567"),
-                ],
+                identifiers=[fs.FIGI("234567")],
                 # THis line should generate an exception
                 # settlement_type=fs.SettlementType.PHYSICAL,
                 currency=self.usd,
@@ -651,9 +566,7 @@ class TestOptionConstructor(BaseTestCase):
                 primary_exc=fs.Exchange.CBOE,
                 expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
                 multiplier=100.0,
-                identifiers=[
-                    fs.FIGI("234567"),
-                ],
+                identifiers=[fs.FIGI("234567")],
                 settlement_type=fs.SettlementType.PHYSICAL,
             )
             option = option
@@ -674,9 +587,7 @@ class TestOptionConstructor(BaseTestCase):
                 primary_exc=fs.Exchange.CBOE,
                 expiry_time_of_day=fs.ExpiryTimeOfDay.OPEN,
                 multiplier=100.0,
-                identifiers=[
-                    fs.FIGI("234567"),
-                ],
+                identifiers=[fs.FIGI("234567")],
                 # THis line should generate an exception
                 # settlement_type=fs.SettlementType.PHYSICAL,
                 currency=self.usd,
