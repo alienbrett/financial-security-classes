@@ -85,6 +85,8 @@ class Security(BaseObject):
 
     # Security data valid and recent as-of this data
     as_of_date: Optional[datetime.datetime]
+    # unique id that identifies this id
+    version_id: Optional[GSID] = None
 
     Config = standard_model_config
 
