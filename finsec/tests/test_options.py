@@ -1,10 +1,14 @@
 import datetime
 import unittest
-import zoneinfo
 
 import finsec as fs
 
 from .base_test import BaseTestCase
+
+try:
+    import zoneinfo
+except ModuleNotFoundError:
+    from backports import zoneinfo
 
 nyc = zoneinfo.ZoneInfo("US/Eastern")
 

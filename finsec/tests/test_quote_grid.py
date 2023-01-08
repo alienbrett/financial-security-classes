@@ -1,8 +1,11 @@
 import datetime
 import decimal
 
-# import unittest
-import zoneinfo
+try:
+    import zoneinfo
+except ModuleNotFoundError:
+    from backports import zoneinfo
+
 
 import finsec as fs
 
