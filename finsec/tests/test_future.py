@@ -6,10 +6,12 @@ from .base_test import BaseTestCase
 
 try:
     import zoneinfo
-except ModuleNotFoundError:
-    from backports import zoneinfo
 
-nyc = zoneinfo.ZoneInfo("US/Eastern")
+    nyc = zoneinfo.ZoneInfo("US/Eastern")
+except ModuleNotFoundError:
+    import pytz
+
+    nyc = pytz.timezone("US/Eastern")
 
 
 class TestFutureConstructor(BaseTestCase):

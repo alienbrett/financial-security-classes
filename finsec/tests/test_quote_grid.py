@@ -3,15 +3,17 @@ import decimal
 
 try:
     import zoneinfo
+
+    nyc = zoneinfo.ZoneInfo("US/Eastern")
 except ModuleNotFoundError:
-    from backports import zoneinfo
+    import pytz
+
+    nyc = pytz.timezone("US/Eastern")
 
 
 import finsec as fs
 
 from .base_test import BaseTestCase
-
-nyc = zoneinfo.ZoneInfo("US/Eastern")
 
 
 class TestQuoteGrids(BaseTestCase):

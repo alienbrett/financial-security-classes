@@ -1,3 +1,4 @@
 pandas
 pydantic
+pytz; python_version<"3.9"
 tzdata
