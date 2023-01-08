@@ -3,8 +3,11 @@ import os
 import sys
 from shutil import rmtree
 
-from setuptools import Command, find_packages, setup
+from setuptools import Command, Extension, find_packages, setup
 from setuptools.command.test import test as TestCommand
+
+# Fix unused import warning
+_ = Extension
 
 
 def read(fname):
@@ -141,7 +144,7 @@ setup(
     package_dir={meta["name"]: os.path.join(".", meta["path"])},
     # If any package contains *.txt or *.rst files, include them:
     # package_data={"": ["*.txt", "*.rst"],}
-    python_requires=">=3.9",
+    python_requires=">=3.8",
     install_requires=install_requires,
     extras_require=extras_require,
     # Metadata to display on PyPI
@@ -158,6 +161,7 @@ setup(
         "Natural Language :: English",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
