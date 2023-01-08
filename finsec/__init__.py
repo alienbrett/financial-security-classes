@@ -58,7 +58,7 @@ from .occ_symbology import (
     option_strike,
     option_symbol,
 )
-from .options import American, European
+from .options import American, European, NewOption
 from .quote_grid import (
     FutureChain,
     FutureOptionChain,

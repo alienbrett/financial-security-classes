@@ -29,7 +29,7 @@ def get_constructor_from_types(
         # This case will need to be expanded as more security types are fleshed out
         pass
 
-    log.info(
+    log.debug(
         "security constructor for {0}.{1}\t=> {2}".format(
             security_type,
             security_subtype,
@@ -51,7 +51,9 @@ def get_constructor(obj_dict: Dict[Any, Any]) -> Optional[Callable[..., Security
 
 def dict_encode(security: Security) -> Dict:
     """Converts security into dict."""
-    return security.dict()
+    res = security.dict()
+    res = {k: v for k, v in res.items() if v is not None}
+    return res
 
 
 def dict_decode(obj_dict: Dict[Any, Any]) -> Security:
