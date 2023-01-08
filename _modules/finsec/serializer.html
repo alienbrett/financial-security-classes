@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>finsec.serializer &#8212; financial-security-classes 0.3.dev0 documentation</title>
+    <title>finsec.serializer &#8212; financial-security-classes 0.3.1 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -71,7 +71,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">financial-security-classes 0.3.dev0 documentation</h1>
+      <h1 class="site-logo" id="site-title">financial-security-classes 0.3.1 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -309,7 +309,7 @@ title="Fullscreen mode"
         <span class="c1"># This case will need to be expanded as more security types are fleshed out</span>
         <span class="k">pass</span>
 
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
         <span class="s2">&quot;security constructor for </span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="se">\t</span><span class="s2">=&gt; </span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">security_type</span><span class="p">,</span>
             <span class="n">security_subtype</span><span class="p">,</span>
@@ -331,7 +331,9 @@ title="Fullscreen mode"
 
 <div class="viewcode-block" id="dict_encode"><a class="viewcode-back" href="../../source/packages/finsec.serializer.html#finsec.serializer.dict_encode">[docs]</a><span class="k">def</span> <span class="nf">dict_encode</span><span class="p">(</span><span class="n">security</span><span class="p">:</span> <span class="n">Security</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Converts security into dict.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">security</span><span class="o">.</span><span class="n">dict</span><span class="p">()</span></div>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">security</span><span class="o">.</span><span class="n">dict</span><span class="p">()</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span></div>
 
 
 <div class="viewcode-block" id="dict_decode"><a class="viewcode-back" href="../../source/packages/finsec.serializer.html#finsec.serializer.dict_decode">[docs]</a><span class="k">def</span> <span class="nf">dict_decode</span><span class="p">(</span><span class="n">obj_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Security</span><span class="p">:</span>
