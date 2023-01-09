@@ -37,7 +37,7 @@ def option_format(
     )
 
     if isinstance(flavor, str) and flavor[0].lower() in ("c", "p"):
-        d_char = flavor[0].lower()
+        d_char = flavor[0].upper()
     else:
         raise ValueError(
             "Unknown option flavor of type {0} [{1}]".format(type(flavor), flavor)
