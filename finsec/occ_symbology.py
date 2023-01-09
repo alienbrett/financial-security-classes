@@ -17,7 +17,7 @@ def option_format(
     symbol: str,
     exp_date: typing.Union[datetime.date, datetime.datetime, str],
     strike: typing.Union[float, int],
-    flavor: typing.Literal["call", "put"],
+    flavor: str,
 ) -> OCCSymbol:
     """Returns the OCC standardized option name.
 
@@ -36,10 +36,8 @@ def option_format(
         exp_date, datetime.datetime
     )
 
-    if flavor == "call":
-        d_char = "C"
-    elif flavor == "put":
-        d_char = "P"
+    if isinstance(flavor, str) and flavor[0].lower() in ("c", "p"):
+        d_char = flavor[0].lower()
     else:
         raise ValueError(
             "Unknown option flavor of type {0} [{1}]".format(type(flavor), flavor)
