@@ -1,5 +1,5 @@
 import datetime
-from typing import Literal, Optional, Union
+from typing import Optional, Union
 
 from .base import (
     AmericanOptionExercise,
@@ -38,7 +38,7 @@ def is_physical_settlement_available(security: Security) -> bool:
         return True
 
 
-def get_flavor(callput: Union[Literal["call", "put"], OptionFlavor]) -> OptionFlavor:
+def get_flavor(callput: Union[str, OptionFlavor]) -> OptionFlavor:
     if isinstance(callput, OptionFlavor):
         flavor = callput
 
