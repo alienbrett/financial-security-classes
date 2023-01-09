@@ -63,8 +63,11 @@ def option_maturity(name: OCCSymbol) -> datetime.date:
     return datetime.datetime.strptime(name[-15:-9], fmt2).strftime(fmt1)
 
 
-def option_flavor(name: OCCSymbol) -> typing.Literal["call", "put"]:
-    """Returns option flavor ticker from OCC standardized option name."""
+def option_flavor(name: OCCSymbol) -> str:
+    """Returns option flavor ticker from OCC standardized option name.
+
+    Return type should really be typing.Literal["call", "put"]
+    """
     return "call" if name.upper()[-9] == "C" else "put"
 
 
