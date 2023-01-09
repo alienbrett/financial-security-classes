@@ -1,11 +1,17 @@
 import datetime
-import zoneinfo
 
 import finsec as fs
 
 from .base_test import BaseTestCase
 
-nyc = zoneinfo.ZoneInfo("US/Eastern")
+try:
+    import zoneinfo
+
+    nyc = zoneinfo.ZoneInfo("US/Eastern")
+except ModuleNotFoundError:
+    import pytz
+
+    nyc = pytz.timezone("US/Eastern")
 
 
 class TestSerializers(BaseTestCase):
