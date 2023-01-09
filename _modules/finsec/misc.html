@@ -279,7 +279,7 @@ title="Fullscreen mode"
                 
   <h1>Source code for finsec.misc</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">AmericanOptionExercise</span><span class="p">,</span>
@@ -318,7 +318,7 @@ title="Fullscreen mode"
         <span class="k">return</span> <span class="kc">True</span></div>
 
 
-<div class="viewcode-block" id="get_flavor"><a class="viewcode-back" href="../../source/packages/finsec.misc.html#finsec.misc.get_flavor">[docs]</a><span class="k">def</span> <span class="nf">get_flavor</span><span class="p">(</span><span class="n">callput</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;call&quot;</span><span class="p">,</span> <span class="s2">&quot;put&quot;</span><span class="p">],</span> <span class="n">OptionFlavor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">OptionFlavor</span><span class="p">:</span>
+<div class="viewcode-block" id="get_flavor"><a class="viewcode-back" href="../../source/packages/finsec.misc.html#finsec.misc.get_flavor">[docs]</a><span class="k">def</span> <span class="nf">get_flavor</span><span class="p">(</span><span class="n">callput</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">OptionFlavor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">OptionFlavor</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">callput</span><span class="p">,</span> <span class="n">OptionFlavor</span><span class="p">):</span>
         <span class="n">flavor</span> <span class="o">=</span> <span class="n">callput</span>
 
