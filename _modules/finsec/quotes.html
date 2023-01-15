@@ -284,9 +284,10 @@ title="Fullscreen mode"
 
 <span class="kn">import</span> <span class="nn">pydantic</span>
 
+<span class="kn">from</span> <span class="nn">.enums</span> <span class="kn">import</span> <span class="n">Size</span>
 <span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="n">MissingTimezone</span>
 <span class="kn">from</span> <span class="nn">.exchanges</span> <span class="kn">import</span> <span class="n">Exchange</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">placeholder</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">mmax</span><span class="p">,</span> <span class="n">mmin</span><span class="p">,</span> <span class="n">placeholder</span>
 
 <span class="n">BaseObject</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span>
 
@@ -346,23 +347,15 @@ title="Fullscreen mode"
 <span class="n">LevelOneQuote</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="mmax"><a class="viewcode-back" href="../../source/packages/finsec.quotes.html#finsec.quotes.mmax">[docs]</a><span class="k">def</span> <span class="nf">mmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="mmin"><a class="viewcode-back" href="../../source/packages/finsec.quotes.html#finsec.quotes.mmin">[docs]</a><span class="k">def</span> <span class="nf">mmin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">y</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
-
-
 <div class="viewcode-block" id="LevelOneQuote"><a class="viewcode-back" href="../../source/packages/finsec.quotes.html#finsec.quotes.LevelOneQuote">[docs]</a><span class="k">class</span> <span class="nc">LevelOneQuote</span><span class="p">(</span><span class="n">AbstractSnapshot</span><span class="p">):</span>
     <span class="n">bid</span><span class="p">:</span> <span class="n">Decimal</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
     <span class="n">ask</span><span class="p">:</span> <span class="n">Decimal</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
 
-    <span class="n">bid_sz</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
-    <span class="n">ask_sz</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">bid_sz</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">ask_sz</span><span class="p">:</span> <span class="n">Size</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
 
     <span class="n">last</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
-    <span class="n">last_sz</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">last_sz</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">Size</span><span class="p">]</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
     <span class="n">last_time</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">LevelOneQuote</span><span class="p">):</span>
