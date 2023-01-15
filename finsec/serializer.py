@@ -46,9 +46,6 @@ def get_constructor(obj_dict: Dict[Any, Any]) -> Optional[Callable[..., Security
     return get_constructor_from_types(security_type, security_subtype)
 
 
-#
-
-
 def dict_encode(security: Security) -> Dict:
     """Converts security into dict."""
     res = security.dict()

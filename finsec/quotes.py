@@ -4,9 +4,10 @@ from decimal import Decimal
 
 import pydantic
 
+from .enums import Size
 from .exceptions import MissingTimezone
 from .exchanges import Exchange
-from .utils import placeholder
+from .utils import mmax, mmin, placeholder
 
 BaseObject = pydantic.BaseModel
 
@@ -66,23 +67,15 @@ class OHLCWithVolume(OHLC):
 LevelOneQuote = None
 
 
-def mmax(x, y):
-    return None if x is None or y is None else max(x, y)
-
-
-def mmin(x, y):
-    return None if x is None or y is None else min(x, y)
-
-
 class LevelOneQuote(AbstractSnapshot):
     bid: Decimal = placeholder()
     ask: Decimal = placeholder()
 
-    bid_sz: int = placeholder()
-    ask_sz: int = placeholder()
+    bid_sz: Size = placeholder()
+    ask_sz: Size = placeholder()
 
     last: typing.Optional[Decimal] = placeholder()
-    last_sz: typing.Optional[int] = placeholder()
+    last_sz: typing.Optional[Size] = placeholder()
     last_time: typing.Optional[datetime.datetime] = placeholder()
 
     def __add__(self, obj: LevelOneQuote):

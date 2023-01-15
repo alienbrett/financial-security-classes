@@ -6,6 +6,7 @@ Ticker = typing.NewType("Ticker", str)
 GSID = typing.NewType("GSID", typing.Any)
 CurrencyQty = typing.NewType("CurrencyQty", decimal.Decimal)
 Multiplier = typing.NewType("Multiplier", decimal.Decimal)
+Size = typing.NewType("Size", decimal.Decimal)
 
 
 class SecurityType(int, enum.Enum):
