@@ -74,7 +74,6 @@ from .quotes import (
     AbstractQuote,
     AbstractSnapshot,
     LevelOneQuote,
-    OHLCWithVolume,
     ensure_timezone,
 )
 from .serializer import dict_decode, dict_encode, json_decode, json_encode

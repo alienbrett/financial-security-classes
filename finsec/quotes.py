@@ -1,6 +1,7 @@
 import datetime
 import typing
 from decimal import Decimal
+from typing import Optional
 
 import pydantic
 
@@ -41,6 +42,7 @@ class AbstractSnapshot(AbstractQuote):
 class AbstractBar(AbstractQuote):
     start_timestamp: datetime.datetime = placeholder()
     end_timestamp: datetime.datetime = placeholder()
+    volume: Optional[Decimal] = placeholder()
 
     @pydantic.validator("start_timestamp", "end_timestamp")
     def start_timestamp_must_have_timezone(cls, v: datetime.datetime):
@@ -58,10 +60,7 @@ class OHLC(AbstractBar):
     high: Decimal = placeholder()
     low: Decimal = placeholder()
     close: Decimal = placeholder()
-
-
-class OHLCWithVolume(OHLC):
-    volume: Decimal = placeholder()
+    open_interest: Optional[Decimal] = placeholder()
 
 
 LevelOneQuote = None
