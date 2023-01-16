@@ -281,6 +281,7 @@ title="Fullscreen mode"
 <span></span><span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">typing</span>
 <span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">pydantic</span>
 
@@ -321,6 +322,7 @@ title="Fullscreen mode"
 <div class="viewcode-block" id="AbstractBar"><a class="viewcode-back" href="../../source/packages/finsec.quotes.html#finsec.quotes.AbstractBar">[docs]</a><span class="k">class</span> <span class="nc">AbstractBar</span><span class="p">(</span><span class="n">AbstractQuote</span><span class="p">):</span>
     <span class="n">start_timestamp</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
     <span class="n">end_timestamp</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">volume</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
 
 <div class="viewcode-block" id="AbstractBar.start_timestamp_must_have_timezone"><a class="viewcode-back" href="../../source/packages/finsec.quotes.html#finsec.quotes.AbstractBar.start_timestamp_must_have_timezone">[docs]</a>    <span class="nd">@pydantic</span><span class="o">.</span><span class="n">validator</span><span class="p">(</span><span class="s2">&quot;start_timestamp&quot;</span><span class="p">,</span> <span class="s2">&quot;end_timestamp&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">start_timestamp_must_have_timezone</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">):</span>
@@ -337,11 +339,8 @@ title="Fullscreen mode"
     <span class="nb">open</span><span class="p">:</span> <span class="n">Decimal</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
     <span class="n">high</span><span class="p">:</span> <span class="n">Decimal</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
     <span class="n">low</span><span class="p">:</span> <span class="n">Decimal</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
-    <span class="n">close</span><span class="p">:</span> <span class="n">Decimal</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="OHLCWithVolume"><a class="viewcode-back" href="../../source/packages/finsec.quotes.html#finsec.quotes.OHLCWithVolume">[docs]</a><span class="k">class</span> <span class="nc">OHLCWithVolume</span><span class="p">(</span><span class="n">OHLC</span><span class="p">):</span>
-    <span class="n">volume</span><span class="p">:</span> <span class="n">Decimal</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span></div>
+    <span class="n">close</span><span class="p">:</span> <span class="n">Decimal</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span>
+    <span class="n">open_interest</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]</span> <span class="o">=</span> <span class="n">placeholder</span><span class="p">()</span></div>
 
 
 <span class="n">LevelOneQuote</span> <span class="o">=</span> <span class="kc">None</span>
