@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>finsec.quote_grid &#8212; financial-security-classes 0.3.3 documentation</title>
+    <title>finsec.quote_grid &#8212; financial-security-classes 0.4.0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -71,7 +71,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">financial-security-classes 0.3.3 documentation</h1>
+      <h1 class="site-logo" id="site-title">financial-security-classes 0.4.0 documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -309,6 +309,9 @@ title="Fullscreen mode"
 
     <span class="n">securities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">GSID</span><span class="p">,</span> <span class="n">Security</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">securities</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="n">SecurityLookupKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Security</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">securities</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">as_gsid</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
 
@@ -325,8 +328,9 @@ title="Fullscreen mode"
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">securities</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">.</span><span class="fm">__iter__</span><span class="p">()</span>
 
-<div class="viewcode-block" id="SecurityCache.add"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityCache.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">:</span> <span class="n">Security</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">gsid</span><span class="p">,</span> <span class="n">sec</span><span class="p">)</span>
+<div class="viewcode-block" id="SecurityCache.add"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityCache.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">:</span> <span class="n">Security</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="ow">not</span> <span class="n">overwrite</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">gsid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">securities</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">sec</span><span class="o">.</span><span class="n">gsid</span><span class="p">,</span> <span class="n">sec</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">sec</span><span class="o">.</span><span class="n">gsid</span></div></div>
 
 
@@ -336,10 +340,10 @@ title="Fullscreen mode"
     <span class="n">quotes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">GSID</span><span class="p">,</span> <span class="n">AbstractQuote</span><span class="p">]</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">sec_cache</span><span class="p">:</span> <span class="n">SecurityCache</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">SecurityCache</span><span class="p">)</span>
 
-<div class="viewcode-block" id="QuoteGrid.ingest"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.QuoteGrid.ingest">[docs]</a>    <span class="k">def</span> <span class="nf">ingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">:</span> <span class="n">Security</span><span class="p">,</span> <span class="n">quote</span><span class="p">:</span> <span class="n">AbstractQuote</span><span class="p">):</span>
+<div class="viewcode-block" id="QuoteGrid.ingest"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.QuoteGrid.ingest">[docs]</a>    <span class="k">def</span> <span class="nf">ingest</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sec</span><span class="p">:</span> <span class="n">Security</span><span class="p">,</span> <span class="n">quote</span><span class="p">:</span> <span class="n">AbstractQuote</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Incorporates a security and quote into the object.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">Security</span><span class="p">):</span>
-            <span class="n">sec_gsid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sec_cache</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
+            <span class="n">sec_gsid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sec_cache</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sec_gsid</span> <span class="o">=</span> <span class="n">sec</span>
 
@@ -359,27 +363,54 @@ title="Fullscreen mode"
         <span class="k">return</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quotes</span></div>
 
 
+<div class="viewcode-block" id="get_attr_by_keyword"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.get_attr_by_keyword">[docs]</a><span class="k">def</span> <span class="nf">get_attr_by_keyword</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">kw</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">sep</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kw</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">kw</span><span class="p">)</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">kw</span><span class="p">[:</span><span class="n">idx</span><span class="p">],</span> <span class="n">kw</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">get_attr_by_keyword</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">sep</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">obj</span></div>
+
+
 <div class="viewcode-block" id="SecurityChain"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityChain">[docs]</a><span class="k">class</span> <span class="nc">SecurityChain</span><span class="p">(</span><span class="n">QuoteGrid</span><span class="p">,</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Stores derivatives and their quotes against GSIDs. Helps quickly can quickly perform business logic without re-buildling securities and qutoes.&quot;&quot;&quot;</span>
 
-    <span class="n">underlying</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Security</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">underlying</span><span class="p">:</span> <span class="n">Security</span>
 
-<div class="viewcode-block" id="SecurityChain.get_available_values"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityChain.get_available_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_available_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Searches all securities in this chain, and returns list of the unique attribute values for specified attribute.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">({</span><span class="nb">getattr</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span> <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sec_cache</span><span class="p">})</span></div>
+<div class="viewcode-block" id="SecurityChain.get_available_values"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityChain.get_available_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_available_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Searches all securities in this chain, and returns list of the unique attribute values for specified attribute.</span>
+
+<span class="sd">        sub-attrs can be accessed in javascript-like style</span>
+<span class="sd">        for exercise date, for example, use attr=&quot;exercise.exercise.expiry_date&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># res = []</span>
+        <span class="c1"># for sec in self.sec_cache:</span>
+        <span class="c1">#     if sec not in res:</span>
+        <span class="c1">#         res.append(get_attr_by_keyword(sec, attr))</span>
+        <span class="c1"># return res</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">({</span><span class="n">get_attr_by_keyword</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">sep</span><span class="p">)</span> <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sec_cache</span><span class="p">})</span></div>
 
 <div class="viewcode-block" id="SecurityChain.filter"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityChain.filter">[docs]</a>    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Security</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns generator that yields all securities matching some criteria function.&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sec_cache</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">sec</span></div>
 
-<div class="viewcode-block" id="SecurityChain.subset"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityChain.subset">[docs]</a>    <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="SecurityChain.subset"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.SecurityChain.subset">[docs]</a>    <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">sep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterates through all securities with attributes matching the kwargs specified.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">items</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">def</span> <span class="nf">match_func</span><span class="p">(</span><span class="n">sec</span><span class="p">:</span> <span class="n">Security</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">v</span> <span class="o">==</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">v</span> <span class="o">==</span> <span class="n">get_attr_by_keyword</span><span class="p">(</span><span class="n">sec</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">sep</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">items</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">match_func</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">match_func</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sec_cache</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FutureChain"><a class="viewcode-back" href="../../source/packages/finsec.quote_grid.html#finsec.quote_grid.FutureChain">[docs]</a><span class="k">class</span> <span class="nc">FutureChain</span><span class="p">(</span><span class="n">SecurityChain</span><span class="p">,</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
