@@ -40,6 +40,7 @@ def NewOption(
     identifiers: Optional[List[SecurityIdentifier]] = None,
     website: Optional[str] = None,
     gsid: GSID = None,
+    description: Optional[str] = None,
 ) -> Option:
 
     if identifiers is None:
@@ -86,6 +87,7 @@ def NewOption(
         primary_exchange=primary_exc,
         identifiers=identifiers,
         website=website,
+        description=description,
         issuer=None,
     )
 

@@ -7,7 +7,7 @@ path = "finsec"
 
 # Your version number should follow https://python.org/dev/peps/pep-0440 and
 # https://semver.org
-version = "0.3.4"
+version = "0.4.0"
 author = "Brett Graves"
 author_email = "alienbrett648@gmail.com"
 description = "Pure python financial securities dataclasses"

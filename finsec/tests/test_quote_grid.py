@@ -122,7 +122,7 @@ class TestQuoteGrids(BaseTestCase):
             self.assertIn(x, ys)
 
         ys = [self.spx_put]
-        for x in chain.subset(strike=3000):
+        for x in chain.subset({"strike": 3000}):
             self.assertIn(x, ys)
 
         self.assertEqual(

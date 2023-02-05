@@ -29,6 +29,9 @@ class SecurityCache(pydantic.BaseModel):
 
     securities: Dict[GSID, Security] = {}
 
+    def __len__(self):
+        return len(self.securities)
+
     def __getitem__(self, k: SecurityLookupKey) -> Optional[Security]:
         return self.securities.__getitem__(as_gsid(k))
 
@@ -45,8 +48,9 @@ class SecurityCache(pydantic.BaseModel):
     def __iter__(self):
         return list(self.securities.values()).__iter__()
 
-    def add(self, sec: Security):
-        self.__setitem__(sec.gsid, sec)
+    def add(self, sec: Security, overwrite: bool = False):
+        if not ((not overwrite) and (sec.gsid in self.securities)):
+            self.__setitem__(sec.gsid, sec)
         return sec.gsid
 
 
@@ -56,10 +60,10 @@ class QuoteGrid(pydantic.BaseModel):
     quotes: Dict[GSID, AbstractQuote] = pydantic.Field(default_factory=dict)
     sec_cache: SecurityCache = pydantic.Field(default_factory=SecurityCache)
 
-    def ingest(self, sec: Security, quote: AbstractQuote):
+    def ingest(self, sec: Security, quote: AbstractQuote, overwrite: bool = False):
         """Incorporates a security and quote into the object."""
         if isinstance(sec, Security):
-            sec_gsid = self.sec_cache.add(sec)
+            sec_gsid = self.sec_cache.add(sec, overwrite=overwrite)
         else:
             sec_gsid = sec
 
@@ -79,27 +83,54 @@ class QuoteGrid(pydantic.BaseModel):
         return k in self.quotes
 
 
+def get_attr_by_keyword(obj: Any, kw: str, sep=".") -> Any:
+    if sep not in kw:
+        return getattr(obj, kw)
+
+    idx = kw.index(sep)
+    x, y = kw[:idx], kw[idx + 1 :]
+    obj = getattr(obj, x)
+    if len(y):
+        return get_attr_by_keyword(obj, y, sep=sep)
+    else:
+        return obj
+
+
 class SecurityChain(QuoteGrid, pydantic.BaseModel):
     """Stores derivatives and their quotes against GSIDs. Helps quickly can quickly perform business logic without re-buildling securities and qutoes."""
 
-    underlying: Optional[Security] = None
+    underlying: Security
 
-    def get_available_values(self, attr: str) -> List[Any]:
-        """Searches all securities in this chain, and returns list of the unique attribute values for specified attribute."""
-        return list({getattr(sec, attr) for sec in self.sec_cache})
+    def get_available_values(self, attr: str, sep=".") -> List[Any]:
+        """Searches all securities in this chain, and returns list of the unique attribute values for specified attribute.
+
+        sub-attrs can be accessed in javascript-like style
+        for exercise date, for example, use attr="exercise.exercise.expiry_date"
+        """
+        # res = []
+        # for sec in self.sec_cache:
+        #     if sec not in res:
+        #         res.append(get_attr_by_keyword(sec, attr))
+        # return res
+        return list({get_attr_by_keyword(sec, attr, sep) for sec in self.sec_cache})
 
     def filter(self, func: Callable[[Security], bool]):
         """Returns generator that yields all securities matching some criteria function."""
         for sec in filter(func, self.sec_cache):
             yield sec
 
-    def subset(self, **kwargs):
+    def subset(self, items: Optional[Dict[str, Any]] = None, sep: str = "."):
         """Iterates through all securities with attributes matching the kwargs specified."""
+        if items is None:
+            items = {}
 
         def match_func(sec: Security) -> bool:
-            return all(v == getattr(sec, k) for k, v in kwargs.items())
+            return all(v == get_attr_by_keyword(sec, k, sep) for k, v in items.items())
 
         return self.filter(match_func)
+
+    def __len__(self):
+        return len(self.sec_cache)
 
 
 class FutureChain(SecurityChain, pydantic.BaseModel):
