@@ -28,11 +28,12 @@ BaseObject = pydantic.BaseModel
 
 
 class standard_model_config:
-    json_encoders = {
-        datetime.date: lambda v: v.strftime("%Y-%m-%d"),
-        datetime.datetime: lambda v: v.timestamp(),
-        datetime.timedelta: pydantic.json.timedelta_isoformat,
-    }
+    # json_encoders = {
+    #     # datetime.date: lambda v: v.strftime("%Y-%m-%d"),
+    #     # datetime.datetime: lambda v: v.timestamp(),
+    #     # datetime.timedelta: pydantic.json.timedelta_isoformat,
+    #     # datetime.timedelta: pydantic.json.timedelta_seconds,
+    # }
     use_enum_values = True
     extra = "forbid"
 
@@ -43,7 +44,8 @@ class SecurityIdentifier(BaseObject):
     id_type: SecurityIdentifierType
     value: str
 
-    Config = standard_model_config
+    class Config(standard_model_config):
+        pass
 
     # class Config:
     #     use_enum_values = True
@@ -88,7 +90,8 @@ class Security(BaseObject):
     # unique id that identifies this id
     version_id: Optional[GSID] = None
 
-    Config = standard_model_config
+    class Config(standard_model_config):
+        pass
 
     def __init__(self, **data: Any):
         super().__init__(**data)
@@ -120,7 +123,8 @@ class ExerciseDatetime(BaseObject):
 
 class DerivativeExercise(BaseObject):
     exercise: Union[List[ExerciseDatetime], ExerciseDatetime]
-    Config = standard_model_config
+    class Config(standard_model_config):
+        pass
 
 
 class ForwardExercise(DerivativeExercise):
