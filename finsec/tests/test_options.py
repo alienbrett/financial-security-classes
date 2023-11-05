@@ -520,8 +520,8 @@ class TestOptionConstructor(BaseTestCase):
             expiry_series_type=fs.ExpirySeriesType.MONTHLY,
         )
 
-        obj_json = obj.json()
-        obj_recovered = fs.Option.parse_raw(obj_json)
+        obj_json = obj.model_dump_json()
+        obj_recovered = fs.Option.model_validate_json(obj_json)
 
         self.assertEqual(obj_recovered, obj)
         self.assertEqual(

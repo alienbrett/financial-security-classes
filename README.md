@@ -3,7 +3,7 @@
 ![open issues](https://img.shields.io/github/issues/alienbrett/financial-security-classes)
 ![pypi version](https://img.shields.io/pypi/v/financial-security-classes)
 ![license](https://img.shields.io/pypi/l/financial-security-classes)
-![pypi version](https://img.shields.io/pypi/pyversions/financial-security-classes)
+![python version](https://img.shields.io/pypi/pyversions/financial-security-classes)
 
 Pure python financial securities dataclasses, as foundation for other projects
 

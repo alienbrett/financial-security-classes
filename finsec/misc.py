@@ -2,8 +2,8 @@ import datetime
 from typing import Optional, Union
 
 from .base import (
-    AmericanOptionExercise,
-    EuropeanOptionExercise,
+    # AmericanOptionExercise,
+    # EuropeanOptionExercise,
     ExerciseDatetime,
     ForwardExercise,
     OptionExercise,
@@ -127,10 +127,11 @@ def get_option_exercise(
         settlement_type=settlement_type,
     )
 
-    if style == OptionExerciseStyle.AMERICAN:
-        res = AmericanOptionExercise(style=style, exercise=exercise)
-    elif style == OptionExerciseStyle.EUROPEAN:
-        res = EuropeanOptionExercise(style=style, exercise=exercise)
+    res = OptionExercise(exercise=exercise, style=style)
+    # if style == OptionExerciseStyle.AMERICAN:
+    #     res = AmericanOptionExercise(style=style, exercise=exercise)
+    # elif style == OptionExerciseStyle.EUROPEAN:
+    #     res = EuropeanOptionExercise(style=style, exercise=exercise)
 
     return res
 

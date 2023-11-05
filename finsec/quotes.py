@@ -110,7 +110,7 @@ class LevelOneQuote(AbstractSnapshot):
             raise TypeError("unknown object type {0}".format(type(obj)))
 
     def __mul__(self, obj: Decimal):
-        ret = self.copy()
+        ret = self.model_copy()
 
         for k in ("bid", "ask", "last"):
             v = getattr(ret, k)

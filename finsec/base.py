@@ -77,16 +77,16 @@ class Security(BaseObject):
     security_subtype: SecuritySubtype
     identifiers: List[SecurityIdentifier]
 
-    primary_exchange: Optional[Exchange]
+    primary_exchange: Optional[Exchange] = None
 
-    denominated_ccy: Optional[SecurityReference]
+    denominated_ccy: Optional[SecurityReference] = None
 
-    issuer: Optional[str]
-    description: Optional[str]
-    website: Optional[str]
+    issuer: Optional[str] = None
+    description: Optional[str] = None
+    website: Optional[str] = None
 
     # Security data valid and recent as-of this data
-    as_of_date: Optional[datetime.datetime]
+    as_of_date: Optional[datetime.datetime] = None
     # unique id that identifies this id
     version_id: Optional[GSID] = None
 
@@ -132,22 +132,39 @@ class ForwardExercise(DerivativeExercise):
 
 
 class OptionExercise(DerivativeExercise):
+    exercise: Union[List[ExerciseDatetime], ExerciseDatetime]
     style: OptionExerciseStyle
 
+    @pydantic.validator("exercise")
+    def check_exercise(cls, v, values):
+        if isinstance(v, list):
+            if len(v) > 1:
+                if values["style"] != OptionExerciseStyle.BERMUDAN:
+                    raise ValueError(
+                        "OptionExercise with multiple exercise dates must be BERMUDAN style"
+                    )
+            return v
+        else:
+            return v
 
-class AmericanOptionExercise(BaseObject):
-    exercise: ExerciseDatetime
-    style: OptionExerciseStyle = OptionExerciseStyle.AMERICAN
 
+def AmericanOptionExercise(exercise: ExerciseDatetime) -> OptionExercise:
+    return OptionExercise(
+        exercise=exercise,
+        style=OptionExerciseStyle.AMERICAN,
+    )
 
-class EuropeanOptionExercise(BaseObject):
-    exercise: ExerciseDatetime
-    style: OptionExerciseStyle = OptionExerciseStyle.EUROPEAN
+def EuropeanOptionExercise(exercise: ExerciseDatetime) -> OptionExercise:
+    return OptionExercise(
+        exercise=exercise,
+        style=OptionExerciseStyle.EUROPEAN,
+    )
 
-
-class BermudanOptionExercise(BaseObject):
-    exercise: List[ExerciseDatetime]
-    style: OptionExerciseStyle = OptionExerciseStyle.BERMUDAN
+def BermudanOptionExercise(exercise: List[ExerciseDatetime]) -> OptionExercise:
+    return OptionExercise(
+        exercise=exercise,
+        style=OptionExerciseStyle.BERMUDAN,
+    )
 
 
 class Derivative(Security):
@@ -172,6 +189,7 @@ class Option(Derivative):
     option_flavor: OptionFlavor = placeholder()
     exercise: OptionExercise = placeholder()
     # option_exercise: OptionExerciseStyle = placeholder()
+
 
 
 AnySecurity = Union[

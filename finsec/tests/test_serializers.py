@@ -15,9 +15,7 @@ except ModuleNotFoundError:
 
 
 class TestSerializers(BaseTestCase):
-    def setUp(
-        self,
-    ):
+    def setUp( self):
         self.usd = fs.FiatCurrency(
             ticker="USD",
             nation="United States",

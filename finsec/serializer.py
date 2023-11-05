@@ -48,7 +48,7 @@ def get_constructor(obj_dict: Dict[Any, Any]) -> Optional[Callable[..., Security
 
 def dict_encode(security: Security) -> Dict:
     """Converts security into dict."""
-    res = security.dict()
+    res = security.model_dump()
     res = {k: v for k, v in res.items() if v is not None}
     return res
 
@@ -61,7 +61,7 @@ def dict_decode(obj_dict: Dict[Any, Any]) -> Security:
 
 def json_encode(security: Security) -> str:
     """Converts security into json string."""
-    res = security.json()
+    res = security.model_dump_json()
     return res
 
 

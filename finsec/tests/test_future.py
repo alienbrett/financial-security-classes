@@ -153,24 +153,24 @@ class TestFutureConstructor(BaseTestCase):
 
     def test_serialize_future_1(self):
         obj = self.esh23
-        obj_json = obj.json()
-        obj_recovered = fs.Future.parse_raw(obj_json)
+        obj_json = obj.model_dump_json()
+        obj_recovered = fs.Future.model_validate_json(obj_json)
         self.assertEqual(obj_recovered, obj)
 
     def test_serialize_future_2(self):
         obj = self.esu22
-        obj_json = obj.json()
-        obj_recovered = fs.Future.parse_raw(obj_json)
+        obj_json = obj.model_dump_json()
+        obj_recovered = fs.Future.model_validate_json(obj_json)
         self.assertEqual(obj_recovered, obj)
 
     def test_serialize_usd_1(self):
         obj = self.usd
-        obj_json = obj.json()
-        obj_recovered = fs.Security.parse_raw(obj_json)
+        obj_json = obj.model_dump_json()
+        obj_recovered = fs.Security.model_validate_json(obj_json)
         self.assertEqual(obj_recovered, obj)
 
     def test_serialize_jpy_1(self):
         obj = self.jpy
-        obj_json = obj.json()
-        obj_recovered = fs.Security.parse_raw(obj_json)
+        obj_json = obj.model_dump_json()
+        obj_recovered = fs.Security.model_validate_json(obj_json)
         self.assertEqual(obj_recovered, obj)

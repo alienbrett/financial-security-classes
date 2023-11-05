@@ -1,5 +1,10 @@
+.. -----------
+.. Readme File
+.. -----------
+.. .. mdinclude:: ../../README.md
+..     :start-line: 1
+
 .. include:: source/readme.rst
-    :start-line: 2
 
 .. toctree::
     :maxdepth: 2
