@@ -39,6 +39,19 @@ def get_constructor_from_types(
     return result
 
 
+def filter_notnull(dd:Dict[str,Any]) -> Dict[str,Any]:
+    res = {}
+    # for {k:v  if v is not None}
+    for k,v in dd.items():
+        if isinstance(v, dict):
+            v = filter_notnull(v)
+        elif isinstance(v, list):
+            v = [filter_notnull(l) for l in v]
+        if v is not None:
+            res[k] = v
+    return res
+
+
 def get_constructor(obj_dict: Dict[Any, Any]) -> Optional[Callable[..., Security]]:
     """Infers the necessary constructor from the dict provided, and returns that constructor."""
     security_type = SecurityType(obj_dict["security_type"])
@@ -59,9 +72,18 @@ def dict_decode(obj_dict: Dict[Any, Any]) -> Security:
     return constructor(**obj_dict)
 
 
-def json_encode(security: Security) -> str:
-    """Converts security into json string."""
+def json_encode(security: Security, pretty:bool=False, drop_null:bool=True) -> str:
+    """Converts security into json string.
+    if pretty=True, then the json string is pretty-printed.
+    if pretty=True and drop_null=True, then the json string is pretty-printed and null values are dropped.
+    """
     res = security.model_dump_json()
+    if pretty:
+        x = json.loads(res)
+        res = json.dumps(
+            filter_notnull(x) if drop_null else x,
+            indent=4
+        )
     return res
 
 

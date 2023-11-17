@@ -3,6 +3,7 @@ from typing import Any, List, Optional, Union
 
 import pandas as pd
 import pydantic
+import bson
 
 from .enums import (
     GSID,
@@ -20,6 +21,7 @@ from .enums import (
 )
 from .exchanges import Exchange
 from .utils import placeholder
+from .format import pretty_print_security
 
 # from .misc import is_physical_settlement_available
 
@@ -28,12 +30,13 @@ BaseObject = pydantic.BaseModel
 
 
 class standard_model_config:
-    # json_encoders = {
+    json_encoders = {
+        bson.ObjectId: str,
     #     # datetime.date: lambda v: v.strftime("%Y-%m-%d"),
     #     # datetime.datetime: lambda v: v.timestamp(),
     #     # datetime.timedelta: pydantic.json.timedelta_isoformat,
     #     # datetime.timedelta: pydantic.json.timedelta_seconds,
-    # }
+    }
     use_enum_values = True
     extra = "forbid"
 
@@ -100,6 +103,8 @@ class Security(BaseObject):
         data["gsid"] = data.get("gsid", None)
 
         self.ticker = self.ticker.strip().upper()
+    
+    __repr__ = pretty_print_security
 
 
 class ExerciseDatetime(BaseObject):
