@@ -104,6 +104,19 @@ class Security(BaseObject):
 
         self.ticker = self.ticker.strip().upper()
     
+    # validate so that SecurityType, SecuritySubtype aren't integers, but converted to proper enums
+    @pydantic.validator("security_type")
+    def validate_security_type(cls, v):
+        if isinstance(v, int):
+            return SecurityType(v)
+        return v
+    
+    @pydantic.validator("security_subtype")
+    def validate_security_subtype(cls, v):
+        if isinstance(v, int):
+            return SecuritySubtype(v)
+        return v
+    
     __repr__ = pretty_print_security
 
 
