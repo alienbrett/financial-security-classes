@@ -80,7 +80,14 @@ def option_flavor(name: OCCSymbol) -> str:
 
     Return type should really be typing.Literal["call", "put"]
     """
-    return "call" if name.upper()[-1] == "C" else "put"
+    # return "call" if name.upper()[-1] == "C" else "put"
+    option_symbol = OptionSymbol.build(name)
+    # return option_symbol.flavor
+    return {
+        "C": "call",
+        "P": "put",
+    }[option_symbol.flavor]
+
 
 
 def option_symbol(name: OCCSymbol) -> str:
