@@ -18,6 +18,13 @@ T = TypeVar('T')
 ListOrT = Union[List[T], T]
 
 
+def loud_create(f, *args, **kwargs):
+    print(f)
+    print(args)
+    print(kwargs)
+    return f(*args, **kwargs)
+
+
 class Quote(pydantic.BaseModel):
     """Base wrapper for QuantLib quotes to enable Pythonic math operations."""
     quote: ql.SimpleQuote | ql.CompositeQuote | ql.DerivedQuote | float
@@ -423,6 +430,12 @@ class FloatingRate(AbstractRateExpression):
     is_constant:bool = False
     is_float:bool = True
 
+    @property
+    def is_compounded(self)->bool|None:
+        if isinstance(self.type_,OvernightFloat):
+            return self.type_.compounded_not_averaged
+
+
 class FixedRate(AbstractRateExpression):
     rate: decimal.Decimal
     is_constant:bool = True
@@ -500,6 +513,15 @@ class Leg(pydantic.BaseModel):
     def validate(cls, v)->Self:
         assert len(v.notionals_array()) == len(v.acc)
         return v
+    
+    @property
+    def pay_delay_days(self)->int:
+        if self.pay_delay is None:
+            return 0
+        elif isinstance(self.pay_delay, Period):
+            assert self.pay_delay.as_ql().units() == 0, "period type must be days, for pay delay"
+            return self.pay_delay.as_ql().length()
+
 
 class Bond(pydantic.BaseModel):
     notional: decimal.Decimal
@@ -618,24 +640,52 @@ class Swap(pydantic.BaseModel):
         flt_index = index_lookup.get(flt.cpn.index)
         if flt_index is None:
             raise ValueError(f"Unknown index: {flt.cpn.index}")
+        
+        fix_rate = fix.rate_array()
+        assert all([x == fix_rate[0] for x in fix_rate])
+
+        if flt.pay_delay is None:
+            pay_delay_days = fix.pay_delay_days
+        elif fix.pay_delay is None:
+            pay_delay_days = flt.pay_delay_days
+        else:
+            pd0 = flt.pay_delay_days
+            pd1 = flt.pay_delay_days
+            assert pd0 == pd1
+            pay_delay_days = pd0
 
         if isinstance(flt_index, ql.OvernightIndex):
             swp = ql.OvernightIndexedSwap(
                 # Swap::Type type,
+                ql.OvernightIndexedSwap.Receiver,
                 # DoubleVector fixedNominals,
+                fix.notionals_array(as_float=True),
                 # Schedule fixedSchedule,
+                fix.acc.as_ql(),
                 # Rate fixedRate,
+                float(fix_rate[0].rate),
                 # DayCounter fixedDC,
+                fix.acc.dc.as_ql,
                 # DoubleVector overnightNominals,
+                -np.asarray(flt.notionals_array(as_float=True)),
                 # Schedule overnightSchedule,
+                flt.acc.as_ql(),
                 # ext::shared_ptr< OvernightIndex > const & overnightIndex,
+                flt_index,
                 # Spread spread=0.0,
+                0,
                 # Natural paymentLag=0,
+                pay_delay_days,
                 # BusinessDayConvention paymentAdjustment=Following,
+                fix.acc.bdc.as_ql(),
                 # Calendar paymentCalendar=Calendar(),
+                fix.acc.cal_pay.as_ql(),
                 # bool telescopicValueDates=False,
+                True,
                 # RateAveraging::Type averagingMethod=Compound
+                int(flt.cpn.is_compounded),
             )
+        return swp
 
 
     @classmethod
