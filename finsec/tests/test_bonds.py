@@ -3,7 +3,6 @@ import decimal
 import unittest
 
 import finsec as fs
-import finsec.fixed_income_objs as fio
 
 from .base_test import BaseTestCase
 
@@ -11,19 +10,19 @@ from .base_test import BaseTestCase
 class TestLegs(BaseTestCase):
     def test_fixed_bond1(self):
         ntnl = 1_000_000
-        fixleg1 = fio.Leg(
+        fixleg1 = fs.Leg(
             notional=ntnl,
-            # cpn=fio.FixedRate(rate=decimal.Decimal('0.01')),
-            cpn=fio.FixedRate(rate=0.01),
-            acc=fio.AccrualInfo(
+            # cpn=fs.FixedRate(rate=decimal.Decimal('0.01')),
+            cpn=fs.FixedRate(rate=0.01),
+            acc=fs.AccrualInfo(
                 start=datetime.date(2025, 1, 1),
                 end=datetime.date(2026, 1, 1),
-                dc=fio.DayCount.Thirty360,
+                dc=fs.DayCount.Thirty360,
                 freq=12,
-                bdc=fio.BusinessDayConvention.unadjusted,
+                bdc=fs.BusinessDayConvention.unadjusted,
             ),
         )
-        bnd1 = fio.Bond(
+        bnd1 = fs.Bond(
             notional=ntnl,
             leg=fixleg1,
             # settle: datetime.date
@@ -36,12 +35,12 @@ class TestLegs(BaseTestCase):
     def test_accrual1(
         self,
     ):
-        acc1 = fio.AccrualInfo(
+        acc1 = fs.AccrualInfo(
             start=datetime.date(2025, 1, 1),
             # end=datetime.date(2025,11,5),
             end="3m",
             period="1m",
-            dc=fio.DayCount.Thirty360,
+            dc=fs.DayCount.Thirty360,
             front_stub_not_back=False,
         )
         dts = acc1.nodes()
@@ -59,7 +58,7 @@ class TestLegs(BaseTestCase):
         sched = acc1.schedule()
         self.assertEqual(
             sched,
-            fio.AccrualSchedule(
+            fs.AccrualSchedule(
                 start=[
                     datetime.date(2025, 1, 1),
                     datetime.date(2025, 2, 1),

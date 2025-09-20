@@ -48,6 +48,7 @@ from .exceptions import (
 )
 from .exchanges import Exchange
 from .fixed_income import Bond, Cashflow, FixedLeg, FloatingLeg, Swap
+from .fixed_income_objs import *
 from .futures import NewFuture
 from .misc import is_physical_settlement_available
 from .occ_symbology import (
@@ -79,5 +80,3 @@ from .quotes import (
 )
 from .security import AnySecurity
 from .serializer import dict_decode, dict_encode, json_decode, json_encode
-
-from .fixed_income_objs import *

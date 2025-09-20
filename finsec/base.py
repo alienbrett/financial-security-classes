@@ -43,8 +43,9 @@ class standard_model_config:
     # use_enum_values = True
     extra = "forbid"
 
+
 standard_model_config = pydantic.ConfigDict(
-    extra='forbid',
+    extra="forbid",
 )
 
 
@@ -217,4 +218,3 @@ class Option(Derivative):
     option_flavor: OptionFlavor = placeholder()
     exercise: OptionExercise = placeholder()
     # option_exercise: OptionExerciseStyle = placeholder()
-
