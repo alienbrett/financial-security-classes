@@ -3,9 +3,7 @@ from . import __meta__
 __version__ = __meta__.version
 
 from .base import (
-    AbstractPosition,
     AmericanOptionExercise,
-    AnySecurity,
     BermudanOptionExercise,
     Derivative,
     DerivativeExercise,
@@ -14,12 +12,29 @@ from .base import (
     Future,
     Option,
     OptionExercise,
-    Position,
-    Portfolio,
     Security,
     SecurityIdentifier,
     SecurityReference,
 )
+
+from .portfolio import (
+    AbstractPosition,
+    Position,
+    Portfolio,
+)
+
+from .fixed_income import (
+    Cashflow,
+    FixedLeg,
+    FloatingLeg,
+    Swap,
+    Bond,
+)
+
+from .security import (
+    AnySecurity,
+)
+
 from .constructors import (
     CUSIP,
     ETP,
