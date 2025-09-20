@@ -1,9 +1,7 @@
 import datetime
 from typing import Optional, Union
 
-from .base import (
-    # AmericanOptionExercise,
-    # EuropeanOptionExercise,
+from .base import (  # AmericanOptionExercise,; EuropeanOptionExercise,
     ExerciseDatetime,
     ForwardExercise,
     OptionExercise,

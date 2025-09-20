@@ -16,25 +16,6 @@ from .base import (
     SecurityIdentifier,
     SecurityReference,
 )
-
-from .portfolio import (
-    AbstractPosition,
-    Position,
-    Portfolio,
-)
-
-from .fixed_income import (
-    Cashflow,
-    FixedLeg,
-    FloatingLeg,
-    Swap,
-    Bond,
-)
-
-from .security import (
-    AnySecurity,
-)
-
 from .constructors import (
     CUSIP,
     ETP,
@@ -66,6 +47,7 @@ from .exceptions import (
     UnknownDenominatedCurrency,
 )
 from .exchanges import Exchange
+from .fixed_income import Bond, Cashflow, FixedLeg, FloatingLeg, Swap
 from .futures import NewFuture
 from .misc import is_physical_settlement_available
 from .occ_symbology import (
@@ -77,6 +59,7 @@ from .occ_symbology import (
     option_symbol,
 )
 from .options import American, European, NewOption
+from .portfolio import AbstractPosition, Portfolio, Position
 from .quote_grid import (
     FutureChain,
     FutureOptionChain,
@@ -94,4 +77,5 @@ from .quotes import (
     LevelOneQuote,
     ensure_timezone,
 )
+from .security import AnySecurity
 from .serializer import dict_decode, dict_encode, json_decode, json_encode

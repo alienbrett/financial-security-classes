@@ -1,11 +1,11 @@
 import datetime
-import math
-import typing
-import re
-import datetime
 import decimal
-from typing import Literal
+import math
+import re
+import typing
 from dataclasses import dataclass
+from typing import Literal
+
 # Regex pattern to match the components: symbol, maturity, flavor, strike
 pattern = re.compile(r"([A-Za-z]+)(\d{6})(C|P)(\d+)$")
 
@@ -89,7 +89,6 @@ def option_flavor(name: OCCSymbol) -> str:
     }[option_symbol.flavor]
 
 
-
 def option_symbol(name: OCCSymbol) -> str:
     """Returns option underlying ticker from OCC standardized option name."""
     # return name[:-15]
@@ -102,14 +101,14 @@ def option_symbol(name: OCCSymbol) -> str:
 class OptionSymbol:
     symbol: str
     maturity: datetime.date
-    flavor: Literal['C', 'P']
+    flavor: Literal["C", "P"]
     strike: decimal.Decimal
 
     @classmethod
     def build(cls, inp: str) -> "OCCSymbol":
         """Constructs an OCCSymbol instance from a string."""
         match = pattern.match(inp)
-        
+
         if match:
             # print(match)
             # print([match.group(i) for i in range(1, 5)])
@@ -117,19 +116,19 @@ class OptionSymbol:
             maturity_str = match.group(2)  # Extract the maturity part as string
             flavor = match.group(3)
             strike_str = match.group(4)  # Extract the strike part as string
-            
+
             # Convert maturity to datetime.date (format: YYMMDD)
             maturity = datetime.datetime.strptime(maturity_str, "%y%m%d").date()
-            
+
             # Convert strike to decimal.Decimal
             strike = decimal.Decimal(str(strike_str)) / decimal.Decimal(1000)
-            
+
             return cls(symbol, maturity, flavor, strike)
         else:
             raise ValueError(f"Invalid OCC symbol format: {inp}")
+
 
 # Example usage
 # occ_symbol = OCCSymbol.build("BTC250131C110000000")
 # print(occ_symbol)
 # Output: OCCSymbol(symbol='BTC', maturity=datetime.date(2025, 1, 31), flavor='C', strike=110000.000)
-

@@ -34,7 +34,7 @@ class AbstractQuote(BaseObject):
 class AbstractSnapshot(AbstractQuote):
     timestamp: datetime.datetime = placeholder()
 
-    @pydantic.validator("timestamp")
+    @pydantic.field_validator("timestamp")
     def timestamp_must_have_timezone(cls, v: datetime.datetime):
         return ensure_timezone(v)
 
@@ -44,7 +44,7 @@ class AbstractBar(AbstractQuote):
     end_timestamp: datetime.datetime = placeholder()
     volume: Optional[Decimal] = placeholder()
 
-    @pydantic.validator("start_timestamp", "end_timestamp")
+    @pydantic.field_validator("start_timestamp", "end_timestamp")
     def start_timestamp_must_have_timezone(cls, v: datetime.datetime):
         return ensure_timezone(v)
 

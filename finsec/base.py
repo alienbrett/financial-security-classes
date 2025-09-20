@@ -1,12 +1,12 @@
 import datetime
 import decimal
-from typing import Any, List, Optional, Union, Dict
-
-import pandas as pd
-import numpy as np
-import pydantic
-import bson
 import uuid
+from typing import Any, Dict, List, Optional, Union
+
+import bson
+import numpy as np
+import pandas as pd
+import pydantic
 
 from .enums import (
     GSID,
@@ -23,8 +23,8 @@ from .enums import (
     Ticker,
 )
 from .exchanges import Exchange
-from .utils import placeholder, format_number
 from .format import pretty_print_security
+from .utils import format_number, placeholder
 
 # from .misc import is_physical_settlement_available
 
@@ -33,15 +33,19 @@ BaseObject = pydantic.BaseModel
 
 
 class standard_model_config:
-    json_encoders = {
-        bson.ObjectId: str,
-    #     # datetime.date: lambda v: v.strftime("%Y-%m-%d"),
-    #     # datetime.datetime: lambda v: v.timestamp(),
-    #     # datetime.timedelta: pydantic.json.timedelta_isoformat,
-    #     # datetime.timedelta: pydantic.json.timedelta_seconds,
-    }
-    use_enum_values = True
+    # json_encoders = {
+    #     bson.ObjectId: str,
+    #     #     # datetime.date: lambda v: v.strftime("%Y-%m-%d"),
+    #     #     # datetime.datetime: lambda v: v.timestamp(),
+    #     #     # datetime.timedelta: pydantic.json.timedelta_isoformat,
+    #     #     # datetime.timedelta: pydantic.json.timedelta_seconds,
+    # }
+    # use_enum_values = True
     extra = "forbid"
+
+standard_model_config = pydantic.ConfigDict(
+    extra='forbid',
+)
 
 
 class SecurityIdentifier(BaseObject):
@@ -50,8 +54,10 @@ class SecurityIdentifier(BaseObject):
     id_type: SecurityIdentifierType
     value: str
 
-    class Config(standard_model_config):
-        pass
+    # class Config(standard_model_config):
+    #     pass
+
+    model_config = standard_model_config
 
     # class Config:
     #     use_enum_values = True
@@ -96,8 +102,7 @@ class Security(BaseObject):
     # unique id that identifies this id
     version_id: Optional[GSID] = None
 
-    class Config(standard_model_config):
-        pass
+    model_config = standard_model_config
 
     def __init__(self, **data: Any):
         super().__init__(**data)
@@ -106,20 +111,20 @@ class Security(BaseObject):
         data["gsid"] = data.get("gsid", None)
 
         self.ticker = self.ticker.strip().upper()
-    
+
     # validate so that SecurityType, SecuritySubtype aren't integers, but converted to proper enums
-    @pydantic.validator("security_type")
+    @pydantic.field_validator("security_type")
     def validate_security_type(cls, v):
         if isinstance(v, int):
             return SecurityType(v)
         return v
-    
-    @pydantic.validator("security_subtype")
+
+    @pydantic.field_validator("security_subtype")
     def validate_security_subtype(cls, v):
         if isinstance(v, int):
             return SecuritySubtype(v)
         return v
-    
+
     __repr__ = pretty_print_security
 
 
@@ -132,7 +137,7 @@ class ExerciseDatetime(BaseObject):
     expiry_time_of_day: ExpiryTimeOfDay = ExpiryTimeOfDay.UNKNOWN
     expiry_series_type: ExpirySeriesType = ExpirySeriesType.UNKNOWN
 
-    @pydantic.validator("expiry_date")
+    @pydantic.field_validator("expiry_date")
     def date_str_to_datetime_date(cls, v):
         if isinstance(v, datetime.date):
             return v
@@ -144,8 +149,8 @@ class ExerciseDatetime(BaseObject):
 
 class DerivativeExercise(BaseObject):
     exercise: Union[List[ExerciseDatetime], ExerciseDatetime]
-    class Config(standard_model_config):
-        pass
+
+    model_config = standard_model_config
 
 
 class ForwardExercise(DerivativeExercise):
@@ -156,7 +161,7 @@ class OptionExercise(DerivativeExercise):
     exercise: Union[List[ExerciseDatetime], ExerciseDatetime]
     style: OptionExerciseStyle
 
-    @pydantic.validator("exercise")
+    @pydantic.field_validator("exercise")
     def check_exercise(cls, v, values):
         if isinstance(v, list):
             if len(v) > 1:
@@ -175,11 +180,13 @@ def AmericanOptionExercise(exercise: ExerciseDatetime) -> OptionExercise:
         style=OptionExerciseStyle.AMERICAN,
     )
 
+
 def EuropeanOptionExercise(exercise: ExerciseDatetime) -> OptionExercise:
     return OptionExercise(
         exercise=exercise,
         style=OptionExerciseStyle.EUROPEAN,
     )
+
 
 def BermudanOptionExercise(exercise: List[ExerciseDatetime]) -> OptionExercise:
     return OptionExercise(
@@ -210,6 +217,3 @@ class Option(Derivative):
     option_flavor: OptionFlavor = placeholder()
     exercise: OptionExercise = placeholder()
     # option_exercise: OptionExerciseStyle = placeholder()
-
-
-

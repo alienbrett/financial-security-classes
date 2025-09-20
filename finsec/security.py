@@ -1,13 +1,14 @@
 import datetime
 import decimal
-from typing import Any, List, Optional, Union, Dict
-
-import pandas as pd
-import numpy as np
-import pydantic
-import bson
 import uuid
+from typing import Any, Dict, List, Optional, Union
 
+import bson
+import numpy as np
+import pandas as pd
+import pydantic
+
+from .base import Derivative, Future, Option, Security
 from .enums import (
     GSID,
     CurrencyQty,
@@ -23,23 +24,9 @@ from .enums import (
     Ticker,
 )
 from .exchanges import Exchange
-from .utils import placeholder, format_number
+from .fixed_income import Bond, Cashflow, FixedLeg, FloatingLeg, Swap
 from .format import pretty_print_security
-
-from .base import (
-    Option,
-    Future,
-    Security,
-    Derivative,
-)
-
-from .fixed_income import (
-    Cashflow,
-    FixedLeg,
-    FloatingLeg,
-    Swap,
-    Bond,
-)
+from .utils import format_number, placeholder
 
 AnySecurity = Union[
     Option,

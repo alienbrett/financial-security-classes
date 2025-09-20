@@ -1,19 +1,18 @@
-import logging
-import os
-import numpy as np
-import pandas as pd
-from typing import *
 import datetime
 import decimal
-import pydantic
-from operator import add, sub, mul
-
-import operator
 import enum
-import QuantLib as ql
-import json
 import functools
+import json
+import logging
+import operator
+import os
+from operator import add, mul, sub
+from typing import *
 
+import numpy as np
+import pandas as pd
+import pydantic
+import QuantLib as ql
 
 T = TypeVar('T')
 ListOrT = Union[List[T], T]
@@ -25,7 +24,7 @@ class Quote(pydantic.BaseModel):
     class Config:
         arbitrary_types_allowed = True
         ignored_types: set = (ql.QuoteHandle,)
-    
+
     @pydantic.field_serializer("quote")
     def serialize_quote(self, v, _info):
         if isinstance(v, ql.SimpleQuote):
@@ -38,12 +37,12 @@ class Quote(pydantic.BaseModel):
         if isinstance(v, float):
             return ql.SimpleQuote(v)
         return v
-    
+
     @property
     def is_modifiable(self) -> bool:
         """Check if the quote is modifiable."""
         return isinstance(self.quote, ql.SimpleQuote)
-    
+
     @property
     def handle(self)->ql.QuoteHandle:
         return ql.QuoteHandle(self.quote)
@@ -59,7 +58,7 @@ class Quote(pydantic.BaseModel):
 
     def __str__(self):
         return f"Quote({self.value()})"
-    
+
     def __add__(self, other: Union["QuoteWrapper", float]):
         return Quote(quote=create_composite_quote(self.handle, other, operator.add))
     def __sub__(self, other: Union["QuoteWrapper", float]):
@@ -159,10 +158,10 @@ class Period(pydantic.BaseModel):
         if isinstance(v, ql.Period):
             return v
         return ql.Period(v)
-    
+
     def __repr__(self):
         return self.period.__repr__()
-    
+
     ## serialize, such that ql.Period(1, ql.Days) becomes 1D, ql.Period(10, ql.Months) becomes 10M, etc.
     @pydantic.field_serializer("period")
     def serialize_period(self, v: ql.Period) -> str:
@@ -173,7 +172,7 @@ class Period(pydantic.BaseModel):
         if isinstance(v, ql.Period):
             return v
         return ql.Period(v)
-    
+
 
 class BusinessDayConvention(enum.Enum):
     """Enum for QuantLib business-day conventions with common short-codes."""
@@ -197,7 +196,7 @@ class BusinessDayConvention(enum.Enum):
             "HMF": ql.HalfMonthModifiedFollowing,
             "N": ql.Nearest,
         }
-    
+
     def as_ql(self)->int:
         return self.quantlib_dict()[self.value]
 
@@ -271,7 +270,7 @@ class AccrualInfo(pydantic.BaseModel):
             return Period(period=ql.Period(x))
         else:
             raise ValueError('Either freq or period must be provided.')
-    
+
     def as_ql(self):
         convention = self.bdc.as_ql()
         terminationDateConvention = self.bdc.as_ql()
@@ -287,7 +286,7 @@ class AccrualInfo(pydantic.BaseModel):
             end = ql.Date.from_date(self.end)
         elif isinstance(self.end, Period):
             end = cal.advance(start, self.end.period, terminationDateConvention, self.eom)
-            
+
         schedule = ql.Schedule(
             start, end,
             self.get_period().period,
@@ -298,7 +297,7 @@ class AccrualInfo(pydantic.BaseModel):
             self.eom,
         )
         return schedule
-    
+
     def nodes(
             self,
             start:  datetime.date|None=None,
@@ -312,7 +311,7 @@ class AccrualInfo(pydantic.BaseModel):
             if not cond:
                 res.append(dt)
         return res
-    
+
     def fraction( self, dt0:datetime.date, dt1:datetime.date, )->float:
         return self.dc.as_ql.yearFraction(
             ql.Date.from_date(dt0),
@@ -334,7 +333,7 @@ class AccrualInfo(pydantic.BaseModel):
             end=nodes[1:],
             frac=frac,
         )
-    
+
 class ExprOperator(enum.Enum):
     ADD = 'ADD'
     SUB = 'SUB'
@@ -383,9 +382,9 @@ class AbstractRateExpression(pydantic.BaseModel):
         return self * -1
     def __rneg__(self) -> "AbstractRateExpression":
         return self * -1
-    
 
-    
+
+
     @staticmethod
     def max(*args: ListOrT["AbstractRateExpression"]) -> "AbstractRateExpression":
         return CompositeRate( components = list(args), operator=ExprOperator.MAX)
@@ -524,7 +523,7 @@ class Bond(pydantic.BaseModel):
             return self.settle
         else:
             return self.leg.acc.start
-    
+
     def as_quantlib(self):
         l = self.leg
         cpn_arr = l.rate_array()
@@ -559,13 +558,13 @@ class Bond(pydantic.BaseModel):
             return ql_bond
         else:
             raise NotImplementedError('need to implement non fixed-only bonds')
-    
+
     def as_quantlib_helper(self)->Tuple[Quote, ql.FixedRateBondHelper]:
         q = Quote(quote=float(self.face))
         helper = ql.BondHelper(q.handle, self.as_quantlib())
         return q, helper
 
-    
+
     def cashflows_df(self)->pd.DataFrame:
         rows = []
         for cf in self.as_quantlib().cashflows():
@@ -600,7 +599,7 @@ class Swap(pydantic.BaseModel):
             if x.cpn.is_constant:
                 return x
         return None
-    
+
     @property
     def float_leg(self)->Optional[Leg]:
         for x in self.legs:
