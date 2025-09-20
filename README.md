@@ -159,26 +159,25 @@ The `finsec.fixed_income_objs` module adds basic fixed–income building blocks:
 ```python3
 import datetime, decimal
 import finsec as fs
-from finsec import fixed_income_objs as fio  # documented below
 ```
 
 ### Calendars, Day Count, and Periods
 
 ```python3
 # Enumerations
-fio.DayCount.Thirty360
-fio.DayCount.Actual360
-fio.DayCount.ActualActual
+fs.DayCount.Thirty360
+fs.DayCount.Actual360
+fs.DayCount.ActualActual
 
-fio.BusinessDayConvention.unadjusted
-fio.BusinessDayConvention.modified_following
+fs.BusinessDayConvention.unadjusted
+fs.BusinessDayConvention.modified_following
 
 # Market calendars
-fio.Calendar.US_GovernmentBond
-fio.Calendar.US_SOFR
+fs.Calendar.US_GovernmentBond
+fs.Calendar.US_SOFR
 
 # Relative/absolute periods
-fio.Period(period='2d')   # 2 business days
+fs.Period(period='2d')   # 2 business days
 '5y'                      # 5 years tenor wherever a tenor string is accepted
 ```
 
@@ -187,11 +186,11 @@ fio.Period(period='2d')   # 2 business days
 Create an accrual definition and inspect the generated schedule.
 
 ```python3
-acc = fio.AccrualInfo(
+acc = fs.AccrualInfo(
     start=datetime.date(2025, 1, 1),
     end='3m',                   # or a concrete date
     period='1m',                # alternatively use freq=12 with a 1y end
-    dc=fio.DayCount.Thirty360,
+    dc=fs.DayCount.Thirty360,
     front_stub_not_back=False,
 )
 len(acc)                        # number of coupon periods
@@ -201,7 +200,7 @@ acc.schedule().to_df()          # pandas DataFrame of period dates
 ### Rate Expressions (`FixedRate`)
 
 ```python3
-expr = fio.FixedRate(rate=decimal.Decimal('0.05')) * (decimal.Decimal('1')/10) + 10
+expr = fs.FixedRate(rate=decimal.Decimal('0.05')) * (decimal.Decimal('1')/10) + 10
 expr.get_fixing(None)           # -> Decimal('10.5')
 expr.is_constant                # -> True
 expr.model_dump()               # pydantic dict for serialization
@@ -210,15 +209,15 @@ expr.model_dump()               # pydantic dict for serialization
 ### Coupon Leg (`Leg`)
 
 ```python3
-fix_leg = fio.Leg(
+fix_leg = fs.Leg(
     notional=1_000_000,
-    cpn=fio.FixedRate(rate=decimal.Decimal('0.01')),  # 1% fixed
-    acc=fio.AccrualInfo(
+    cpn=fs.FixedRate(rate=decimal.Decimal('0.01')),  # 1% fixed
+    acc=fs.AccrualInfo(
         start=datetime.date(2025, 1, 1),
         end=datetime.date(2026, 1, 1),
-        dc=fio.DayCount.Thirty360,
+        dc=fs.DayCount.Thirty360,
         freq=12,  # monthly
-        bdc=fio.BusinessDayConvention.unadjusted,
+        bdc=fs.BusinessDayConvention.unadjusted,
     ),
 )
 # fix_leg.schedule().to_df()
@@ -227,31 +226,31 @@ fix_leg = fio.Leg(
 ### Plain Vanilla Bond (`Bond`)
 
 ```python3
-bond = fio.Bond(
+bond = fs.Bond(
     notional=1_000_000,
     leg=fix_leg,
     settle_days=1,              # settlement lag
 )
 ql_bond = bond.as_quantlib()    # QuantLib::Bond for pricing
 # Round-trip JSON
-bond2 = fio.Bond.model_validate_json(bond.model_dump_json())
+bond2 = fs.Bond.model_validate_json(bond.model_dump_json())
 ```
 
 ### OIS Swap (fixed vs SOFR) (`Swap.make_ois`)
 
 ```python3
-ois = fio.Swap.make_ois(
+ois = fs.Swap.make_ois(
     start=datetime.date(2025, 1, 1),
     end='5y',
     rate=3.5 / 100,                 # fixed rate
-    dc_fix=fio.DayCount.Actual360,
-    dc_float=fio.DayCount.Actual360,
+    dc_fix=fs.DayCount.Actual360,
+    dc_float=fs.DayCount.Actual360,
     freq_fix=1,
     freq_float=1,
     index='SOFR',
-    cal_pay=fio.Calendar.US_SOFR,
+    cal_pay=fs.Calendar.US_SOFR,
     notional=1_000_000,
-    pay_delay=fio.Period(period='2d'),
+    pay_delay=fs.Period(period='2d'),
 )
 ois.model_dump()                     # inspect structure
 ```

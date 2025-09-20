@@ -79,3 +79,5 @@ from .quotes import (
 )
 from .security import AnySecurity
 from .serializer import dict_decode, dict_encode, json_decode, json_encode
+
+from .fixed_income_objs import *

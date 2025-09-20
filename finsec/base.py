@@ -217,3 +217,4 @@ class Option(Derivative):
     option_flavor: OptionFlavor = placeholder()
     exercise: OptionExercise = placeholder()
     # option_exercise: OptionExerciseStyle = placeholder()
+
