@@ -7,6 +7,8 @@ import finsec as fs
 
 from .base_test import BaseTestCase
 
+usd_ccy = fs.FiatCurrency( ticker='USD', gsid='USD')
+usd = fs.create_reference_from_security(usd_ccy)
 
 class TestSwaps(BaseTestCase):
 
@@ -16,6 +18,7 @@ class TestSwaps(BaseTestCase):
         swp_end = '5y'
         swp_index = 'SOFR'
         swp = fs.Swap.make_ois(
+            ccy=usd,
             start=datetime.date(2025, 1, 1),
             end='5y',
             rate=3.5 / 100,

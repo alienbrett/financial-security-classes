@@ -6,11 +6,14 @@ import finsec as fs
 
 from .base_test import BaseTestCase
 
+usd_ccy = fs.FiatCurrency( ticker='USD', gsid='USD')
+usd = fs.create_reference_from_security(usd_ccy)
 
 class TestLegs(BaseTestCase):
     def test_fixed_bond1(self):
         ntnl = 1_000_000
         fixleg1 = fs.Leg(
+            ccy=usd,
             notional=ntnl,
             # cpn=fs.FixedRate(rate=decimal.Decimal('0.01')),
             cpn=fs.FixedRate(rate=0.01),

@@ -14,16 +14,20 @@ import pandas as pd
 import pydantic
 import QuantLib as ql
 
+from .base import Security, SecurityReference
+
 T = TypeVar('T')
 ListOrT = Union[List[T], T]
 
+IndexMap = NewType('IndexMap', Dict[Hashable, 'ql.InterestRateIndex'])
 
 def loud_create(f, *args, **kwargs):
     print(f)
-    print(args)
-    print(kwargs)
+    for x in args:
+        print(x)
+    for k,v in kwargs.items():
+        print(k,'->',v)
     return f(*args, **kwargs)
-
 
 class Quote(pydantic.BaseModel):
     """Base wrapper for QuantLib quotes to enable Pythonic math operations."""
@@ -132,28 +136,6 @@ class DayCount(enum.Enum):
             DayCount.Thirty360: ql.Thirty360(ql.Thirty360.BondBasis),
         }[self]
 
-class Calendar(enum.Enum):
-    """Enum for QuantLib calendars."""
-    NULL = "null"
-    US_Settlement = "us/settlement"
-    US_NYSE = "us/nyse"
-    US_GovernmentBond = "us/government_bond"
-    US_FederalReserve = "us/federal_reserve"
-    US_NERC = "us/nerc"
-    US_SOFR = "us/sofr"
-
-    def as_ql(self) -> ql.Calendar:
-        """Convert to QuantLib calendar."""
-        return {
-            Calendar.NULL: ql.NullCalendar(),
-            Calendar.US_Settlement: ql.UnitedStates(ql.UnitedStates.Settlement),
-            Calendar.US_NYSE: ql.UnitedStates(ql.UnitedStates.NYSE),
-            Calendar.US_GovernmentBond: ql.UnitedStates(ql.UnitedStates.GovernmentBond),
-            Calendar.US_FederalReserve: ql.UnitedStates(ql.UnitedStates.FederalReserve),
-            Calendar.US_NERC: ql.UnitedStates(ql.UnitedStates.NERC),
-            Calendar.US_SOFR: ql.UnitedStates(ql.UnitedStates.SOFR),
-        }[self]
-
 class Period(pydantic.BaseModel):
     """Wrapper for QuantLib periods."""
     period: ql.Period
@@ -179,6 +161,56 @@ class Period(pydantic.BaseModel):
         if isinstance(v, ql.Period):
             return v
         return ql.Period(v)
+    
+    @property
+    def payments_per_year(self)->int:
+        p = self.period
+        u = p.units()
+        l = p.length()
+        if u == 3:
+            assert l == 1
+            return 1
+        elif u == 2:
+            assert 12 % l == 0, "period units must divide 12 evenly"
+            return 12 / l
+        else:
+            raise ValueError('Cannot produce frequency from this period')
+
+class Calendar(enum.Enum):
+    """Enum for QuantLib calendars."""
+    NULL = "null"
+    US_Settlement = "us/settlement"
+    US_NYSE = "us/nyse"
+    US_GovernmentBond = "us/government_bond"
+    US_FederalReserve = "us/federal_reserve"
+    US_NERC = "us/nerc"
+    US_SOFR = "us/sofr"
+
+    def as_ql(self) -> ql.Calendar:
+        """Convert to QuantLib calendar."""
+        return {
+            Calendar.NULL: ql.NullCalendar(),
+            Calendar.US_Settlement: ql.UnitedStates(ql.UnitedStates.Settlement),
+            Calendar.US_NYSE: ql.UnitedStates(ql.UnitedStates.NYSE),
+            Calendar.US_GovernmentBond: ql.UnitedStates(ql.UnitedStates.GovernmentBond),
+            Calendar.US_FederalReserve: ql.UnitedStates(ql.UnitedStates.FederalReserve),
+            Calendar.US_NERC: ql.UnitedStates(ql.UnitedStates.NERC),
+            Calendar.US_SOFR: ql.UnitedStates(ql.UnitedStates.SOFR),
+        }[self]
+    
+    def bump(
+        self,
+        dt:datetime.date|List[datetime.date],
+        period:Period|ql.Period|str
+    )->List[datetime.date]:
+        if not isinstance(dt, list):
+            dt = [dt]
+        if isinstance(period, Period):
+            p = period.period
+        else:
+            p = Period(period=period).period
+        ql_cal = self.as_ql()
+        return [ ql_cal.advance(ql.Date.from_date(d), p).to_date() for d in dt ]
 
 class BusinessDayConvention(enum.Enum):
     """Enum for QuantLib business-day conventions with common short-codes."""
@@ -252,7 +284,6 @@ class AccrualInfo(pydantic.BaseModel):
         if v.freq is None and v.period is None:
             raise ValueError('Either freq or period must be provided.')
         return v
-
 
     def get_period(self)->Period:
         if self.period is not None:
@@ -435,7 +466,6 @@ class FloatingRate(AbstractRateExpression):
         if isinstance(self.type_,OvernightFloat):
             return self.type_.compounded_not_averaged
 
-
 class FixedRate(AbstractRateExpression):
     rate: decimal.Decimal
     is_constant:bool = True
@@ -479,6 +509,7 @@ RateExpression = NewType('AnyAbstractRateExpression', FixedRate|FloatingRate|Com
 class Leg(pydantic.BaseModel):
     '''Encapsulates a single generic fixed-income coupon stream.
     '''
+    ccy: Security|SecurityReference 
     notional: ListOrT[decimal.Decimal]
     cpn: ListOrT[RateExpression]
     acc: AccrualInfo
@@ -491,11 +522,15 @@ class Leg(pydantic.BaseModel):
             arr = [ float(self.notional) if as_float else self.notional ]
             return arr * len(self.acc)
 
-    def rate_array(self,)->List[AbstractRateExpression]:
+    def rate_array(self, as_float:bool|None=None)->List[AbstractRateExpression]:
         if isinstance(self.cpn, list):
-            return self.cpn
+            res = self.cpn
         else:
-            return [self.cpn] * len(self.acc)
+            res = [self.cpn] * len(self.acc)
+        if as_float is not None:
+            if as_float and self.cpn.is_constant:
+                res = np.asarray([float(x.rate) for x in res])
+        return res
 
     @pydantic.field_validator('notional', mode='before', )
     @classmethod
@@ -521,7 +556,71 @@ class Leg(pydantic.BaseModel):
         elif isinstance(self.pay_delay, Period):
             assert self.pay_delay.as_ql().units() == 0, "period type must be days, for pay delay"
             return self.pay_delay.as_ql().length()
+    
+    def get_float_index(self, 
+        index_lookup:IndexMap|None=None,
+    )->ql.InterestRateIndex|None:
+        if self.cpn.is_float:
+            if index_lookup is None:
+                raise ValueError('must provide lookup')
+            flt_index = index_lookup.get(self.cpn.index)
+            if flt_index is None:
+                raise ValueError(f"Unknown index: {self.cpn.index}")
+            return flt_index
 
+    def as_quantlib(
+        self,
+        index_lookup:IndexMap|None=None,
+    ):
+        if self.cpn.is_constant:
+            leg = ql.FixedRateLeg(
+                self.acc.as_ql(),
+                self.acc.dc.as_ql,
+                self.notionals_array(as_float=True),
+                self.rate_array(as_float=True),
+                self.acc.bdc.as_ql(),
+                paymentCalendar=self.acc.cal_pay.as_ql(),
+                paymentLag=self.pay_delay_days,
+            )
+        elif self.cpn.is_float:
+            idx = self.get_float_index(index_lookup=index_lookup)
+            leg = ql.OvernightLeg(
+            # leg = loud_create(ql.OvernightLeg,
+                self.notionals_array(as_float=True),
+                self.acc.as_ql(),
+                idx,
+                self.acc.dc.as_ql,
+                self.acc.bdc.as_ql(),
+                telescopicValueDates=False,
+                averagingMethod=int(self.cpn.is_compounded),
+                paymentCalendar=self.acc.cal_pay.as_ql(),
+                paymentLag=self.pay_delay_days,
+            )
+        
+        return leg
+
+    def cashflows_df(
+        self,
+        index_lookup:IndexMap|None=None,
+    )->pd.DataFrame:
+        ql_leg = self.as_quantlib(index_lookup=index_lookup)
+        rows = list()
+        for cf in ql_leg:
+            rows.append({
+                'date': cf.date().to_date(),
+                'amount': cf.amount(),
+                'has_occurred': cf.hasOccurred(),
+            })
+        acc_df = self.acc.schedule().to_df()
+        cashflow_df = pd.merge(
+            acc_df,
+            pd.DataFrame(rows),
+            left_index=True,
+            right_index=True,
+            how='outer',
+        ).set_index('date')
+        cashflow_df['rate'] = cashflow_df['amount'] / cashflow_df['frac'] / float(self.notional)
+        return cashflow_df
 
 class Bond(pydantic.BaseModel):
     notional: decimal.Decimal
@@ -531,6 +630,10 @@ class Bond(pydantic.BaseModel):
     face:decimal.Decimal=100
     settle: datetime.date|None=None
     redemption:decimal.Decimal|None=None
+
+    @property
+    def ccy(self)->Security|SecurityReference:
+        return self.leg.ccy
 
     def final_redemption(self)->decimal.Decimal:
         if self.redemption is None:
@@ -543,9 +646,13 @@ class Bond(pydantic.BaseModel):
         else:
             return self.leg.acc.start
 
-    def as_quantlib(self):
+    def as_quantlib(
+        self,
+        index_lookup:IndexMap|None=None,
+    ):
         l = self.leg
         cpn_arr = l.rate_array()
+
         ## only handle fixed coupon for now
         if all([x.is_constant for x in cpn_arr]):
             ql_sched = l.acc.as_ql()
@@ -578,11 +685,16 @@ class Bond(pydantic.BaseModel):
         else:
             raise NotImplementedError('need to implement non fixed-only bonds')
 
-    def as_quantlib_helper(self)->Tuple[Quote, ql.FixedRateBondHelper]:
-        q = Quote(quote=float(self.face))
+    def as_quantlib_helper(
+        self,
+        quote:Quote|None=None,
+    )->Tuple[Quote, ql.FixedRateBondHelper]:
+        if quote is None:
+            q = Quote(quote=float(self.face))
+        else:
+            q = quote
         helper = ql.BondHelper(q.handle, self.as_quantlib())
         return q, helper
-
 
     def cashflows_df(self)->pd.DataFrame:
         rows = []
@@ -627,10 +739,7 @@ class Swap(pydantic.BaseModel):
 
     def as_quantlib(
         self,
-        index_lookup:Dict[
-            Hashable,
-            ql.IborIndex|ql.OvernightIndex
-        ]|None=None,
+        index_lookup:IndexMap|None=None,
     ):
         fix = self.fixed_leg
         flt = self.float_leg
@@ -653,9 +762,14 @@ class Swap(pydantic.BaseModel):
             pd1 = flt.pay_delay_days
             assert pd0 == pd1
             pay_delay_days = pd0
+        
+        # telescopic_dates = True
+        telescopic_dates = False
 
         if isinstance(flt_index, ql.OvernightIndex):
             swp = ql.OvernightIndexedSwap(
+            # swp = loud_create(
+                # ql.OvernightIndexedSwap,
                 # Swap::Type type,
                 ql.OvernightIndexedSwap.Receiver,
                 # DoubleVector fixedNominals,
@@ -681,16 +795,117 @@ class Swap(pydantic.BaseModel):
                 # Calendar paymentCalendar=Calendar(),
                 fix.acc.cal_pay.as_ql(),
                 # bool telescopicValueDates=False,
-                True,
+                telescopic_dates,
                 # RateAveraging::Type averagingMethod=Compound
                 int(flt.cpn.is_compounded),
             )
         return swp
 
+    def as_quantlib_helper(
+        self,
+        quote:Quote|None=None,
+        index_lookup:IndexMap|None=None,
+        discounting_curve:ql.YieldTermStructureHandle|None=None,
+    )->Tuple[Quote, ql.FixedRateBondHelper]:
+
+        fix = self.fixed_leg
+        flt = self.float_leg
+        assert fix is not None, "swap doesnt have fixed leg"
+        assert flt is not None, "swap doesnt have float leg"
+
+        flt_index = index_lookup.get(flt.cpn.index)
+        if flt_index is None:
+            raise ValueError(f"Unknown index: {flt.cpn.index}")
+        
+        fix_rate = fix.rate_array()
+        assert all([x == fix_rate[0] for x in fix_rate])
+
+        if flt.pay_delay is None:
+            pay_delay_days = fix.pay_delay_days
+        elif fix.pay_delay is None:
+            pay_delay_days = flt.pay_delay_days
+        else:
+            pd0 = flt.pay_delay_days
+            pd1 = flt.pay_delay_days
+            assert pd0 == pd1
+            pay_delay_days = pd0
+        
+        telescopic_dates = False
+
+        ## swaprate helper
+        if quote is None:
+            q = Quote(quote=0)
+        else:
+            q = quote
+
+        fix_acc_sched = fix.acc.schedule()
+        start = ql.Date.from_date(fix_acc_sched.start[0])
+        end = ql.Date.from_date(fix_acc_sched.end[-1])
+
+        assert fix.acc.get_period() == flt.acc.get_period()
+
+        if discounting_curve is not None:
+            disc_curve_use = discounting_curve
+        else:
+            disc_curve_use = ql.YieldTermStructureHandle()
+        
+        fix_freq = period=fix.acc.get_period().payments_per_year
+        flt_freq = period=flt.acc.get_period().payments_per_year
+
+        if isinstance(flt.cpn.type_, OvernightFloat):
+            helper = ql.DatedOISRateHelper(
+            # helper = loud_create(ql.DatedOISRateHelper,
+                # Date startDate,
+                start,
+                # Date endDate,
+                end,
+                # QuoteHandle rate,
+                q.handle,
+                # ext::shared_ptr< OvernightIndex > const & index,
+                flt_index,
+                # YieldTermStructureHandle discountingCurve={},
+                disc_curve_use,
+                # bool telescopicValueDates=False,
+                telescopic_dates,
+                # RateAveraging::Type averagingMethod=Compound,
+                int(flt.cpn.is_compounded),
+                # Integer paymentLag=0,
+                pay_delay_days,
+                # BusinessDayConvention paymentConvention=Following,
+                fix.acc.bdc.as_ql(),
+                # Frequency paymentFrequency=Annual,
+                flt_freq,
+                # Calendar paymentCalendar=Calendar(),
+                fix.acc.cal_pay.as_ql(),
+                # Spread overnightSpread=0.0,
+                0,
+                # ext::optional< bool > endOfMonth=ext::nullopt,
+                fix.acc.eom,
+                # ext::optional< Frequency > fixedPaymentFrequency=ext::nullopt,
+                fix_freq,
+                # Calendar fixedCalendar=Calendar(),
+                fix.acc.cal_pay.as_ql(),
+                # Natural lookbackDays=Null< Natural >(),
+                0,
+                # Natural lockoutDays=0,
+                0,
+                # bool applyObservationShift=False,
+                False,
+                # ext::shared_ptr< FloatingRateCouponPricer > const & pricer={}
+            )
+        return q, helper
+
+    def cashflows_df(self, **kwargs)->pd.DataFrame:
+        fix_df = self.fixed_leg.cashflows_df(**kwargs)
+        flt_df = self.float_leg.cashflows_df(**kwargs)
+        fix_df['fix'] = True
+        flt_df['fix'] = False
+        return pd.concat([fix_df,flt_df], axis=0).sort_index()
 
     @classmethod
     def make_ois(
         cls,
+        ccy:Security|SecurityReference,
         start:datetime.date,
         end:Period|str|datetime.date,
         rate:float|decimal.Decimal,
@@ -707,6 +922,7 @@ class Swap(pydantic.BaseModel):
         compounded_not_averaged:bool = True,
     )->"Swap":
         fixleg = Leg(
+            ccy=ccy,
             notional=notional,
             cpn=FixedRate(rate=rate),
             acc=AccrualInfo(
@@ -720,6 +936,7 @@ class Swap(pydantic.BaseModel):
             )
         )
         floatleg = Leg(
+            ccy=ccy,
             notional=-notional,
             cpn=FloatingRate(
                 index=index,
@@ -741,7 +958,34 @@ class Swap(pydantic.BaseModel):
         swp = Swap(legs=(fixleg, floatleg))
         return swp
 
+    def risk_builder(
+        self,
+        funding_index:str|ql.YieldTermStructureHandle,
+        engine_args:Dict[str,Any]|None=None,
+    )->Callable[
+        [IndexMap],
+        Tuple[Callable[[],float],Any]
+    ]:
+        if engine_args is None:
+            engine_args = dict()
+
+        def f(index_map:IndexMap):
+            if isinstance(funding_index, str): 
+                funding_curve = index_map[funding_index].forwardingTermStructure()
+            elif isinstance(funding_index, ql.YieldTermStructureHandle):
+                funding_curve = funding_index
+
+            ql_obj = self.as_quantlib( index_lookup=index_map,)
+            engine = ql.DiscountingSwapEngine( funding_curve, **engine_args )
+            ql_obj.setPricingEngine( engine )
+            def g()->float:
+                return ql_obj.NPV()
+            return g, ql_obj
+        return f
+
+
 __all__ = [
+    'IndexMap',
     'Quote',
     'create_composite_quote',
     'DayCount',
