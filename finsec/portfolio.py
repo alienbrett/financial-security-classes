@@ -181,6 +181,8 @@ class Portfolio(AbstractPosition):
 
     def __mul__(self, other):
         if isinstance( other, NumericType,):
+            if not isinstance(other, decimal.Decimal):
+                other = decimal.Decimal(other)
             positions = [
                 Position(security=pos.security, quantity=pos.quantity * other)
                 for pos in self.positions
@@ -188,28 +190,69 @@ class Portfolio(AbstractPosition):
             return Portfolio(positions=positions)
         else:
             raise TypeError(f"Cannot multiply Portfolio and {type(other)}")
+    
+    def __rmul__(self, other):
+        return self * other
+    
+    def __sub__(self, other):
+        if isinstance(other, Portfolio):
+            return self + (-other)
+        if isinstance(other, Position):
+            return self + Position(security=other.security, quantity=-other.quantity)
+        raise TypeError(f"Cannot subtract {type(other)} from Portfolio")
 
     def __add__(self, other):
-        """Adds two portfolios together."""
+        """Adds a position or another portfolio, then coalesces by GSID."""
         if isinstance(other, Portfolio):
             positions = self.positions + other.positions
-            # res = Portfolio(positions=positions)
-        if isinstance(other, Position):
-            # res = self + Portfolio(positions=[other])
+        elif isinstance(other, Position):
             positions = self.positions + [other]
         else:
             raise TypeError(f"Cannot add Portfolio and {type(other)}")
-        new_pos = dict()
+
+        new_pos = {}
         for p in positions:
             k = p.security.gsid
-            pp = new_pos.get(k, None)
-            if pp is None:
-                pp = p
+            if k not in new_pos:
+                new_pos[k] = p
             else:
-                pp += p
-            new_pos[k] = pp
+                # relies on Position.__iadd__/__add__ to sum quantities
+                new_pos[k] += p
         return Portfolio(positions=list(new_pos.values()))
 
+    def __radd__(self, other):
+        # lets sum([...], Portfolio(...)) work and supports Position + Portfolio
+        if other == 0 or other is None:
+            return self
+        if isinstance(other, Portfolio):
+            return other.__add__(self)
+        if isinstance(other, Position):
+            return self.__add__(other)
+        return NotImplemented
+    
+    # def __sub__(self, other):
+    #     return self + (-other)
+
+    # def __add__(self, other):
+    #     """Adds two portfolios together."""
+    #     if isinstance(other, Portfolio):
+    #         positions = self.positions + other.positions
+    #         # res = Portfolio(positions=positions)
+    #     if isinstance(other, Position):
+    #         # res = self + Portfolio(positions=[other])
+    #         positions = self.positions + [other]
+    #     else:
+    #         raise TypeError(f"Cannot add Portfolio and {type(other)}")
+    #     new_pos = dict()
+    #     for p in positions:
+    #         k = p.security.gsid
+    #         pp = new_pos.get(k, None)
+    #         if pp is None:
+    #             pp = p
+    #         else:
+    #             pp += p
+    #         new_pos[k] = pp
+    #     return Portfolio(positions=list(new_pos.values()))
     
     def __truediv__(self, other):
         if isinstance(other, NumericType):

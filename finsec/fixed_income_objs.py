@@ -782,14 +782,17 @@ class Leg(pydantic.BaseModel):
     def risk_builder(self, funding_index: str | ql.YieldTermStructureHandle, engine_args=None):
         if engine_args is None:
             engine_args = {}
-        def f(index_map: IndexMap):
+        def f(index_map: IndexMap, funding_spec=funding_index):
             eval_dt = ql.Settings.instance().evaluationDate
             sett_dt = eval_dt
             # 1) Resolve funding curve handle
-            if isinstance(funding_index, str):
-                funding_curve = index_map[funding_index].forwardingTermStructure()
+            if funding_spec is None:
+                funding_spec = index_map.get_default_curve_by_ccy(ccy=self.ccy)
+
+            if isinstance(funding_spec, str):
+                funding_curve = index_map[funding_spec].forwardingTermStructure()
             else:
-                funding_curve = funding_index
+                funding_curve = funding_spec
             # assert not funding_curve.empty(), "Empty funding curve"
             self.log.debug( 'funding curve df: %f', funding_curve.discount( funding_curve.maxDate(),))
 
@@ -924,17 +927,20 @@ class Bond(pydantic.BaseModel):
 
         return cashflow_df
     
-    def risk_builder(self, funding_index: str | ql.YieldTermStructureHandle, engine_args=None):
+    def risk_builder(self, funding_index: str|ql.YieldTermStructureHandle|None=None, engine_args=None):
         if engine_args is None:
             engine_args = {}
-        def f(index_map: IndexMap):
+        def f(index_map: IndexMap, funding_spec=funding_index):
             eval_dt = ql.Settings.instance().evaluationDate
             sett_dt = eval_dt
             # 1) Resolve funding curve handle
-            if isinstance(funding_index, str):
-                funding_curve = index_map[funding_index].forwardingTermStructure()
+            if funding_spec is None:
+                funding_spec = index_map.get_default_curve_by_ccy(ccy=ccy)
+                # print('funding index?', funding_spec)
+            if isinstance(funding_spec, str):
+                funding_curve = index_map[funding_spec].forwardingTermStructure()
             else:
-                funding_curve = funding_index
+                funding_curve = funding_spec
             # assert not funding_curve.empty(), "Empty funding curve"
             self.log.debug( 'funding curve df: %f', funding_curve.discount( funding_curve.maxDate(),))
 
@@ -1002,64 +1008,71 @@ class Swap(pydantic.BaseModel):
         self,
         index_lookup:IndexMap|None=None,
     ):
-        fix = self.fixed_leg
-        flt = self.float_leg
-        assert fix is not None, "swap doesnt have fixed leg"
-        assert flt is not None, "swap doesnt have float leg"
-
-        flt_index = index_lookup.get(flt.cpn.index)
-        if flt_index is None:
-            raise ValueError(f"Unknown index: {flt.cpn.index}")
-        
-        fix_rate = fix.rate_array()
-        assert all([x == fix_rate[0] for x in fix_rate])
-
-        if flt.pay_delay is None:
-            pay_delay_days = fix.pay_delay_days
-        elif fix.pay_delay is None:
-            pay_delay_days = flt.pay_delay_days
-        else:
-            pd0 = flt.pay_delay_days
-            pd1 = fix.pay_delay_days
-            assert pd0 == pd1
-            pay_delay_days = pd0
-        
-        # telescopic_dates = True
-        telescopic_dates = False
-
-        if isinstance(flt_index, ql.OvernightIndex):
-            swp = ql.OvernightIndexedSwap(
-            # swp = loud_create(
-                # ql.OvernightIndexedSwap,
-                # Swap::Type type,
-                ql.OvernightIndexedSwap.Receiver,
-                # DoubleVector fixedNominals,
-                fix.notionals_array(as_float=True),
-                # Schedule fixedSchedule,
-                fix.acc.as_ql(),
-                # Rate fixedRate,
-                float(fix_rate[0].rate),
-                # DayCounter fixedDC,
-                fix.acc.dc.as_ql,
-                # DoubleVector overnightNominals,
-                -np.asarray(flt.notionals_array(as_float=True)),
-                # Schedule overnightSchedule,
-                flt.acc.as_ql(),
-                # ext::shared_ptr< OvernightIndex > const & overnightIndex,
-                flt_index,
-                # Spread spread=0.0,
-                0,
-                # Natural paymentLag=0,
-                pay_delay_days,
-                # BusinessDayConvention paymentAdjustment=Following,
-                fix.acc.bdc.as_ql(),
-                # Calendar paymentCalendar=Calendar(),
-                fix.acc.cal_pay.as_ql(),
-                # bool telescopicValueDates=False,
-                telescopic_dates,
-                # RateAveraging::Type averagingMethod=Compound
-                int(flt.cpn.is_compounded),
+        if self.is_xccy:
+            swp = (
+                (l.ccy, l.as_quantlib(index_lookup=index_lookup))
+                for l in self.legs
             )
+
+        else:
+            fix = self.fixed_leg
+            flt = self.float_leg
+            assert fix is not None, "swap doesnt have fixed leg"
+            assert flt is not None, "swap doesnt have float leg"
+
+            flt_index = index_lookup.get(flt.cpn.index)
+            if flt_index is None:
+                raise ValueError(f"Unknown index: {flt.cpn.index}")
+            
+            fix_rate = fix.rate_array()
+            assert all([x == fix_rate[0] for x in fix_rate])
+
+            if flt.pay_delay is None:
+                pay_delay_days = fix.pay_delay_days
+            elif fix.pay_delay is None:
+                pay_delay_days = flt.pay_delay_days
+            else:
+                pd0 = flt.pay_delay_days
+                pd1 = fix.pay_delay_days
+                assert pd0 == pd1
+                pay_delay_days = pd0
+            
+            # telescopic_dates = True
+            telescopic_dates = False
+
+            if isinstance(flt_index, ql.OvernightIndex):
+                swp = ql.OvernightIndexedSwap(
+                # swp = loud_create(
+                    # ql.OvernightIndexedSwap,
+                    # Swap::Type type,
+                    ql.OvernightIndexedSwap.Receiver,
+                    # DoubleVector fixedNominals,
+                    fix.notionals_array(as_float=True),
+                    # Schedule fixedSchedule,
+                    fix.acc.as_ql(),
+                    # Rate fixedRate,
+                    float(fix_rate[0].rate),
+                    # DayCounter fixedDC,
+                    fix.acc.dc.as_ql,
+                    # DoubleVector overnightNominals,
+                    -np.asarray(flt.notionals_array(as_float=True)),
+                    # Schedule overnightSchedule,
+                    flt.acc.as_ql(),
+                    # ext::shared_ptr< OvernightIndex > const & overnightIndex,
+                    flt_index,
+                    # Spread spread=0.0,
+                    0,
+                    # Natural paymentLag=0,
+                    pay_delay_days,
+                    # BusinessDayConvention paymentAdjustment=Following,
+                    fix.acc.bdc.as_ql(),
+                    # Calendar paymentCalendar=Calendar(),
+                    fix.acc.cal_pay.as_ql(),
+                    # bool telescopicValueDates=False,
+                    telescopic_dates,
+                    # RateAveraging::Type averagingMethod=Compound
+                    int(flt.cpn.is_compounded),
+                )
         return swp
 
     def as_quantlib_helper(
@@ -1222,42 +1235,68 @@ class Swap(pydantic.BaseModel):
         swp = Swap(legs=(fixleg, floatleg))
         return swp
 
-    def risk_builder(self, funding_index: str | ql.YieldTermStructureHandle, engine_args=None):
+    def risk_builder(self, funding_index: str|ql.YieldTermStructureHandle|None=None, engine_args=None):
         if engine_args is None:
             engine_args = {}
-        def f(index_map: IndexMap):
-            eval_dt = ql.Settings.instance().evaluationDate
-            sett_dt = eval_dt
-            # 1) Resolve funding curve handle
-            if isinstance(funding_index, str):
-                funding_curve = index_map[funding_index].forwardingTermStructure()
-            else:
-                funding_curve = funding_index
-            # assert not funding_curve.empty(), "Empty funding curve"
-            self.log.debug( 'funding curve df: %f', funding_curve.discount( funding_curve.maxDate(),))
+        
+        if self.is_xccy:
+            fs = [
+                l.risk_builder(funding_index=funding_index, engine_args=engine_args)
+                for l in self.legs
+            ]
+            def f(index_map: IndexMap, funding_spec=funding_index):
+                pv_funcs = []
+                ql_objs = []
+                for ff in fs:
+                    pf, qlo = ff(index_map=index_map, funding_spec=funding_index)
+                    pv_funcs.append(pf)
+                    ql_objs.append(qlo)
 
-            # 2) Build QL instrument and engine
-            ql_obj = self.as_quantlib(index_lookup=index_map)
-            eval_date = ql.Settings.instance().evaluationDate
-            engine = ql.DiscountingSwapEngine(funding_curve, sett_dt, eval_dt, **engine_args)
-            ql_obj.setPricingEngine(engine)
+                def g()->float:
+                    return pv_funcs[0]() + pv_funcs[1]()
+                
+                return g, ql_objs
 
-            # 3) Warm everything once so the first external call is correct
-            ql_obj.recalculate()  # or ql_obj.NPV()
+        else:
+            def f(index_map: IndexMap, funding_spec=funding_index):
+                nonlocal funding_index
+                ccy = self.legs[0].ccy
+                eval_dt = ql.Settings.instance().evaluationDate
+                sett_dt = eval_dt
+                # 1) Resolve funding curve handle
+                if funding_spec is None:
+                    funding_spec = index_map.get_default_curve_by_ccy(ccy=ccy)
 
-            # 4) Pin refs to avoid GC
-            ql_obj._engine = engine
-            ql_obj._funding_curve = funding_curve
+                if isinstance(funding_spec, str):
+                    funding_curve = index_map[funding_spec].forwardingTermStructure()
+                else:
+                    funding_curve = funding_spec
+                # assert not funding_curve.empty(), "Empty funding curve"
+                self.log.debug( 'funding curve df: %f', funding_curve.discount( funding_curve.maxDate(),))
 
-            # 5) Return stable PV closure
-            def g() -> float:
-                # If you ever move Settings.evaluationDate elsewhere, re-pin here if needed
-                # return ql_obj.NPV()
-                return Position(
-                    security=self.legs[0].ccy,
-                    quantity=ql_obj.NPV(),
-                )
-            return g, ql_obj
+                # 2) Build QL instrument and engine
+                ql_obj = self.as_quantlib(index_lookup=index_map)
+                eval_date = ql.Settings.instance().evaluationDate
+                engine = ql.DiscountingSwapEngine(funding_curve, sett_dt, eval_dt, **engine_args)
+                ql_obj.setPricingEngine(engine)
+
+                # 3) Warm everything once so the first external call is correct
+                ql_obj.recalculate()  # or ql_obj.NPV()
+
+                # 4) Pin refs to avoid GC
+                ql_obj._engine = engine
+                ql_obj._funding_curve = funding_curve
+
+                # 5) Return stable PV closure
+                def g() -> float:
+                    # If you ever move Settings.evaluationDate elsewhere, re-pin here if needed
+                    # return ql_obj.NPV()
+                    return Position(
+                        security=ccy,
+                        quantity=ql_obj.NPV(),
+                    )
+                return g, ql_obj
+        # f.funding_index = funding_index
         return f
 
 
