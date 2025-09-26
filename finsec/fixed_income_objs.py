@@ -1,3 +1,4 @@
+import logging
 import datetime
 import decimal
 import enum
@@ -93,13 +94,12 @@ class Quote(pydantic.BaseModel):
     def __rmul__(self, other: Union["QuoteWrapper", float]):
         return self*other
     def __rtruediv__(self, other: Union["QuoteWrapper", float]):
-        return self/other
-    def __rfloordiv__(self, other: Union["QuoteWrapper", float]):
-        return self//other
-    def __rmod__(self, other: Union["QuoteWrapper", float]):
-        return self%other
-    def __rpow__(self, other: Union["QuoteWrapper", float]):
-        return self**other
+        return (self / other)**-1
+    # def __rfloordiv__(self, other: Union["QuoteWrapper", float]):
+    # def __rmod__(self, other: Union["QuoteWrapper", float]):
+    #     return self%other
+    # def __rpow__(self, other: Union["QuoteWrapper", float]):
+    #     return self**other
 
     # def model_copy(self, **kwargs):
     #     values = self.model_dump()
@@ -115,9 +115,11 @@ def create_composite_quote(
     q1 = y.handle if isinstance(y, Quote) else y
 
     if isinstance(q1, ql.QuoteHandle):
-        return ql.CompositeQuote(q0, q1, op)
+        q = ql.CompositeQuote(q0, q1, op)
     else:
-        return ql.DerivedQuote(q0, lambda xx: op(xx, q1))
+        q = ql.DerivedQuote(q0, lambda xx: op(xx, q1))
+    # _ = q.value()
+    return q
 
 class DayCount(enum.Enum):
     """Enum for QuantLib day counts."""
@@ -163,21 +165,50 @@ class Period(pydantic.BaseModel):
         return ql.Period(v)
     
     @property
-    def payments_per_year(self)->int:
+    def payments_per_year(self) -> int:
         p = self.period
         u = p.units()
         l = p.length()
-        if u == 3:
-            assert l == 1
-            return 1
-        elif u == 2:
+        if u == ql.Years:
+            return 1 // l if l > 1 else 1  # e.g., 1Y -> 1; 2Y would not be a valid coupon freq
+        elif u == ql.Months:
             assert 12 % l == 0, "period units must divide 12 evenly"
-            return 12 / l
+            return 12 // l
         else:
             raise ValueError('Cannot produce frequency from this period')
 
+
+def _make_calendar(class_name: str, market_attr: str | None = None):
+    """
+    Safely construct a QuantLib calendar.
+    If the specific market enum doesn't exist in the current QL build,
+    fall back to the class' default constructor.
+    """
+    CalClass = getattr(ql, class_name)
+    if market_attr is None:
+        return CalClass()
+    # Try to fetch an inner enum like ql.Germany.Xetra, else fall back.
+    try:
+        market_enum = getattr(CalClass, market_attr)
+        return CalClass(market_enum)
+    except Exception:
+        return CalClass()
+
 class Calendar(enum.Enum):
-    """Enum for QuantLib calendars."""
+    """Enum for QuantLib calendars.
+
+    Notes for a US investor:
+      - TARGET: Eurozone payments calendar (ECB/Eurosystem). Used for EUR OIS/IRS,
+        govvie settlement (cash), and many EUR-denominated products.
+      - UK_Exchange vs UK_Metals: LSE vs London bullion/Metals (LBMA-style) holidays differ.
+      - Germany_Xetra/Eurex: Cash equities (Xetra/Frankfurt) vs derivatives (Eurex).
+      - Japan: TSE/Tokyo business days (single market in QL); used for JPY IRS/JGBs.
+      - HK_Exchange / SGX: Hong Kong and Singapore exchange schedules; useful for
+        region-specific product calendars and valuation days.
+      - China_SSE vs China_Interbank: Exchange vs CNY money-market/bond (IB) regimes.
+    """
+
+    # --- Null / US ----------------------------------------------------------
     NULL = "null"
     US_Settlement = "us/settlement"
     US_NYSE = "us/nyse"
@@ -186,9 +217,49 @@ class Calendar(enum.Enum):
     US_NERC = "us/nerc"
     US_SOFR = "us/sofr"
 
-    def as_ql(self) -> ql.Calendar:
-        """Convert to QuantLib calendar."""
+    # --- Pan-EUR / Europe ---------------------------------------------------
+    EU_TARGET = "eu/target"                       # Eurozone payments calendar (ECB)
+    UK_Settlement = "uk/settlement"               # UK settlement days
+    UK_Exchange = "uk/exchange"                   # London Stock Exchange
+    UK_Metals = "uk/metals"                       # London metals (LBMA-like)
+
+    DE_Settlement = "de/settlement"               # Germany settlement days
+    DE_Frankfurt = "de/frankfurt"                 # Frankfurt Stock Exchange
+    DE_Xetra = "de/xetra"                         # Xetra cash equities
+    DE_Eurex = "de/eurex"                         # Eurex derivatives
+
+    FR_Settlement = "fr/settlement"               # France settlement
+    CH_Settlement = "ch/settlement"               # Switzerland settlement
+    IT_Settlement = "it/settlement"               # Italy settlement (BTPs)
+    # ES_Settlement = "es/settlement"               # Spain settlement (Bonos/Obligaciones)
+
+    SE_Stockholm = "se/stockholm"                 # Sweden (Stockholm)
+    NO_Oslo = "no/oslo"                           # Norway (Oslo)
+    DK_Copenhagen = "dk/copenhagen"               # Denmark (Copenhagen)
+    FI_Helsinki = "fi/helsinki"                   # Finland (Helsinki)
+
+    # --- Americas (non-US) --------------------------------------------------
+    CA_Settlement = "ca/settlement"               # Canada settlement
+    CA_TSX = "ca/tsx"                              # Toronto Stock Exchange
+
+    # --- APAC ---------------------------------------------------------------
+    JP_Tokyo = "jp/tokyo"                          # Japan business days (TSE)
+    HK_Exchange = "hk/exchange"                    # Hong Kong Exchange
+    SG_SGX = "sg/sgx"                              # Singapore Exchange
+    CN_SSE = "cn/sse"                              # China Shanghai Stock Exchange
+    CN_Interbank = "cn/ib"                         # China Interbank (CNY MM/bonds)
+    KR_KRX = "kr/krx"                              # Korea Exchange
+    AU_ASX = "au/asx"                              # Australia (ASX)
+    NZ_NZSE = "nz/nzse"                            # New Zealand (NZSE)
+
+    @classmethod
+    def lookup(cls):
+        """Return a mapping from Calendar enum -> QuantLib calendar instance.
+
+        Uses a defensive constructor to tolerate differences between QuantLib builds.
+        """
         return {
+            # --- Null / US ---
             Calendar.NULL: ql.NullCalendar(),
             Calendar.US_Settlement: ql.UnitedStates(ql.UnitedStates.Settlement),
             Calendar.US_NYSE: ql.UnitedStates(ql.UnitedStates.NYSE),
@@ -196,7 +267,55 @@ class Calendar(enum.Enum):
             Calendar.US_FederalReserve: ql.UnitedStates(ql.UnitedStates.FederalReserve),
             Calendar.US_NERC: ql.UnitedStates(ql.UnitedStates.NERC),
             Calendar.US_SOFR: ql.UnitedStates(ql.UnitedStates.SOFR),
-        }[self]
+
+            # # --- Pan-EUR / Europe ---
+            Calendar.EU_TARGET: ql.TARGET(),
+            Calendar.UK_Settlement: ql.UnitedKingdom(ql.UnitedKingdom.Settlement),
+            Calendar.UK_Exchange: ql.UnitedKingdom(ql.UnitedKingdom.Exchange),
+            Calendar.UK_Metals: ql.UnitedKingdom(ql.UnitedKingdom.Metals),
+
+            # # Germany: try specific markets, fall back if not in build
+            Calendar.DE_Settlement: _make_calendar("Germany", "Settlement"),
+            Calendar.DE_Frankfurt: _make_calendar("Germany", "FrankfurtStockExchange"),
+            Calendar.DE_Xetra: _make_calendar("Germany", "Xetra"),
+            Calendar.DE_Eurex: _make_calendar("Germany", "Eurex"),
+
+            Calendar.FR_Settlement: _make_calendar("France", "Settlement"),
+            Calendar.CH_Settlement: _make_calendar("Switzerland", "Settlement"),
+            Calendar.IT_Settlement: _make_calendar("Italy", "Settlement"),
+            # Calendar.ES_Settlement: _make_calendar("Spain", "Settlement"),
+
+            # # Nordics (settlement/exchange naming varies; factory will fall back)
+            Calendar.SE_Stockholm: _make_calendar("Sweden", "Stockholm"),
+            Calendar.NO_Oslo: _make_calendar("Norway", "Oslo"),
+            Calendar.DK_Copenhagen: _make_calendar("Denmark", "Copenhagen"),
+            Calendar.FI_Helsinki: _make_calendar("Finland", "Helsinki"),
+
+            # --- Americas (non-US) ---
+            Calendar.CA_Settlement: _make_calendar("Canada", "Settlement"),
+            Calendar.CA_TSX: _make_calendar("Canada", "TSX"),
+
+            # --- APAC ---
+            Calendar.JP_Tokyo: _make_calendar("Japan", None),  # single market in QL
+            Calendar.HK_Exchange: _make_calendar("HongKong", "HKEx"),
+            Calendar.SG_SGX: _make_calendar("Singapore", "SGX"),
+            Calendar.CN_SSE: _make_calendar("China", "SSE"),
+            Calendar.CN_Interbank: _make_calendar("China", "IB"),
+            Calendar.KR_KRX: _make_calendar("SouthKorea", "KRX"),
+            Calendar.AU_ASX: _make_calendar("Australia", None),
+            Calendar.NZ_NZSE: _make_calendar("NewZealand", None),
+        }
+
+    @classmethod
+    def from_ql(cls, obj):
+        for k,v in cls.lookup().items():
+            print(obj, v, k)
+            if obj == v:
+                return k
+
+    def as_ql(self) -> ql.Calendar:
+        """Convert to QuantLib calendar."""
+        return self.lookup()[self]
     
     def bump(
         self,
@@ -270,7 +389,11 @@ class AccrualInfo(pydantic.BaseModel):
     eom: bool = False
 
     def __len__(self)->int:
-        return len(self.as_ql().dates())-1
+        ql_sched = self.as_ql()
+        if isinstance(ql_sched, tuple):
+            return len(ql_sched)
+        else:
+            return len(ql_sched.dates())-1
 
     ## model validators
     @pydantic.model_validator(mode='after')
@@ -285,11 +408,13 @@ class AccrualInfo(pydantic.BaseModel):
             raise ValueError('Either freq or period must be provided.')
         return v
 
-    def get_period(self)->Period:
+    def get_period(self)->Period|None:
         if self.period is not None:
             return self.period
         elif self.freq is not None:
-            if self.freq < 1:
+            if self.freq == 0:
+                return None
+            elif self.freq < 1:
                 x = f'{int(1/self.freq)}y'
             else:
                 x = {
@@ -324,15 +449,21 @@ class AccrualInfo(pydantic.BaseModel):
         elif isinstance(self.end, Period):
             end = cal.advance(start, self.end.period, terminationDateConvention, self.eom)
 
-        schedule = ql.Schedule(
-            start, end,
-            self.get_period().period,
-            cal,
-            convention,
-            terminationDateConvention,
-            rule,
-            self.eom,
-        )
+        p = self.get_period()
+        ## check for flat/one-off frequency
+        if p is None:
+            schedule = ( start, end )
+        else:
+            schedule = ql.Schedule(
+                start, end,
+                p.period,
+                cal,
+                convention,
+                terminationDateConvention,
+                rule,
+                self.eom,
+            )
+
         return schedule
 
     def nodes(
@@ -515,6 +646,13 @@ class Leg(pydantic.BaseModel):
     acc: AccrualInfo
     pay_delay: Period|None = None
 
+    log: logging.Logger|None = pydantic.Field(
+        default_factory=lambda: logging.getLogger('Leg'),
+        exclude=True,
+    )
+    class Config:
+        arbitrary_types_allowed = True
+
     def notionals_array(self, as_float:bool=False)->List[decimal.Decimal]:
         if isinstance(self.notional, list):
             return [ float(x) if as_float else x for x in self.notional ]
@@ -531,6 +669,9 @@ class Leg(pydantic.BaseModel):
             if as_float and self.cpn.is_constant:
                 res = np.asarray([float(x.rate) for x in res])
         return res
+    
+    def get_dummy_leg(self)->ql.Leg:
+        return ql.Leg([ql.SimpleCashFlow(0, ql.Settings.instance().evaluationDate)])
 
     @pydantic.field_validator('notional', mode='before', )
     @classmethod
@@ -563,7 +704,8 @@ class Leg(pydantic.BaseModel):
         if self.cpn.is_float:
             if index_lookup is None:
                 raise ValueError('must provide lookup')
-            flt_index = index_lookup.get(self.cpn.index)
+            # flt_index = index_lookup.get(self.cpn.index)
+            flt_index = index_lookup[self.cpn.index]
             if flt_index is None:
                 raise ValueError(f"Unknown index: {self.cpn.index}")
             return flt_index
@@ -573,15 +715,31 @@ class Leg(pydantic.BaseModel):
         index_lookup:IndexMap|None=None,
     ):
         if self.cpn.is_constant:
-            leg = ql.FixedRateLeg(
-                self.acc.as_ql(),
-                self.acc.dc.as_ql,
-                self.notionals_array(as_float=True),
-                self.rate_array(as_float=True),
-                self.acc.bdc.as_ql(),
-                paymentCalendar=self.acc.cal_pay.as_ql(),
-                paymentLag=self.pay_delay_days,
-            )
+            ntnl_arr = self.notionals_array(as_float=True)
+            rate_arr = self.rate_array(as_float=True)
+
+            acc_sched = self.acc.as_ql()
+            if isinstance(acc_sched, tuple):
+                assert len(ntnl_arr) == 2
+                assert len(rate_arr) == 2
+                leg = ql.Leg([
+                    ql.SimpleCashFlow(
+                        # rate
+                        ntnl_arr[-1] * rate_arr[-1],
+                        # date
+                        acc_sched[-1]
+                    )
+                ])
+            else:
+                leg = ql.FixedRateLeg(
+                    acc_sched,
+                    self.acc.dc.as_ql,
+                    ntnl_arr,
+                    rate_arr,
+                    self.acc.bdc.as_ql(),
+                    paymentCalendar=self.acc.cal_pay.as_ql(),
+                    paymentLag=self.pay_delay_days,
+                )
         elif self.cpn.is_float:
             idx = self.get_float_index(index_lookup=index_lookup)
             leg = ql.OvernightLeg(
@@ -596,7 +754,6 @@ class Leg(pydantic.BaseModel):
                 paymentCalendar=self.acc.cal_pay.as_ql(),
                 paymentLag=self.pay_delay_days,
             )
-        
         return leg
 
     def cashflows_df(
@@ -622,6 +779,42 @@ class Leg(pydantic.BaseModel):
         cashflow_df['rate'] = cashflow_df['amount'] / cashflow_df['frac'] / float(self.notional)
         return cashflow_df
 
+    def risk_builder(self, funding_index: str | ql.YieldTermStructureHandle, engine_args=None):
+        if engine_args is None:
+            engine_args = {}
+        def f(index_map: IndexMap):
+            eval_dt = ql.Settings.instance().evaluationDate
+            sett_dt = eval_dt
+            # 1) Resolve funding curve handle
+            if isinstance(funding_index, str):
+                funding_curve = index_map[funding_index].forwardingTermStructure()
+            else:
+                funding_curve = funding_index
+            # assert not funding_curve.empty(), "Empty funding curve"
+            self.log.debug( 'funding curve df: %f', funding_curve.discount( funding_curve.maxDate(),))
+
+            # 2) Build QL instrument and engine
+            ql_leg_obj = self.as_quantlib(index_lookup=index_map)
+            ql_obj = ql.Swap(ql_leg_obj, self.get_dummy_leg())
+            engine = ql.DiscountingSwapEngine(funding_curve, **engine_args)
+            ql_obj.setPricingEngine(engine)
+
+            # 3) Warm everything once so the first external call is correct
+            ql_obj.recalculate()  # or ql_obj.NPV()
+
+            # 4) Pin refs to avoid GC
+            ql_obj._engine = engine
+            ql_obj._funding_curve = funding_curve
+
+            # 5) Return stable PV closure
+            def g() -> float:
+                # If you ever move Settings.evaluationDate elsewhere, re-pin here if needed
+                return ql_obj.NPV()
+            return g, ql_obj
+        return f
+
+    
+
 class Bond(pydantic.BaseModel):
     notional: decimal.Decimal
     leg: Leg
@@ -630,6 +823,13 @@ class Bond(pydantic.BaseModel):
     face:decimal.Decimal=100
     settle: datetime.date|None=None
     redemption:decimal.Decimal|None=None
+
+    log: logging.Logger|None = pydantic.Field(
+        default_factory=lambda: logging.getLogger('Bond'),
+        exclude=True,
+    )
+    class Config:
+        arbitrary_types_allowed = True
 
     @property
     def ccy(self)->Security|SecurityReference:
@@ -653,7 +853,6 @@ class Bond(pydantic.BaseModel):
         l = self.leg
         cpn_arr = l.rate_array()
 
-        ## only handle fixed coupon for now
         if all([x.is_constant for x in cpn_arr]):
             ql_sched = l.acc.as_ql()
             float_cpn_array = [float(x.rate) for x in cpn_arr]
@@ -688,6 +887,7 @@ class Bond(pydantic.BaseModel):
     def as_quantlib_helper(
         self,
         quote:Quote|None=None,
+        index_lookup:IndexMap|None=None,
     )->Tuple[Quote, ql.FixedRateBondHelper]:
         if quote is None:
             q = Quote(quote=float(self.face))
@@ -719,9 +919,50 @@ class Bond(pydantic.BaseModel):
         cashflow_df['rate'] = cashflow_df['amount'] / cashflow_df['frac'] / float(self.notional)
 
         return cashflow_df
+    
+    def risk_builder(self, funding_index: str | ql.YieldTermStructureHandle, engine_args=None):
+        if engine_args is None:
+            engine_args = {}
+        def f(index_map: IndexMap):
+            eval_dt = ql.Settings.instance().evaluationDate
+            sett_dt = eval_dt
+            # 1) Resolve funding curve handle
+            if isinstance(funding_index, str):
+                funding_curve = index_map[funding_index].forwardingTermStructure()
+            else:
+                funding_curve = funding_index
+            # assert not funding_curve.empty(), "Empty funding curve"
+            self.log.debug( 'funding curve df: %f', funding_curve.discount( funding_curve.maxDate(),))
+
+            # 2) Build QL instrument and engine
+            ql_obj = self.as_quantlib(index_lookup=index_map)
+            eval_date = ql.Settings.instance().evaluationDate
+            engine = ql.DiscountingBondEngine(funding_curve, **engine_args)
+            ql_obj.setPricingEngine(engine)
+
+            # 3) Warm everything once so the first external call is correct
+            ql_obj.recalculate()  # or ql_obj.NPV()
+
+            # 4) Pin refs to avoid GC
+            ql_obj._engine = engine
+            ql_obj._funding_curve = funding_curve
+
+            # 5) Return stable PV closure
+            def g() -> float:
+                # If you ever move Settings.evaluationDate elsewhere, re-pin here if needed
+                return ql_obj.NPV()
+            return g, ql_obj
+        return f
 
 class Swap(pydantic.BaseModel):
     legs : Tuple[Leg, Leg]
+
+    log: logging.Logger|None = pydantic.Field(
+        default_factory=lambda: logging.getLogger('Swap'),
+        exclude=True,
+    )
+    class Config:
+        arbitrary_types_allowed = True
 
     @property
     def fixed_leg(self)->Optional[Leg]:
@@ -759,7 +1000,7 @@ class Swap(pydantic.BaseModel):
             pay_delay_days = flt.pay_delay_days
         else:
             pd0 = flt.pay_delay_days
-            pd1 = flt.pay_delay_days
+            pd1 = fix.pay_delay_days
             assert pd0 == pd1
             pay_delay_days = pd0
         
@@ -807,6 +1048,7 @@ class Swap(pydantic.BaseModel):
         index_lookup:IndexMap|None=None,
         discounting_curve:ql.YieldTermStructureHandle|None=None,
     )->Tuple[Quote, ql.FixedRateBondHelper]:
+        self.log.debug('Building actual ql helper')
 
         fix = self.fixed_leg
         flt = self.float_leg
@@ -849,8 +1091,10 @@ class Swap(pydantic.BaseModel):
         else:
             disc_curve_use = ql.YieldTermStructureHandle()
         
-        fix_freq = period=fix.acc.get_period().payments_per_year
-        flt_freq = period=flt.acc.get_period().payments_per_year
+        # fix_freq = period=fix.acc.get_period().payments_per_year
+        # flt_freq = period=flt.acc.get_period().payments_per_year
+        fix_freq = int(fix.acc.get_period().payments_per_year)
+        flt_freq = int(flt.acc.get_period().payments_per_year)
 
         if isinstance(flt.cpn.type_, OvernightFloat):
             helper = ql.DatedOISRateHelper(
@@ -958,31 +1202,43 @@ class Swap(pydantic.BaseModel):
         swp = Swap(legs=(fixleg, floatleg))
         return swp
 
-    def risk_builder(
-        self,
-        funding_index:str|ql.YieldTermStructureHandle,
-        engine_args:Dict[str,Any]|None=None,
-    )->Callable[
-        [IndexMap],
-        Tuple[Callable[[],float],Any]
-    ]:
+    def risk_builder(self, funding_index: str | ql.YieldTermStructureHandle, engine_args=None):
         if engine_args is None:
-            engine_args = dict()
-
-        def f(index_map:IndexMap):
-            if isinstance(funding_index, str): 
+            engine_args = {}
+        def f(index_map: IndexMap):
+            eval_dt = ql.Settings.instance().evaluationDate
+            sett_dt = eval_dt
+            # 1) Resolve funding curve handle
+            if isinstance(funding_index, str):
                 funding_curve = index_map[funding_index].forwardingTermStructure()
-            elif isinstance(funding_index, ql.YieldTermStructureHandle):
+            else:
                 funding_curve = funding_index
+            # assert not funding_curve.empty(), "Empty funding curve"
+            self.log.debug( 'funding curve df: %f', funding_curve.discount( funding_curve.maxDate(),))
 
-            ql_obj = self.as_quantlib( index_lookup=index_map,)
-            engine = ql.DiscountingSwapEngine( funding_curve, **engine_args )
-            ql_obj.setPricingEngine( engine )
-            def g()->float:
+            # 2) Build QL instrument and engine
+            ql_obj = self.as_quantlib(index_lookup=index_map)
+            eval_date = ql.Settings.instance().evaluationDate
+            engine = ql.DiscountingSwapEngine(funding_curve, sett_dt, eval_dt, **engine_args)
+            ql_obj.setPricingEngine(engine)
+
+            # 3) Warm everything once so the first external call is correct
+            ql_obj.recalculate()  # or ql_obj.NPV()
+
+            # 4) Pin refs to avoid GC
+            ql_obj._engine = engine
+            ql_obj._funding_curve = funding_curve
+
+            # 5) Return stable PV closure
+            def g() -> float:
+                # If you ever move Settings.evaluationDate elsewhere, re-pin here if needed
                 return ql_obj.NPV()
             return g, ql_obj
         return f
 
+
+
+FixedIncomeSecurity = Bond | Swap
 
 __all__ = [
     'IndexMap',
@@ -1009,4 +1265,5 @@ __all__ = [
     'Leg',
     'Bond',
     'Swap',
+    'FixedIncomeSecurity',
 ]
