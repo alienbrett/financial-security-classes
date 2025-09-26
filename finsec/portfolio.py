@@ -3,6 +3,7 @@ import decimal
 import uuid
 from typing import Any, Dict, List, Optional, Union
 
+import operator
 import bson
 import numpy as np
 import pandas as pd
@@ -27,6 +28,18 @@ from .format import pretty_print_security
 from .security import AnySecurity
 from .utils import format_number, placeholder
 
+NumericType = (
+    int,
+    float,
+    np.int64,
+    np.int32,
+    np.int16,
+    np.int8,
+    np.float64,
+    np.float32,
+    np.float16,
+    decimal.Decimal,
+)
 
 class AbstractPosition(pydantic.BaseModel):
     """Base class for positions in securities."""
@@ -57,57 +70,58 @@ class Position(AbstractPosition):
         core_post_str = self._core_post_str()
         return f"Position({core_post_str})"
 
+    def __sub__(self, other):
+        return self + (-other)
+    def __radd__(self, other):
+        return self + other
+    def __rsub__(self, other):
+        return -(self-other)
+    
+    def __truediv__(self, other):
+        return self._op(other, operator.truediv)
+
     def __add__(self, other):
         """Adds two positions together."""
         if isinstance(other, Position):
             if self.security == other.security:
                 return Position(
-                    security=self.security, quantity=self.quantity + other.quantity
+                    security=self.security,
+                    quantity=self.quantity + other.quantity
                 )
             else:
-                raise ValueError("Cannot add two positions of different securities.")
-        elif isinstance(
-            other,
-            (
-                int,
-                float,
-                np.int64,
-                np.int32,
-                np.int16,
-                np.int8,
-                np.float64,
-                np.float32,
-                np.float16,
-                decimal.Decimal,
-            ),
-        ):
+                # raise ValueError("Cannot add two positions of different securities.")
+                return Portfolio(positions=[self, other])
+        elif isinstance( other, NumericType,):
+            if not isinstance(other, decimal.Decimal):
+                other = decimal.Decimal(other)
             return Position(security=self.security, quantity=self.quantity + other)
         else:
             raise TypeError(f"Cannot add Position and {type(other)}")
 
     def __mul__(self, other):
         """Multiplies a position by a scalar."""
-        if isinstance(
-            other,
-            (
-                int,
-                float,
-                np.int64,
-                np.int32,
-                np.int16,
-                np.int8,
-                np.float64,
-                np.float32,
-                np.float16,
-                decimal.Decimal,
-            ),
-        ):
-            return Position(security=self.security, quantity=self.quantity * other)
+        return self._op(other, operator.mul)
+
+    def __pow__(self, other, op):
+        """Exponentiates a position"""
+        return self._op(other, operator.pow)
+
+    def __abs__(self, other, op):
+        """Abs-values a position"""
+        return self._op(other, operator.abs)
+
+    def _op(self, other, op):
+        """Generically applies some scalar to a position"""
+        if isinstance( other, NumericType,):
+            if not isinstance(other, decimal.Decimal):
+                other = decimal.Decimal(other)
+            return Position(security=self.security, quantity=op(self.quantity,other))
         else:
-            raise TypeError(f"Cannot multiply Position and {type(other)}")
+            raise TypeError(f"Cannot perform math operations on Position and {type(other)}")
 
     def __neg__(self):
         return Position(security=self.security, quantity=-self.quantity)
+    
 
 
 class Portfolio(AbstractPosition):
@@ -166,21 +180,7 @@ class Portfolio(AbstractPosition):
         return item in self.positions
 
     def __mul__(self, other):
-        if isinstance(
-            other,
-            (
-                int,
-                float,
-                np.int64,
-                np.int32,
-                np.int16,
-                np.int8,
-                np.float64,
-                np.float32,
-                np.float16,
-                decimal.Decmial,
-            ),
-        ):
+        if isinstance( other, NumericType,):
             positions = [
                 Position(security=pos.security, quantity=pos.quantity * other)
                 for pos in self.positions
@@ -193,10 +193,36 @@ class Portfolio(AbstractPosition):
         """Adds two portfolios together."""
         if isinstance(other, Portfolio):
             positions = self.positions + other.positions
-            return Portfolio(positions=positions)
+            # res = Portfolio(positions=positions)
+        if isinstance(other, Position):
+            # res = self + Portfolio(positions=[other])
+            positions = self.positions + [other]
         else:
             raise TypeError(f"Cannot add Portfolio and {type(other)}")
+        new_pos = dict()
+        for p in positions:
+            k = p.security.gsid
+            pp = new_pos.get(k, None)
+            if pp is None:
+                pp = p
+            else:
+                pp += p
+            new_pos[k] = pp
+        return Portfolio(positions=list(new_pos.values()))
 
+    
+    def __truediv__(self, other):
+        if isinstance(other, NumericType):
+            return Portfolio(positions=[pos/other for pos in self.positions])
+        else:
+            raise TypeError(f"Cannot divide portfolio by {type(other)}")
+    
+    def __rtruediv__(self, other):
+        if isinstance(other, NumericType):
+            return Portfolio(positions=[other/pos for pos in self.positions])
+        else:
+            raise TypeError(f"Cannot {type(other)} by Portfolio")
+    
     def __neg__(self):
         return Portfolio(positions=[-pos for pos in self.positions])
 

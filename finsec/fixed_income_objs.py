@@ -1,4 +1,3 @@
-import logging
 import datetime
 import decimal
 import enum
@@ -16,6 +15,7 @@ import pydantic
 import QuantLib as ql
 
 from .base import Security, SecurityReference
+from .portfolio import Portfolio, Position
 
 T = TypeVar('T')
 ListOrT = Union[List[T], T]
@@ -640,7 +640,7 @@ RateExpression = NewType('AnyAbstractRateExpression', FixedRate|FloatingRate|Com
 class Leg(pydantic.BaseModel):
     '''Encapsulates a single generic fixed-income coupon stream.
     '''
-    ccy: Security|SecurityReference 
+    ccy: Security|SecurityReference
     notional: ListOrT[decimal.Decimal]
     cpn: ListOrT[RateExpression]
     acc: AccrualInfo
@@ -809,7 +809,11 @@ class Leg(pydantic.BaseModel):
             # 5) Return stable PV closure
             def g() -> float:
                 # If you ever move Settings.evaluationDate elsewhere, re-pin here if needed
-                return ql_obj.NPV()
+                # return ql_obj.NPV()
+                return Position(
+                    security=self.ccy,
+                    quantity=ql_obj.NPV(),
+                )
             return g, ql_obj
         return f
 
@@ -950,7 +954,11 @@ class Bond(pydantic.BaseModel):
             # 5) Return stable PV closure
             def g() -> float:
                 # If you ever move Settings.evaluationDate elsewhere, re-pin here if needed
-                return ql_obj.NPV()
+                # return ql_obj.NPV()
+                return Position(
+                    security=self.ccy,
+                    quantity=ql_obj.NPV(),
+                )
             return g, ql_obj
         return f
 
@@ -977,6 +985,18 @@ class Swap(pydantic.BaseModel):
             if x.cpn.is_float:
                 return x
         return None
+    
+    @property
+    def is_xccy(self)->bool:
+        c0 = self.legs[0].ccy
+        c1 = self.legs[1].ccy
+        for x in ('ticker','gsid'):
+            x0 = getattr(c0, x)
+            x1 = getattr(c1, x)
+            if x0 is not None and x1 is not None and x0 != x1:
+                return True
+        return False
+
 
     def as_quantlib(
         self,
@@ -1232,7 +1252,11 @@ class Swap(pydantic.BaseModel):
             # 5) Return stable PV closure
             def g() -> float:
                 # If you ever move Settings.evaluationDate elsewhere, re-pin here if needed
-                return ql_obj.NPV()
+                # return ql_obj.NPV()
+                return Position(
+                    security=self.legs[0].ccy,
+                    quantity=ql_obj.NPV(),
+                )
             return g, ql_obj
         return f
 
