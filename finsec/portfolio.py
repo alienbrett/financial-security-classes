@@ -1,7 +1,7 @@
 import datetime
 import decimal
 import uuid
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, Self
 
 import operator
 import bson
@@ -131,6 +131,14 @@ class Portfolio(AbstractPosition):
 
     # def __str__(self)->str:
     #     return f"Portfolio({len(self.positions)} x positions ({s}))"
+    @pydantic.model_validator(mode='after')
+    def validate(cls, v)->Self:
+        new_positions = []
+        for p in v.positions:
+            if p.quantity != decimal.Decimal(0):
+                new_positions.append(p)
+        v.positions = new_positions
+        return v
 
     def __repr__(self) -> str:
         s = ", ".join([pos._core_post_str() for pos in self.positions])

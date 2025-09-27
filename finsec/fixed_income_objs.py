@@ -330,6 +330,15 @@ class Calendar(enum.Enum):
             p = Period(period=period).period
         ql_cal = self.as_ql()
         return [ ql_cal.advance(ql.Date.from_date(d), p).to_date() for d in dt ]
+    
+    @staticmethod
+    def create_joint_calendar(c1, c2, join_holidays_not_bus_days:bool=False)->ql.JointCalendar:
+        c1 = c1.as_ql() if isinstance(c1, Calendar) else c1
+        c2 = c2.as_ql() if isinstance(c2, Calendar) else c2
+        return ql.JointCalendar(
+            c1, c2,
+            ql.JoinHolidays if join_holidays_not_bus_days else ql.JoinBusinessDays
+        )
 
 class BusinessDayConvention(enum.Enum):
     """Enum for QuantLib business-day conventions with common short-codes."""
@@ -471,13 +480,17 @@ class AccrualInfo(pydantic.BaseModel):
             start:  datetime.date|None=None,
             end:    datetime.date|None=None,
         )->List[datetime.date]:
-        ql_dts = self.as_ql().dates()
-        res = []
-        for ql_dt in ql_dts:
-            dt = ql_dt.to_date()
-            cond = (start is not None and dt < start) or (end is not None and dt > end)
-            if not cond:
-                res.append(dt)
+        qll = self.as_ql()
+        if isinstance(qll, tuple) and len(qll) == 2:
+            res = list(qll)
+        else:
+            ql_dts = qll.dates()
+            res = []
+            for ql_dt in ql_dts:
+                dt = ql_dt.to_date()
+                cond = (start is not None and dt < start) or (end is not None and dt > end)
+                if not cond:
+                    res.append(dt)
         return res
 
     def fraction( self, dt0:datetime.date, dt1:datetime.date, )->float:
@@ -895,6 +908,7 @@ class Bond(pydantic.BaseModel):
         self,
         quote:Quote|None=None,
         index_lookup:IndexMap|None=None,
+        fx_lookup:Any|None=None,
     )->Tuple[Quote, ql.FixedRateBondHelper]:
         if quote is None:
             q = Quote(quote=float(self.face))
@@ -946,7 +960,6 @@ class Bond(pydantic.BaseModel):
 
             # 2) Build QL instrument and engine
             ql_obj = self.as_quantlib(index_lookup=index_map)
-            eval_date = ql.Settings.instance().evaluationDate
             engine = ql.DiscountingBondEngine(funding_curve, **engine_args)
             ql_obj.setPricingEngine(engine)
 
@@ -1007,6 +1020,7 @@ class Swap(pydantic.BaseModel):
     def as_quantlib(
         self,
         index_lookup:IndexMap|None=None,
+        fx_lookup:Any|None=None,
     ):
         if self.is_xccy:
             swp = (
@@ -1079,9 +1093,107 @@ class Swap(pydantic.BaseModel):
         self,
         quote:Quote|None=None,
         index_lookup:IndexMap|None=None,
-        discounting_curve:ql.YieldTermStructureHandle|None=None,
-    )->Tuple[Quote, ql.FixedRateBondHelper]:
+        fx_lookup:Any|None=None,
+    )->Tuple[Quote, Any]:
         self.log.debug('Building actual ql helper')
+        if self.is_xccy:
+            helper = self.as_ql_fx_fwd_helper(
+                quote=quote,
+                index_lookup=index_lookup,
+                fx_lookup=fx_lookup,
+            )
+        else:
+            helper = self.as_ql_single_ccy_swap_helper(
+                quote=quote,
+                index_lookup=index_lookup,
+            )
+        return helper
+
+    def as_ql_fx_fwd_helper(
+        self,
+        quote:Quote|None=None,
+        index_lookup:IndexMap|None=None,
+        fx_lookup:Any|None=None,
+    )->Tuple[Quote, Any]:
+        self.log.debug('Building FX swap helper')
+        eval_dt = ql.Settings.instance().evaluationDate
+        l_base = self.legs[0]
+        l_quote = self.legs[1]
+
+        q = Quote(quote=0) if quote is None else quote
+
+        acc_sched = l_base.acc.as_ql()
+        start = acc_sched[0]
+        end = acc_sched[-1]
+        bdc = l_base.acc.bdc.as_ql()
+        eom = l_base.acc.eom
+
+        # assert l_base.acc.get_period() == flt.acc.get_period()
+        
+        joint_cal = Calendar.create_joint_calendar( l_base.acc.cal_pay, l_quote.acc.cal_pay,)
+        fixing_days = 1
+        spot_dt = joint_cal.advance(eval_dt, fixing_days, ql.Days)
+        adj_mat = joint_cal.adjust(end, bdc)
+
+        bdays = joint_cal.businessDaysBetween(
+            # from date
+            spot_dt,
+            # to date
+            adj_mat,
+            # include start
+            False,
+            # include end
+            True,
+        )
+        tenor = ql.Period(bdays, ql.Days)
+
+        funding_idx = index_lookup.get_default_curve_by_ccy(ccy=l_quote.ccy)
+        self.log.debug('Using funding index for fx swap: %s', funding_idx)
+        funding_curve = index_lookup[ funding_idx ].forwardingTermStructure()
+
+        spot_quote = fx_lookup.get_fx_quote( l_base.ccy, l_quote.ccy)
+
+        self.log.debug('Using spot fx: %f', spot_quote.value())
+        self.log.debug('Using basis quote: %f', q.value())
+
+        ## fx forward
+        # assert l_base.rate == 
+        helper = ql.FxSwapRateHelper(
+        # helper = loud_create( ql.FxSwapRateHelper,
+            # QuoteHandle fwdPoint,
+            ## difference over spot rate, outright. not in pips or anything
+            q.handle,
+            # QuoteHandle spotFx,
+            spot_quote.handle,
+            # Period tenor,
+            tenor,
+            # Natural fixingDays,
+            fixing_days,
+            # Calendar calendar,
+            joint_cal,
+            # BusinessDayConvention convention,
+            bdc,
+            # bool endOfMonth,
+            eom,
+            # bool isFxBaseCurrencyCollateralCurrency,
+            False,
+            # YieldTermStructureHandle collateralCurve,
+            funding_curve,
+            # Calendar tradingCalendar=Calendar()
+        )
+
+
+        return q, helper
+
+
+
+
+    def as_ql_single_ccy_swap_helper(
+        self,
+        quote:Quote|None=None,
+        index_lookup:IndexMap|None=None,
+    )->Tuple[Quote, Any]:
+        self.log.debug('Building single-ccy swap helper')
 
         fix = self.fixed_leg
         flt = self.float_leg
@@ -1119,11 +1231,6 @@ class Swap(pydantic.BaseModel):
 
         assert fix.acc.get_period() == flt.acc.get_period()
 
-        if discounting_curve is not None:
-            disc_curve_use = discounting_curve
-        else:
-            disc_curve_use = ql.YieldTermStructureHandle()
-        
         # fix_freq = period=fix.acc.get_period().payments_per_year
         # flt_freq = period=flt.acc.get_period().payments_per_year
         fix_freq = int(fix.acc.get_period().payments_per_year)
@@ -1141,7 +1248,8 @@ class Swap(pydantic.BaseModel):
                 # ext::shared_ptr< OvernightIndex > const & index,
                 flt_index,
                 # YieldTermStructureHandle discountingCurve={},
-                disc_curve_use,
+                # disc_curve_use,
+                ql.YieldTermStructureHandle(),
                 # bool telescopicValueDates=False,
                 telescopic_dates,
                 # RateAveraging::Type averagingMethod=Compound,
@@ -1276,7 +1384,6 @@ class Swap(pydantic.BaseModel):
 
                 # 2) Build QL instrument and engine
                 ql_obj = self.as_quantlib(index_lookup=index_map)
-                eval_date = ql.Settings.instance().evaluationDate
                 engine = ql.DiscountingSwapEngine(funding_curve, sett_dt, eval_dt, **engine_args)
                 ql_obj.setPricingEngine(engine)
 
@@ -1301,7 +1408,7 @@ class Swap(pydantic.BaseModel):
 
 
 
-FixedIncomeSecurity = Bond | Swap
+FixedIncomeSecurity = Bond | Swap | Leg
 
 __all__ = [
     'IndexMap',
