@@ -98,6 +98,7 @@ class ExpiryTimeOfDay(int, enum.Enum):
     OPEN = 1
     EDSP = 2
     CLOSE = 3
+    GMT_OPEN = 4
 
 
 option_subtypes = (

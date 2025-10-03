@@ -1157,7 +1157,6 @@ class Swap(pydantic.BaseModel):
         self.log.debug('Using basis quote: %f', q.value())
 
         ## fx forward
-        # assert l_base.rate == 
         helper = ql.FxSwapRateHelper(
         # helper = loud_create( ql.FxSwapRateHelper,
             # QuoteHandle fwdPoint,
@@ -1181,7 +1180,6 @@ class Swap(pydantic.BaseModel):
             funding_curve,
             # Calendar tradingCalendar=Calendar()
         )
-
 
         return q, helper
 

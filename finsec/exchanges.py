@@ -17,3 +17,7 @@ class Exchange(str, enum.Enum):
 
     # Canadian
     TORONTO = "TSX"
+
+    # Crypto
+    BYBIT = 'BYBIT'
+    BINANCE = 'BINANCE'
