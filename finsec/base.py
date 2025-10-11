@@ -126,6 +126,17 @@ class Security(BaseObject):
             return SecuritySubtype(v)
         return v
 
+    def reference(self) -> SecurityReference:
+        if self.gsid is None:
+            raise MissingGSID("security gsid not provided")
+        return SecurityReference(
+            gsid=self.gsid,
+            ticker=self.ticker,
+            security_type=self.security_type,
+            security_subtype=self.security_subtype,
+        )
+
+
     __repr__ = pretty_print_security
 
 
