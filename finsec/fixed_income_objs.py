@@ -33,9 +33,13 @@ def loud_create(f, *args, **kwargs):
 class Quote(pydantic.BaseModel):
     """Base wrapper for QuantLib quotes to enable Pythonic math operations."""
     quote: ql.SimpleQuote | ql.CompositeQuote | ql.DerivedQuote | float
-    class Config:
-        arbitrary_types_allowed = True
-        ignored_types: set = (ql.QuoteHandle,)
+    # class Config:
+    #     arbitrary_types_allowed = True
+    #     ignored_types: set = (ql.QuoteHandle,)
+    model_config = pydantic.ConfigDict({
+        'arbitrary_types_allowed': True,
+        'ignored_types': (ql.QuoteHandle,),
+    })
 
     @pydantic.field_serializer("quote")
     def serialize_quote(self, v, _info):
@@ -141,8 +145,11 @@ class DayCount(enum.Enum):
 class Period(pydantic.BaseModel):
     """Wrapper for QuantLib periods."""
     period: ql.Period
-    class Config:
-        arbitrary_types_allowed = True
+    # class Config:
+    #     arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict({
+        'arbitrary_types_allowed': True,
+    })
 
     @pydantic.field_validator("period")
     def validate_period(cls, v):
@@ -406,16 +413,16 @@ class AccrualInfo(pydantic.BaseModel):
 
     ## model validators
     @pydantic.model_validator(mode='after')
-    def validate(cls, v):
-        if isinstance(v.end, str):
-            v.end = Period(period=ql.Period(v.end))
+    def validate(obj):
+        if isinstance(obj.end, str):
+            obj.end = Period(period=ql.Period(obj.end))
 
-        if isinstance(v.period, str):
-            v.period = Period(period=ql.Period(v.period))
+        if isinstance(obj.period, str):
+            obj.period = Period(period=ql.Period(obj.period))
 
-        if v.freq is None and v.period is None:
+        if obj.freq is None and obj.period is None:
             raise ValueError('Either freq or period must be provided.')
-        return v
+        return obj
 
     def get_period(self)->Period|None:
         if self.period is not None:
@@ -663,8 +670,11 @@ class Leg(pydantic.BaseModel):
         default_factory=lambda: logging.getLogger('Leg'),
         exclude=True,
     )
-    class Config:
-        arbitrary_types_allowed = True
+    # class Config:
+    #     arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict({
+        'arbitrary_types_allowed': True,
+    })
 
     def notionals_array(self, as_float:bool=False)->List[decimal.Decimal]:
         if isinstance(self.notional, list):
@@ -686,9 +696,11 @@ class Leg(pydantic.BaseModel):
     def get_dummy_leg(self)->ql.Leg:
         return ql.Leg([ql.SimpleCashFlow(0, ql.Settings.instance().evaluationDate)])
 
-    @pydantic.field_validator('notional', mode='before', )
-    @classmethod
-    def validate_notional(cls, v:ListOrT[decimal.Decimal|int|float|str]):
+    @pydantic.field_validator('notional', mode='before')
+    def validate_notional(v:ListOrT[decimal.Decimal|int|float|str]):
+        # print('validate notional')
+        # print('obj:', type(obj), obj)
+        # print('v:', type(v), v)
         if isinstance(v, list):
             return [
                 x if isinstance(x, decimal.Decimal) else decimal.Decimal(x)
@@ -698,10 +710,12 @@ class Leg(pydantic.BaseModel):
             return v if isinstance(v, decimal.Decimal) else decimal.Decimal(v)
 
     @pydantic.model_validator(mode='after')
-    @classmethod
-    def validate(cls, v)->Self:
-        assert len(v.notionals_array()) == len(v.acc)
-        return v
+    def validate(obj)->Self:
+        # print('validate')
+        # print('obj:', type(obj), obj)
+        # print('v:', type(v), v)
+        assert len(obj.notionals_array()) == len(obj.acc)
+        return obj
     
     @property
     def pay_delay_days(self)->int:
@@ -848,8 +862,11 @@ class Bond(pydantic.BaseModel):
         default_factory=lambda: logging.getLogger('Bond'),
         exclude=True,
     )
-    class Config:
-        arbitrary_types_allowed = True
+    # class Config:
+    #     arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict({
+        'arbitrary_types_allowed': True,
+    })
 
     @property
     def ccy(self)->Security|SecurityReference:
@@ -988,8 +1005,11 @@ class Swap(pydantic.BaseModel):
         default_factory=lambda: logging.getLogger('Swap'),
         exclude=True,
     )
-    class Config:
-        arbitrary_types_allowed = True
+    # class Config:
+    #     arbitrary_types_allowed = True
+    model_config = pydantic.ConfigDict({
+        'arbitrary_types_allowed': True,
+    })
 
     @property
     def fixed_leg(self)->Optional[Leg]:
@@ -1235,6 +1255,50 @@ class Swap(pydantic.BaseModel):
         flt_freq = int(flt.acc.get_period().payments_per_year)
 
         if isinstance(flt.cpn.type_, OvernightFloat):
+            ## updated syntax
+            # helper = ql.DatedOISRateHelper(
+            # # helper = loud_create(ql.DatedOISRateHelper,
+            #     # Date startDate,
+            #     start,
+            #     # Date endDate,
+            #     end,
+            #     # QuoteHandle rate,
+            #     q.handle,
+            #     # ext::shared_ptr< OvernightIndex > const & index,
+            #     flt_index,
+            #     # YieldTermStructureHandle discountingCurve={},
+            #     # disc_curve_use,
+            #     ql.YieldTermStructureHandle(),
+            #     # bool telescopicValueDates=False,
+            #     telescopic_dates,
+            #     # RateAveraging::Type averagingMethod=Compound,
+            #     int(flt.cpn.is_compounded),
+            #     # Integer paymentLag=0,
+            #     pay_delay_days,
+            #     # BusinessDayConvention paymentConvention=Following,
+            #     fix.acc.bdc.as_ql(),
+            #     # Frequency paymentFrequency=Annual,
+            #     flt_freq,
+            #     # Calendar paymentCalendar=Calendar(),
+            #     fix.acc.cal_pay.as_ql(),
+            #     # Spread overnightSpread=0.0,
+            #     0,
+            #     # ext::optional< bool > endOfMonth=ext::nullopt,
+            #     fix.acc.eom,
+
+            #     # ext::optional< Frequency > fixedPaymentFrequency=ext::nullopt,
+            #     fix_freq,
+            #     # Calendar fixedCalendar=Calendar(),
+            #     fix.acc.cal_pay.as_ql(),
+            #     # Natural lookbackDays=Null< Natural >(),
+            #     0,
+            #     # Natural lockoutDays=0,
+            #     0,
+            #     # bool applyObservationShift=False,
+            #     False,
+            #     # ext::shared_ptr< FloatingRateCouponPricer > const & pricer={}
+            # )
+
             helper = ql.DatedOISRateHelper(
             # helper = loud_create(ql.DatedOISRateHelper,
                 # Date startDate,
@@ -1246,7 +1310,6 @@ class Swap(pydantic.BaseModel):
                 # ext::shared_ptr< OvernightIndex > const & index,
                 flt_index,
                 # YieldTermStructureHandle discountingCurve={},
-                # disc_curve_use,
                 ql.YieldTermStructureHandle(),
                 # bool telescopicValueDates=False,
                 telescopic_dates,
@@ -1260,21 +1323,24 @@ class Swap(pydantic.BaseModel):
                 flt_freq,
                 # Calendar paymentCalendar=Calendar(),
                 fix.acc.cal_pay.as_ql(),
+                # Period forwardStart=0*Days,
+                ql.Period(0, ql.Days,),
                 # Spread overnightSpread=0.0,
                 0,
                 # ext::optional< bool > endOfMonth=ext::nullopt,
                 fix.acc.eom,
+
                 # ext::optional< Frequency > fixedPaymentFrequency=ext::nullopt,
-                fix_freq,
-                # Calendar fixedCalendar=Calendar(),
-                fix.acc.cal_pay.as_ql(),
-                # Natural lookbackDays=Null< Natural >(),
-                0,
-                # Natural lockoutDays=0,
-                0,
-                # bool applyObservationShift=False,
-                False,
-                # ext::shared_ptr< FloatingRateCouponPricer > const & pricer={}
+                # fix_freq,
+                # # Calendar fixedCalendar=Calendar(),
+                # fix.acc.cal_pay.as_ql(),
+                # # Natural lookbackDays=Null< Natural >(),
+                # 0,
+                # # Natural lockoutDays=0,
+                # 0,
+                # # bool applyObservationShift=False,
+                # False,
+                # # ext::shared_ptr< FloatingRateCouponPricer > const & pricer={}
             )
         return q, helper
 

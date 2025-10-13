@@ -23,12 +23,16 @@ def ensure_timezone(v: datetime.datetime) -> datetime.datetime:
 class AbstractQuote(BaseObject):
     exchange: typing.Optional[Exchange] = None
 
-    class Config:
-        json_encoders = {
-            datetime.datetime: lambda v: v.timestamp(),
-        }
-        use_enum_values = True
-        extra = "forbid"
+    # class Config:
+    #     # json_encoders = {
+    #     #     datetime.datetime: lambda v: v.timestamp(),
+    #     # }
+    #     use_enum_values = True
+    #     extra = "forbid"
+    model_config = pydantic.ConfigDict({
+        'use_enum_values': True,
+        'extra': 'forbid',
+    })
 
 
 class AbstractSnapshot(AbstractQuote):
