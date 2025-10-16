@@ -132,13 +132,13 @@ class Portfolio(AbstractPosition):
     # def __str__(self)->str:
     #     return f"Portfolio({len(self.positions)} x positions ({s}))"
     @pydantic.model_validator(mode='after')
-    def validate(cls, v)->Self:
+    def validate(obj)->Self:
         new_positions = []
-        for p in v.positions:
+        for p in obj.positions:
             if p.quantity != decimal.Decimal(0):
                 new_positions.append(p)
-        v.positions = new_positions
-        return v
+        obj.positions = new_positions
+        return obj
 
     def __repr__(self) -> str:
         s = ", ".join([pos._core_post_str() for pos in self.positions])

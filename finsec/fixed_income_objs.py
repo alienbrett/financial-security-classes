@@ -316,7 +316,6 @@ class Calendar(enum.Enum):
     @classmethod
     def from_ql(cls, obj):
         for k,v in cls.lookup().items():
-            print(obj, v, k)
             if obj == v:
                 return k
 
@@ -413,7 +412,7 @@ class AccrualInfo(pydantic.BaseModel):
 
     ## model validators
     @pydantic.model_validator(mode='after')
-    def validate(obj):
+    def validate(obj)->Self:
         if isinstance(obj.end, str):
             obj.end = Period(period=ql.Period(obj.end))
 
@@ -698,9 +697,6 @@ class Leg(pydantic.BaseModel):
 
     @pydantic.field_validator('notional', mode='before')
     def validate_notional(v:ListOrT[decimal.Decimal|int|float|str]):
-        # print('validate notional')
-        # print('obj:', type(obj), obj)
-        # print('v:', type(v), v)
         if isinstance(v, list):
             return [
                 x if isinstance(x, decimal.Decimal) else decimal.Decimal(x)
@@ -711,9 +707,6 @@ class Leg(pydantic.BaseModel):
 
     @pydantic.model_validator(mode='after')
     def validate(obj)->Self:
-        # print('validate')
-        # print('obj:', type(obj), obj)
-        # print('v:', type(v), v)
         assert len(obj.notionals_array()) == len(obj.acc)
         return obj
     
@@ -967,7 +960,6 @@ class Bond(pydantic.BaseModel):
             # 1) Resolve funding curve handle
             if funding_spec is None:
                 funding_spec = index_map.get_default_curve_by_ccy(ccy=ccy)
-                # print('funding index?', funding_spec)
             if isinstance(funding_spec, str):
                 funding_curve = index_map[funding_spec].forwardingTermStructure()
             else:
