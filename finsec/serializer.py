@@ -1,4 +1,5 @@
-import json
+import orjson
+# import json
 import logging
 from typing import Any, Callable, Dict, Optional
 
@@ -59,9 +60,15 @@ def get_constructor(obj_dict: Dict[Any, Any]) -> Optional[Callable[..., Security
     return get_constructor_from_types(security_type, security_subtype)
 
 
-def dict_encode(security: Security) -> Dict:
+def dict_encode(
+    security: Security,
+    json_safe:bool = False,
+) -> Dict:
     """Converts security into dict."""
-    res = security.model_dump()
+    if json_safe:
+        res = orjson.loads(security.model_dump_json())
+    else:
+        res = security.model_dump()
     res = {k: v for k, v in res.items() if v is not None}
     return res
 
@@ -81,12 +88,12 @@ def json_encode(
     """
     res = security.model_dump_json()
     if pretty:
-        x = json.loads(res)
-        res = json.dumps(filter_notnull(x) if drop_null else x, indent=4)
+        x = orjson.loads(res)
+        res = orjson.dumps(filter_notnull(x) if drop_null else x, indent=4)
     return res
 
 
 def json_decode(obj_json: str) -> Security:
     """Converts json string into a security."""
-    obj_dict = json.loads(obj_json)
+    obj_dict = orjson.loads(obj_json)
     return get_constructor(obj_dict)(**obj_dict)

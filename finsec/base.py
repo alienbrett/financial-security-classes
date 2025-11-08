@@ -3,9 +3,9 @@ import decimal
 import uuid
 from typing import Any, Dict, List, Optional, Union
 
-import orjson
 import bson
 import numpy as np
+import orjson
 import pandas as pd
 import pydantic
 
@@ -47,7 +47,6 @@ class standard_model_config:
 
 standard_model_config = pydantic.ConfigDict(
     extra="forbid",
-
     ser_json_dumps=orjson.dumps,
     ser_json_loads=orjson.loads,
 )
@@ -141,7 +140,6 @@ class Security(BaseObject):
             security_type=self.security_type,
             security_subtype=self.security_subtype,
         )
-
 
     __repr__ = pretty_print_security
 
