@@ -2,3 +2,4 @@ pandas
 pydantic>2
 pytz; python_version<"3.9"
 tzdata
+orjson

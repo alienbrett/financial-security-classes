@@ -3,6 +3,7 @@ import decimal
 import uuid
 from typing import Any, Dict, List, Optional, Union
 
+import orjson
 import bson
 import numpy as np
 import pandas as pd
@@ -46,6 +47,9 @@ class standard_model_config:
 
 standard_model_config = pydantic.ConfigDict(
     extra="forbid",
+
+    ser_json_dumps=orjson.dumps,
+    ser_json_loads=orjson.loads,
 )
 
 
@@ -71,6 +75,8 @@ class SecurityReference(BaseObject):
     ticker: Ticker
     security_type: SecurityType
     security_subtype: SecuritySubtype
+
+    model_config = standard_model_config
 
 
 class Security(BaseObject):
@@ -148,6 +154,8 @@ class ExerciseDatetime(BaseObject):
     settlement_type: SettlementType = SettlementType.UNKNOWN
     expiry_time_of_day: ExpiryTimeOfDay = ExpiryTimeOfDay.UNKNOWN
     expiry_series_type: ExpirySeriesType = ExpirySeriesType.UNKNOWN
+
+    model_config = standard_model_config
 
     @pydantic.field_validator("expiry_date")
     def date_str_to_datetime_date(cls, v):
