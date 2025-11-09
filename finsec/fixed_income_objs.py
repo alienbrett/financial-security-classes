@@ -14,7 +14,7 @@ import pandas as pd
 import pydantic
 import QuantLib as ql
 
-from .base import Security, SecurityReference
+from .base import Security, SecurityIdentifier, SecurityReference
 from .portfolio import Portfolio, Position
 
 T = TypeVar('T')
@@ -850,6 +850,8 @@ class Bond(pydantic.BaseModel):
     face:decimal.Decimal=100
     settle: datetime.date|None=None
     redemption:decimal.Decimal|None=None
+    ticker: str | None = None
+    identifiers: List[SecurityIdentifier] = pydantic.Field(default_factory=list)
 
     log: logging.Logger|None = pydantic.Field(
         default_factory=lambda: logging.getLogger('Bond'),
@@ -860,6 +862,12 @@ class Bond(pydantic.BaseModel):
     model_config = pydantic.ConfigDict({
         'arbitrary_types_allowed': True,
     })
+
+    @pydantic.model_validator(mode='after')
+    def _normalize(self):
+        if self.ticker is not None:
+            self.ticker = self.ticker.strip().upper()
+        return self
 
     @property
     def ccy(self)->Security|SecurityReference:
@@ -1248,49 +1256,6 @@ class Swap(pydantic.BaseModel):
 
         if isinstance(flt.cpn.type_, OvernightFloat):
             ## updated syntax
-            # helper = ql.DatedOISRateHelper(
-            # # helper = loud_create(ql.DatedOISRateHelper,
-            #     # Date startDate,
-            #     start,
-            #     # Date endDate,
-            #     end,
-            #     # QuoteHandle rate,
-            #     q.handle,
-            #     # ext::shared_ptr< OvernightIndex > const & index,
-            #     flt_index,
-            #     # YieldTermStructureHandle discountingCurve={},
-            #     # disc_curve_use,
-            #     ql.YieldTermStructureHandle(),
-            #     # bool telescopicValueDates=False,
-            #     telescopic_dates,
-            #     # RateAveraging::Type averagingMethod=Compound,
-            #     int(flt.cpn.is_compounded),
-            #     # Integer paymentLag=0,
-            #     pay_delay_days,
-            #     # BusinessDayConvention paymentConvention=Following,
-            #     fix.acc.bdc.as_ql(),
-            #     # Frequency paymentFrequency=Annual,
-            #     flt_freq,
-            #     # Calendar paymentCalendar=Calendar(),
-            #     fix.acc.cal_pay.as_ql(),
-            #     # Spread overnightSpread=0.0,
-            #     0,
-            #     # ext::optional< bool > endOfMonth=ext::nullopt,
-            #     fix.acc.eom,
-
-            #     # ext::optional< Frequency > fixedPaymentFrequency=ext::nullopt,
-            #     fix_freq,
-            #     # Calendar fixedCalendar=Calendar(),
-            #     fix.acc.cal_pay.as_ql(),
-            #     # Natural lookbackDays=Null< Natural >(),
-            #     0,
-            #     # Natural lockoutDays=0,
-            #     0,
-            #     # bool applyObservationShift=False,
-            #     False,
-            #     # ext::shared_ptr< FloatingRateCouponPricer > const & pricer={}
-            # )
-
             helper = ql.DatedOISRateHelper(
             # helper = loud_create(ql.DatedOISRateHelper,
                 # Date startDate,
@@ -1302,6 +1267,7 @@ class Swap(pydantic.BaseModel):
                 # ext::shared_ptr< OvernightIndex > const & index,
                 flt_index,
                 # YieldTermStructureHandle discountingCurve={},
+                # disc_curve_use,
                 ql.YieldTermStructureHandle(),
                 # bool telescopicValueDates=False,
                 telescopic_dates,
@@ -1315,25 +1281,67 @@ class Swap(pydantic.BaseModel):
                 flt_freq,
                 # Calendar paymentCalendar=Calendar(),
                 fix.acc.cal_pay.as_ql(),
-                # Period forwardStart=0*Days,
-                ql.Period(0, ql.Days,),
                 # Spread overnightSpread=0.0,
                 0,
                 # ext::optional< bool > endOfMonth=ext::nullopt,
                 fix.acc.eom,
 
                 # ext::optional< Frequency > fixedPaymentFrequency=ext::nullopt,
-                # fix_freq,
-                # # Calendar fixedCalendar=Calendar(),
-                # fix.acc.cal_pay.as_ql(),
-                # # Natural lookbackDays=Null< Natural >(),
-                # 0,
-                # # Natural lockoutDays=0,
-                # 0,
-                # # bool applyObservationShift=False,
-                # False,
-                # # ext::shared_ptr< FloatingRateCouponPricer > const & pricer={}
+                fix_freq,
+                # Calendar fixedCalendar=Calendar(),
+                fix.acc.cal_pay.as_ql(),
+                # Natural lookbackDays=Null< Natural >(),
+                0,
+                # Natural lockoutDays=0,
+                0,
+                # bool applyObservationShift=False,
+                False,
+                # ext::shared_ptr< FloatingRateCouponPricer > const & pricer={}
             )
+
+            # helper = ql.DatedOISRateHelper(
+            # # helper = loud_create(ql.DatedOISRateHelper,
+            #     # Date startDate,
+            #     start,
+            #     # Date endDate,
+            #     end,
+            #     # QuoteHandle rate,
+            #     q.handle,
+            #     # ext::shared_ptr< OvernightIndex > const & index,
+            #     flt_index,
+            #     # YieldTermStructureHandle discountingCurve={},
+            #     ql.YieldTermStructureHandle(),
+            #     # bool telescopicValueDates=False,
+            #     telescopic_dates,
+            #     # RateAveraging::Type averagingMethod=Compound,
+            #     int(flt.cpn.is_compounded),
+            #     # Integer paymentLag=0,
+            #     pay_delay_days,
+            #     # BusinessDayConvention paymentConvention=Following,
+            #     fix.acc.bdc.as_ql(),
+            #     # Frequency paymentFrequency=Annual,
+            #     flt_freq,
+            #     # Calendar paymentCalendar=Calendar(),
+            #     fix.acc.cal_pay.as_ql(),
+            #     # Period forwardStart=0*Days,
+            #     ql.Period(0, ql.Days,),
+            #     # Spread overnightSpread=0.0,
+            #     0,
+            #     # ext::optional< bool > endOfMonth=ext::nullopt,
+            #     fix.acc.eom,
+
+            #     # ext::optional< Frequency > fixedPaymentFrequency=ext::nullopt,
+            #     # fix_freq,
+            #     # # Calendar fixedCalendar=Calendar(),
+            #     # fix.acc.cal_pay.as_ql(),
+            #     # # Natural lookbackDays=Null< Natural >(),
+            #     # 0,
+            #     # # Natural lockoutDays=0,
+            #     # 0,
+            #     # # bool applyObservationShift=False,
+            #     # False,
+            #     # # ext::shared_ptr< FloatingRateCouponPricer > const & pricer={}
+            # )
         return q, helper
 
     def cashflows_df(self, **kwargs)->pd.DataFrame:
